@@ -1,0 +1,6 @@
+node_modules
+.vscode
+target/
+bin/
+!**/src/main/**/target/
+!**/src/test/**/target
