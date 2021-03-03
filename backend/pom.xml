@@ -11,6 +11,9 @@
 	<groupId>no.hvl.dat109</groupId>
 	<artifactId>backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
+		<packaging>war</packaging>
+
 	<name>dat109</name>
 	<description>Spring Boot project</description>
 	<properties>
