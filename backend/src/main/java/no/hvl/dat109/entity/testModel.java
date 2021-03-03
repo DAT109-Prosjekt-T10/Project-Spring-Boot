@@ -1,4 +1,4 @@
-package no.hvl.dat109.models;
+package no.hvl.dat109.entity;
 
 public class testModel {
 

@@ -1,4 +1,4 @@
-package no.hvl.dat109.models;
+package no.hvl.dat109.entity;
 
 import java.time.LocalDate;
 
@@ -9,12 +9,16 @@ import javax.persistence.Id;
 @Entity
 public class Book {
     
-    private @Id @GeneratedValue Long id;
+    @Id 
+    @GeneratedValue
+    private Long id;
     private Long[] authors;
     private String isbn, name;
     private LocalDate published;
 
-    public Book() {}
+    public Book() {
+        super();
+    }
 
     public Book(String isbn, String name, Long[] authors, LocalDate published) {
         this.isbn = isbn;
