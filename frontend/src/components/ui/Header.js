@@ -1,71 +1,65 @@
-import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
-import logo from '../assets/images/logo-libsys.png';
+import React, { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import logo from '../assets/images/logo-libsys.png'
 
 const Header = () => {
-	const [currentUser, setCurrentUser] = useState(['ashd']);
+	const [currentUser, setCurrentUser] = useState(['ashd'])
 	return (
-		<header className="header navbar navbar-expand-lg navbar-dark bg-gradient navbar-floating navbar-sticky">
-			<div className="container px-0 px-xl-3">
+		<header className='header navbar navbar-expand-lg navbar-dark bg-gradient navbar-floating navbar-sticky'>
+			<div className='container px-0 px-xl-3'>
 				<button
-					className="navbar-toggler"
-					type="button"
-					data-bs-toggle="collapse"
-					data-bs-target="#navbarCollapse1"
+					className='navbar-toggler'
+					type='button'
+					data-bs-toggle='collapse'
+					data-bs-target='#navbarCollapse1'
 				>
-					<span className="navbar-toggler-icon"></span>
+					<span className='navbar-toggler-icon'></span>
 				</button>
-				<Link
-					className="navbar-brand order-lg-1 me-0 pe-lg-2 me-lg-4"
-					to="/"
-				>
+				<Link className='navbar-brand order-lg-1 me-0 pe-lg-2 me-lg-4' to='/'>
 					<img
-						className="navbar-floating-logo d-none d-lg-block"
+						className='navbar-floating-logo d-none d-lg-block'
 						src={logo}
-						alt="OddsNotifier"
-						width="153"
+						alt='OddsNotifier'
+						width='153'
 					/>
 					<img
-						className="d-lg-none"
+						className='d-lg-none'
 						src={logo}
-						alt="OddsNotifier"
-						width="153"
+						alt='OddsNotifier'
+						width='153'
 					/>
 				</Link>
 				{currentUser ? (
-					<div className="d-flex align-items-center order-lg-3 ms-lg-auto">
-						<div className="navbar-tool dropdown">
-							<div className="navbar-tool-icon-box">
-								<i className="ai-user"></i>
+					<div className='d-flex align-items-center order-lg-3 ms-lg-auto'>
+						<div className='navbar-tool dropdown'>
+							<div className='navbar-tool-icon-box'>
+								<i className='ai-user'></i>
 							</div>
-							<Link
-								className="navbar-tool-label dropdown-toggle"
-								to="/"
-							>
+							<Link className='navbar-tool-label dropdown-toggle' to='/'>
 								<small>Hello,</small>
 								Markus
 							</Link>
 							<ul
-								className="dropdown-menu dropdown-menu-end"
+								className='dropdown-menu dropdown-menu-end'
 								style={{ width: '15rem' }}
 							>
 								<li>
 									<Link
-										className="dropdown-item d-flex align-items-center"
-										to="/"
+										className='dropdown-item d-flex align-items-center'
+										to='/'
 										exact
 									>
-										<i className="ai-box font-size-base opacity-60 me-2"></i>
+										<i className='ai-box font-size-base opacity-60 me-2'></i>
 										Dashboard
 									</Link>
 								</li>
-								<li className="dropdown-divider"></li>
+								<li className='dropdown-divider'></li>
 								<li>
 									<button
-										className="dropdown-item d-flex align-items-center mt-2"
+										className='dropdown-item d-flex align-items-center mt-2'
 										//onClick={handleLogout}
 									>
-										<i className="ai-log-out font-size-base opacity-60 me-2"></i>
+										<i className='ai-log-out font-size-base opacity-60 me-2'></i>
 										Sign out
 									</button>
 								</li>
@@ -73,33 +67,30 @@ const Header = () => {
 						</div>
 					</div>
 				) : (
-					<div className="d-flex align-items-center order-lg-3 ms-lg-auto">
-						<Link
-							className="nav-link-style fs-sm text-nowrap"
-							to="/login"
-						>
-							<i className="ai-user fs-xl me-2 align-middle"></i>
+					<div className='d-flex align-items-center order-lg-3 ms-lg-auto'>
+						<Link className='nav-link-style fs-sm text-nowrap' to='/login'>
+							<i className='ai-user fs-xl me-2 align-middle'></i>
 							Sign in
 						</Link>
 						<Link
-							className="btn btn-primary ms-grid-gutter d-none d-lg-inline-block"
-							to="/register"
+							className='btn btn-primary ms-grid-gutter d-none d-lg-inline-block'
+							to='/register'
 						>
 							Sign up
 						</Link>
 					</div>
 				)}
 				<div
-					className="collapse navbar-collapse order-lg-2"
-					id="navbarCollapse1"
+					className='collapse navbar-collapse order-lg-2'
+					id='navbarCollapse1'
 				>
-					<ul className="navbar-nav me-auto">
-						<li className="nav-item">
+					<ul className='navbar-nav me-auto'>
+						<li className='nav-item'>
 							<NavLink
-								className="nav-link"
-								to="/"
+								className='nav-link'
+								to='/'
 								exact
-								activeClassName="active"
+								activeClassName='active'
 							>
 								Dashboard
 							</NavLink>
@@ -108,7 +99,7 @@ const Header = () => {
 				</div>
 			</div>
 		</header>
-	);
-};
+	)
+}
 
-export default Header;
+export default Header
