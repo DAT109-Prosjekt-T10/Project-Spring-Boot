@@ -1,10 +1,13 @@
 package no.hvl.dat109.entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
@@ -12,20 +15,25 @@ import javax.persistence.ManyToMany;
 public class Author {
     
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(name = "name", nullable = false)
 	private String name;
 	
-	@ManyToMany
-	private List<Book> books;
+	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors")
+	private Set<Book> books;
+	
+	public Author() {
+		super();
+	}
 	
 	public Author(String name) {
 		this.name = name;
-		this.books = new ArrayList<Book>();
+		this.books = new HashSet<Book>();
 	}
 	
-	public Author(String name, List<Book> books) {
+	public Author(String name, Set<Book> books) {
 		this.name = name;
 		this.books = books;
 	}
@@ -46,11 +54,11 @@ public class Author {
 		this.name = name;
 	}
 
-	public List<Book> getBooks() {
+	public Set<Book> getBooks() {
 		return books;
 	}
 
-	public void setBooks(List<Book> books) {
+	public void setBooks(Set<Book> books) {
 		this.books = books;
 	}
 

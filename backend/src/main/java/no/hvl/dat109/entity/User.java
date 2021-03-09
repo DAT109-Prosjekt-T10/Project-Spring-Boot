@@ -2,6 +2,7 @@ package no.hvl.dat109.entity;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import org.hibernate.annotations.NaturalId;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.NaturalId;
 public class User {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@NaturalId
