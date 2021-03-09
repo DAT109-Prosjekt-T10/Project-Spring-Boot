@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.NaturalId;
+
 @Entity
 public class User {
 
@@ -11,8 +13,15 @@ public class User {
 	@GeneratedValue
 	private Long id;
 	
-	private String name, email, password;
+	@NaturalId
+	private String email;
+	
+	private String name, password;
 	private boolean admin;
+	
+	public User() {
+		super();
+	}
 	
 	public User(String name, String email, String password) {
 		this.name = name;
