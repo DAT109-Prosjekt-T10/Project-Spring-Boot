@@ -1,5 +1,8 @@
 package no.hvl.dat109.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -9,14 +12,17 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class JWTUtil {
 
-    public String createToken() {
+    public String createToken(String id) {
     	
     	String token = null;
+    	Map<String, Object> payloadClaims = new HashMap<>();
+    	payloadClaims.put("id", id);
     	
         try {
             Algorithm algorithm = Algorithm.HMAC256("secret"); //Change secret and move to variables file
             token = JWT.create()
                 .withIssuer("Gruppe-10")
+                .withPayload(payloadClaims)
                 .sign(algorithm);
         } catch (JWTCreationException exception){
             //Add error handling
@@ -26,7 +32,7 @@ public class JWTUtil {
         return token;
     
     }
-
+    
     public boolean verifyToken(String token){
         
     	try {
