@@ -30,6 +30,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User: " + name + "\n Email: " + email;
+        return "User: " + name + "\n Email: " + email + "\n Hashed Password: " + hashedPassword;
     }
 }
