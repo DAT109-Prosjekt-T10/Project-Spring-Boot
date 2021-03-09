@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
-import author from './authors/authorReducer'
+import authors from './authors/authorReducer'
+import books from './authors/booksReducer'
 
 export default combineReducers({
-	author,
+	authors,
+	books,
 })

@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import logo from '../assets/images/logo-libsys.png'
 
 const Header = () => {
-	const [currentUser, setCurrentUser] = useState(['ashd'])
+	const [currentUser, setCurrentUser] = useState()
 	return (
 		<header className='header navbar navbar-expand-lg navbar-dark bg-gradient navbar-floating navbar-sticky'>
 			<div className='container px-0 px-xl-3'>

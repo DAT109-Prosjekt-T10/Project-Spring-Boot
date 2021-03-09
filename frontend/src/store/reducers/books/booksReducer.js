@@ -1,19 +1,19 @@
 import {
-	POST_AUTHOR_STARTED,
-	POST_AUTHOR_SUCCESS,
-	POST_AUTHOR_FAILURE,
-	GET_AUTHOR_STARTED,
-	GET_AUTHOR_SUCCESS,
-	GET_AUTHOR_FAILURE,
-	GET_AUTHORS_STARTED,
-	GET_AUTHORS_SUCCESS,
-	GET_AUTHORS_FAILURE,
-	UPDATE_AUTHOR_STARTED,
-	UPDATE_AUTHOR_SUCCESS,
-	UPDATE_AUTHOR_FAILURE,
-	DELETE_AUTHOR_STARTED,
-	DELETE_AUTHOR_SUCCESS,
-	DELETE_AUTHOR_FAILURE,
+	POST_BOOK_STARTED,
+	POST_BOOK_SUCCESS,
+	POST_BOOK_FAILURE,
+	GET_BOOK_STARTED,
+	GET_BOOK_SUCCESS,
+	GET_BOOK_FAILURE,
+	GET_BOOKS_STARTED,
+	GET_BOOKS_SUCCESS,
+	GET_BOOKS_FAILURE,
+	UPDATE_BOOK_STARTED,
+	UPDATE_BOOK_SUCCESS,
+	UPDATE_BOOK_FAILURE,
+	DELETE_BOOK_STARTED,
+	DELETE_BOOK_SUCCESS,
+	DELETE_BOOK_FAILURE,
 } from '../../actions/authors/types'
 
 const initialState = {
@@ -41,26 +41,26 @@ const initialState = {
 
 const authorReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case GET_AUTHORS_STARTED:
+		case GET_BOOKS_STARTED:
 			return {
 				...state,
 				loading: true,
 				success: false,
 			}
-		case GET_AUTHORS_SUCCESS:
+		case GET_BOOKS_SUCCESS:
 			return {
 				...state,
 				data: action.payload.data,
 				loading: false,
 				success: true,
 			}
-		case GET_AUTHORS_FAILURE:
+		case GET_BOOKS_FAILURE:
 			return {
 				...state,
 				loading: false,
 				error: action.payload.error,
 			}
-		case UPDATE_AUTHOR_STARTED:
+		case UPDATE_BOOK_STARTED:
 			return {
 				...state,
 				update: {
@@ -69,10 +69,10 @@ const authorReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case UPDATE_AUTHOR_SUCCESS:
+		case UPDATE_BOOK_SUCCESS:
 			//* find the index of element that is being updated in state
 			const index = state.data.findIndex(
-				(author) => author.id === action.payload.data.id
+				(book) => book.id === action.payload.data.id
 			)
 
 			//* add updated element in state
@@ -85,7 +85,7 @@ const authorReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case UPDATE_AUTHOR_FAILURE:
+		case UPDATE_BOOK_FAILURE:
 			return {
 				...state,
 				update: {
@@ -93,7 +93,7 @@ const authorReducer = (state = initialState, action) => {
 					error: action.payload.error,
 				},
 			}
-		case DELETE_AUTHOR_STARTED:
+		case DELETE_BOOK_STARTED:
 			return {
 				...state,
 				delete: {
@@ -102,13 +102,13 @@ const authorReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case DELETE_AUTHOR_SUCCESS:
+		case DELETE_BOOK_SUCCESS:
 			//* filters out deleted element from state
 			return {
 				...state,
 				data: [
 					...state.data.filter(
-						(author) => author.id !== action.payload.data
+						(book) => book.id !== action.payload.data
 					),
 				],
 				delete: {
@@ -116,7 +116,7 @@ const authorReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case DELETE_AUTHOR_FAILURE:
+		case DELETE_BOOK_FAILURE:
 			return {
 				...state,
 				delete: {
@@ -124,7 +124,7 @@ const authorReducer = (state = initialState, action) => {
 					error: action.payload.error,
 				},
 			}
-		case POST_AUTHOR_STARTED:
+		case POST_BOOK_STARTED:
 			return {
 				...state,
 				post: {
@@ -133,7 +133,7 @@ const authorReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case POST_AUTHOR_SUCCESS:
+		case POST_BOOK_SUCCESS:
 			return {
 				...state,
 				data: [...state.data, action.payload.data],
@@ -142,7 +142,7 @@ const authorReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case POST_AUTHOR_FAILURE:
+		case POST_BOOK_FAILURE:
 			return {
 				...state,
 				post: {
