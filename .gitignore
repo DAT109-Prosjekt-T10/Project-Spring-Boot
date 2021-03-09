@@ -4,3 +4,7 @@ target/
 bin/
 !**/src/main/**/target/
 !**/src/test/**/target
+
+*.iml
+.idea/
+.DS_Store
