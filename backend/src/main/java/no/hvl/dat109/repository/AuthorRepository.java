@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import no.hvl.dat109.entity.Author;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long>{
+public interface AuthorRepository extends JpaRepository<Author, Author>{
 
 	
 	

@@ -1,10 +1,14 @@
 package no.hvl.dat109.entity;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.NaturalId;
 
 @Entity
 public class Book {
@@ -12,19 +16,30 @@ public class Book {
     @Id 
     @GeneratedValue
     private Long id;
-    private Long[] authors;
-    private String isbn, name;
+    
+    private List<Long> author;
+    
+    @NaturalId
+    private String isbn; 
+    private String name;
     private LocalDate published;
 
     public Book() {
         super();
     }
 
-    public Book(String isbn, String name, Long[] authors, LocalDate published) {
+    public Book(String isbn, String name, List<Long> author, LocalDate published) {
         this.isbn = isbn;
         this.name = name;
-        this.authors = authors;
+        this.author = author;
         this.published = published;
+    }
+    
+    public Book(String isbn, String name, LocalDate published) {
+    	this.isbn = isbn;
+    	this.name = name;
+    	this.author = new ArrayList<Long>();
+    	this.published = published;
     }
 
     public Long getId() {
@@ -35,12 +50,12 @@ public class Book {
         this.id = id;
     }
 
-    public Long[] getAuthors() {
-        return authors;
+    public List<Long> getAuthors() {
+        return author;
     }
 
-    public void setAuthors(Long[] authors) {
-        this.authors = authors;
+    public void setAuthors(List<Long> author) {
+        this.author = author;
     }
 
     public String getIsbn() {
