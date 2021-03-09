@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @SpringBootApplication
-public class Main {
+public class Application {
 
 	/**
 	 * 
@@ -15,7 +15,7 @@ public class Main {
 	 * 
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 	/*
