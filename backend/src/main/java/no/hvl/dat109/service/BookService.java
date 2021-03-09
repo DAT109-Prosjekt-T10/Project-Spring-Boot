@@ -1,5 +1,8 @@
 package no.hvl.dat109.service;
 
-public interface BookService {
+import org.springframework.stereotype.Service;
+
+@Service
+public class BookService {
     
 }
