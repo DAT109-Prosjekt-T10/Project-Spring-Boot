@@ -15,7 +15,10 @@ const Header = () => {
 				>
 					<span className='navbar-toggler-icon'></span>
 				</button>
-				<Link className='navbar-brand order-lg-1 me-0 pe-lg-2 me-lg-4' to='/'>
+				<Link
+					className='navbar-brand order-lg-1 me-0 pe-lg-2 me-lg-4 mt-1'
+					to='/'
+				>
 					<img
 						className='navbar-floating-logo d-none d-lg-block'
 						src={logo}
@@ -35,7 +38,10 @@ const Header = () => {
 							<div className='navbar-tool-icon-box'>
 								<i className='ai-user'></i>
 							</div>
-							<Link className='navbar-tool-label dropdown-toggle' to='/'>
+							<Link
+								className='navbar-tool-label dropdown-toggle'
+								to='/'
+							>
 								<small>Hello,</small>
 								Markus
 							</Link>
@@ -68,7 +74,10 @@ const Header = () => {
 					</div>
 				) : (
 					<div className='d-flex align-items-center order-lg-3 ms-lg-auto'>
-						<Link className='nav-link-style fs-sm text-nowrap' to='/login'>
+						<Link
+							className='nav-link-style fs-sm text-nowrap'
+							to='/login'
+						>
 							<i className='ai-user fs-xl me-2 align-middle'></i>
 							Sign in
 						</Link>

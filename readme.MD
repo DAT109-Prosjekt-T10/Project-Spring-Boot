@@ -3,7 +3,6 @@
 
 &#xa0;
 
-  <!-- <a href="https://maventest.netlify.app">Demo</a> -->
 </div>
 
 <h1 align="center">DAT109 Prosjekt</h1>
@@ -46,23 +45,20 @@
 
 ## :dart: About
 
-Describe your project
+Library System
 
 ## :sparkles: Features
 
-:heavy_check_mark: Feature 1;\
-:heavy_check_mark: Feature 2;\
-:heavy_check_mark: Feature 3;
+:heavy_check_mark: Feature 1
+:heavy_check_mark: Feature 2
+:heavy_check_mark: Feature 3
 
 ## :rocket: Technologies
 
 The following tools were used in this project:
 
--   [Expo](https://expo.io/)
--   [Node.js](https://nodejs.org/en/)
+-   [Java](http://java.com)
 -   [React](https://pt-br.reactjs.org/)
--   [React Native](https://reactnative.dev/)
--   [TypeScript](https://www.typescriptlang.org/)
 
 ## :white_check_mark: Requirements
 
@@ -72,10 +68,10 @@ Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) an
 
 ```bash
 # Clone this project
-$ git clone https://github.com/MrHencke/maven-test
+$ git clone https://github.com/DAT109-Prosjekt-T10/Project-Spring-Boot.git
 
 # Access
-$ cd maven-test
+$ cd frontend
 
 # Install dependencies
 $ yarn
