@@ -20,7 +20,7 @@ public class Book {
     private List<Long> author;
     
     @NaturalId
-    private String isbn; 
+    private String isbn;
     private String name;
     private LocalDate published;
 
@@ -82,13 +82,10 @@ public class Book {
         this.published = published;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return true;
-    }
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", author=" + author + ", isbn=" + isbn + ", name=" + name + ", published="
+				+ published + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "";
-    }
 }
