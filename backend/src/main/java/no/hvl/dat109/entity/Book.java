@@ -1,12 +1,16 @@
 package no.hvl.dat109.entity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 import org.hibernate.annotations.NaturalId;
 
@@ -14,34 +18,38 @@ import org.hibernate.annotations.NaturalId;
 public class Book {
     
     @Id 
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    private List<Long> author;
-    
     @NaturalId
-    private String isbn; 
+    @Column(name = "isbn", nullable = false, unique = true)
+    private String isbn;
+    
+    @Column(name = "name", nullable = false)
     private String name;
+    
+    @ManyToMany
+    @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
+    		@JoinColumn(name = "author_id") })
+    private Set<Author> authors;
+    
+    @ManyToMany
+    @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
+    		@JoinColumn(name = "publisher_id") })
+    private Set<Publisher> publishers;
+    
     private LocalDate published;
 
     public Book() {
         super();
     }
 
-    public Book(String isbn, String name, List<Long> author, LocalDate published) {
+    public Book(String isbn, String name, LocalDate published) {
         this.isbn = isbn;
         this.name = name;
-        this.author = author;
         this.published = published;
     }
     
-    public Book(String isbn, String name, LocalDate published) {
-    	this.isbn = isbn;
-    	this.name = name;
-    	this.author = new ArrayList<Long>();
-    	this.published = published;
-    }
-
     public Long getId() {
         return id;
     }
@@ -50,12 +58,12 @@ public class Book {
         this.id = id;
     }
 
-    public List<Long> getAuthors() {
-        return author;
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAuthors(List<Long> author) {
-        this.author = author;
+    public void setAuthors(Set<Author> author) {
+        this.authors = author;
     }
 
     public String getIsbn() {
@@ -82,13 +90,10 @@ public class Book {
         this.published = published;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        return true;
-    }
+	@Override
+	public String toString() {
+		return "Book [id=" + id + ", author=" + authors + ", isbn=" + isbn + ", name=" + name + ", published="
+				+ published + "]";
+	}
 
-    @Override
-    public String toString() {
-        return "";
-    }
 }
