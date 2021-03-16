@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 
 import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.repository.AuthorRepository;
@@ -73,11 +74,14 @@ public class AuthorController {
 	 * @return ResponseEntity<Author>
 	 */
 	@PostMapping("/api/authors")
-	  public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+	  public ResponseEntity<Author> createAuthor(WebRequest req) {
 	    try {
-	      Author _author = authorRepository.save(new Author(author.getName(), author.getBooks()));
+	    	
+	    	String name = req.getParameter("name");
+	    
+	    	Author _author = authorRepository.save(new Author(name));
 	      
-	      return new ResponseEntity<>(_author, HttpStatus.CREATED);
+	    	return new ResponseEntity<>(_author, HttpStatus.CREATED);
 	    } catch (Exception e) {
 	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	    }
