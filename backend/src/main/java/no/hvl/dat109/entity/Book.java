@@ -31,10 +31,12 @@ public class Book {
     @ManyToMany
     @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
     		@JoinColumn(name = "author_id") })
-    private Set<Author> author;
+    private Set<Author> authors;
     
     @ManyToMany
-    private Set<Publisher> publisher;
+    @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
+    		@JoinColumn(name = "publisher_id") })
+    private Set<Publisher> publishers;
     
     private LocalDate published;
 
@@ -56,12 +58,12 @@ public class Book {
         this.id = id;
     }
 
-    public Set<Author> getAuthor() {
-        return author;
+    public Set<Author> getAuthors() {
+        return authors;
     }
 
-    public void setAuthor(Set<Author> author) {
-        this.author = author;
+    public void setAuthors(Set<Author> author) {
+        this.authors = author;
     }
 
     public String getIsbn() {
@@ -90,7 +92,7 @@ public class Book {
 
 	@Override
 	public String toString() {
-		return "Book [id=" + id + ", author=" + author + ", isbn=" + isbn + ", name=" + name + ", published="
+		return "Book [id=" + id + ", author=" + authors + ", isbn=" + isbn + ", name=" + name + ", published="
 				+ published + "]";
 	}
 
