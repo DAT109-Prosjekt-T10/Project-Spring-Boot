@@ -26,7 +26,7 @@ public class Author {
 	private String name;
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors")
-	private Set<Book> books;
+	private Set<Long> books = new HashSet<Long>();
 	
 	public Author() {
 		super();
@@ -34,14 +34,8 @@ public class Author {
 	
 	public Author(String name) {
 		this.name = name;
-		this.books = new HashSet<Book>();
 	}
 	
-	public Author(String name, Set<Book> books) {
-		this.name = name;
-		this.books = books;
-	}
-
 	public Long getId() {
 		return id;
 	}
@@ -58,11 +52,11 @@ public class Author {
 		this.name = name;
 	}
 
-	public Set<Book> getBooks() {
+	public Set<Long> getBooks() {
 		return books;
 	}
 
-	public void setBooks(Set<Book> books) {
+	public void setBooks(Set<Long> books) {
 		this.books = books;
 	}
 

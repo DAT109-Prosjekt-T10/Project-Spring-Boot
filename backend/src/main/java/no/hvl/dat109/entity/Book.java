@@ -1,6 +1,7 @@
 package no.hvl.dat109.entity;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -31,12 +32,12 @@ public class Book {
     @ManyToMany
     @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
     		@JoinColumn(name = "author_id") })
-    private Set<Author> authors;
+    private Set<Long> authors = new HashSet<Long>();
     
     @ManyToMany
     @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
     		@JoinColumn(name = "publisher_id") })
-    private Set<Publisher> publishers;
+    private Set<Long> publishers = new HashSet<Long>();
     
     private LocalDate published;
 
@@ -58,11 +59,11 @@ public class Book {
         this.id = id;
     }
 
-    public Set<Author> getAuthors() {
+    public Set<Long> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Author> author) {
+    public void setAuthors(Set<Long> author) {
         this.authors = author;
     }
 
