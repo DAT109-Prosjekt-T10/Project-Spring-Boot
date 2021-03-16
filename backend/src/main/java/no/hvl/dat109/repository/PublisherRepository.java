@@ -9,5 +9,4 @@ import no.hvl.dat109.entity.Publisher;
 public interface PublisherRepository extends JpaRepository<Publisher, Long>{
 
 
-
 }
