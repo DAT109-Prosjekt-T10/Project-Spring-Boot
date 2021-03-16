@@ -8,6 +8,6 @@ import no.hvl.dat109.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
 
-
+    User findByEmail(String email);
 
 }
