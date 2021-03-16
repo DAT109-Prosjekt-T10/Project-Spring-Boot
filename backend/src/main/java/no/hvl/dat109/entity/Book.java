@@ -4,8 +4,10 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,15 +31,17 @@ public class Book {
     @Column(name = "name", nullable = false)
     private String name;
     
-    @ManyToMany
-    @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
-    		@JoinColumn(name = "author_id") })
-    private Set<Long> authors = new HashSet<Long>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @JoinTable(
+    		joinColumns = { @JoinColumn(name = "book_id") }, 
+    		inverseJoinColumns = { @JoinColumn(name = "author_id") })
+    private Set<Author> authors = new HashSet<Author>();
     
-    @ManyToMany
-    @JoinTable(joinColumns = { @JoinColumn(name = "book_id") }, inverseJoinColumns = {
-    		@JoinColumn(name = "publisher_id") })
-    private Set<Long> publishers = new HashSet<Long>();
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @JoinTable(
+    		joinColumns = { @JoinColumn(name = "book_id") }, 
+    		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
+    private Set<Publisher> publishers = new HashSet<Publisher>();
     
     private LocalDate published;
 
@@ -59,11 +63,11 @@ public class Book {
         this.id = id;
     }
 
-    public Set<Long> getAuthors() {
+    public Set<Author> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Long> author) {
+    public void setAuthors(Set<Author> author) {
         this.authors = author;
     }
 

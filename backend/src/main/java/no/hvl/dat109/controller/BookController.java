@@ -1,30 +1,31 @@
 package no.hvl.dat109.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.repository.BookRepository;
+import org.springframework.web.context.request.WebRequest;
 
 @RestController
-@RequestMapping(value="/books", produces = "application/json")
+@RequestMapping(value="/api/books", produces = "application/json")
 public class BookController {
-	
+
+	@Autowired
 	private BookRepository bookRepository;
 	
-	@GetMapping("/api/books")
+	@GetMapping("")
 	public ResponseEntity<List<Book>> getAllBooks() {
 		List<Book> allBooks = bookRepository.findAll();
-		
-		if(allBooks == null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} else if (allBooks.isEmpty()) {
+
+		if (allBooks.isEmpty()) {
 			return new ResponseEntity<>(allBooks, HttpStatus.NO_CONTENT);
 		} else {
 			return new ResponseEntity<>(allBooks, HttpStatus.OK);
@@ -32,13 +33,14 @@ public class BookController {
 		
 	}
 	
-	@GetMapping("/api/books/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<Book> getBook(@PathVariable Long id) {
 		return bookRepository.findById(id)
 						  .map(book -> new ResponseEntity<>(book, HttpStatus.OK))
 						  .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
 	}
 
+	// Endpoint?
 	@GetMapping("/api/publisher/{id}")
 	public ResponseEntity<List<Book>> getAllBooksByPublisherId(@PathVariable Long[] publisherIds) {
 		List<Book> allBooksByPublisherId = new ArrayList<>();
@@ -52,7 +54,7 @@ public class BookController {
 		return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.OK);
 	}
 
-	@GetMapping("/by-author-id/{authorIds}")
+	@GetMapping("/{authorIds}")
 	public ResponseEntity<List<Book>> getAllBooksByAuthorId(@PathVariable Long[] authorIds) {
 		List<Book> allBooksByAuthorId = new ArrayList<>();
 		for (Long authorId : authorIds) {
@@ -67,19 +69,30 @@ public class BookController {
 	}
 
 	
-	@PostMapping("/api/books")
-	public ResponseEntity<Book> createBook(@RequestBody Book book) {
-		try {
-			Book newBook = bookRepository.save(new Book(book.getIsbn(), book.getName(), book.getPublished()));
+	@PostMapping("")
+	public ResponseEntity<Book> createBook(@RequestBody WebRequest req) {
 
-			return new ResponseEntity<>(newBook, HttpStatus.CREATED);
+		String isbn = req.getParameter("isbn");
+		String name = req.getParameter("name");
+		String published = req.getParameter("published");
+
+		LocalDate publishedDate = null;
+
+		if (published != null) {
+			publishedDate = LocalDate.parse(published);
+		}
+
+		try {
+			Book newBook = bookRepository.save(new Book(isbn, name, publishedDate));
+
+			return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
 		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return ResponseEntity.status(HttpStatus.CONFLICT).build();
 		}
 	}
 	
 	
-    @PutMapping("/api/books/{id}")
+    @PutMapping("/{id}")
 	  public ResponseEntity<Book> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
 	    Optional<Book> books = bookRepository.findById(id);
 
@@ -96,7 +109,7 @@ public class BookController {
 	    }
 	  }
 
-    @DeleteMapping("/api/books/{id}")
+    @DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deleteAuthor(@PathVariable("id") long id) {
 	    try {
 	    	bookRepository.deleteById(id);
