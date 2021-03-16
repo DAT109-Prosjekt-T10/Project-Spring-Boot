@@ -26,7 +26,7 @@ public class BookController {
 	@Autowired
 	private BookRepository bookRepository;
 	
-	@GetMapping(value = "/getAllBooks")
+	@GetMapping("")
 	public ResponseEntity<List<Book>> getAllBooks() {
 		List<Book> allBooks = bookRepository.findAll();
 
