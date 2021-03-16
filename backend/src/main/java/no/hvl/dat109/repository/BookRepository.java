@@ -20,8 +20,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b " +
             "FROM Book b " +
             "JOIN FETCH b.authors " +
-            "jOIN FETCH b.publisher")
+            "JOIN FETCH b.publishers")
     List<Book> findAll();
 	
-	
+    @Query("SELECT b from Book b WHERE b.name LIKE %?1% OR b.isbn LIKE %?1%")
+	public List<Book> search(String keyword);
 }

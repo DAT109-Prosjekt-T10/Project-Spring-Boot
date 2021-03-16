@@ -9,6 +9,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -26,7 +28,7 @@ public class Author {
 	private String name;
 	
 	@ManyToMany(fetch = FetchType.LAZY, mappedBy = "authors")
-	private Set<Long> books = new HashSet<Long>();
+	private Set<Book> books = new HashSet<Book>();
 	
 	public Author() {
 		super();
@@ -52,11 +54,11 @@ public class Author {
 		this.name = name;
 	}
 
-	public Set<Long> getBooks() {
+	public Set<Book> getBooks() {
 		return books;
 	}
 
-	public void setBooks(Set<Long> books) {
+	public void setBooks(Set<Book> books) {
 		this.books = books;
 	}
 
