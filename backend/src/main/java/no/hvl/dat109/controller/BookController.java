@@ -45,7 +45,7 @@ public class BookController {
 	public ResponseEntity<List<Book>> getAllBooksByPublisherId(@PathVariable Long[] publisherIds) {
 		List<Book> allBooksByPublisherId = new ArrayList<>();
 		for (Long publisherId : publisherIds) {
-			List<Book> booksByPublisherId = bookRepository.findByPublisherId(publisherId);
+			List<Book> booksByPublisherId = bookRepository.findByPublishers_Id(publisherId);
 			if (!booksByPublisherId.isEmpty())
 				allBooksByPublisherId.addAll(booksByPublisherId);
 		}
@@ -58,7 +58,7 @@ public class BookController {
 	public ResponseEntity<List<Book>> getAllBooksByAuthorId(@PathVariable Long[] authorIds) {
 		List<Book> allBooksByAuthorId = new ArrayList<>();
 		for (Long authorId : authorIds) {
-			List<Book> booksByAuthorId = bookRepository.findByAuthorsId(authorId);
+			List<Book> booksByAuthorId = bookRepository.findByAuthors_Id(authorId);
 			if (!booksByAuthorId.isEmpty())
 				allBooksByAuthorId.addAll(booksByAuthorId);
 		}
