@@ -69,4 +69,10 @@ button:focus {
 	display: none;
 }
 
+.was-validated .form-control:invalid ~ .ai-user::before {
+	position: relative;
+	bottom: 11px !important;
+	background: red;
+}
+
 /* End Auth Forms */

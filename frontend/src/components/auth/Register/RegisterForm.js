@@ -1,119 +1,105 @@
 import React, { useState, useEffect } from 'react'
-import _ from 'lodash'
+import { checkRegisterFormValidity } from '../../../helpers/validate'
 
 const RegisterForm = () => {
-	//* form utilities
-	const [hidePassword, setHidePassword] = useState(true)
-	const [hideConfirmPassword, setHideConfirmPassword] = useState(true)
+	//* form utils
+	const [name, setName] = useState('')
+	const [email, setEmail] = useState('')
+	const [password, setPassword] = useState('')
+	const [confirmPassword, setConfirmPassword] = useState('')
 
+	const [checkFormValidity, setCheckFormValidity] = useState(false)
+
+	//* submit handler
 	const onSubmit = (e) => {
 		e.preventDefault()
+
+		//* check form validation
+		setCheckFormValidity(true)
 
 		//? log in user
 
 		//? redirect user to dashboard
 	}
 
-	//* bootstrap client side form validation
+	//* after submit, check actively for form changes
 	useEffect(() => {
-		// Fetch all the forms we want to apply custom Bootstrap validation styles to
-		let forms = document.querySelectorAll('.needs-validation')
-
-		// Loop over them and prevent submission
-		Array.prototype.slice.call(forms).forEach(function (form) {
-			form.addEventListener(
-				'submit',
-				function (event) {
-					if (!form.checkValidity()) {
-						event.preventDefault()
-						event.stopPropagation()
-					}
-
-					form.classList.add('was-validated')
-				},
-				false
+		if (checkFormValidity) {
+			checkRegisterFormValidity(
+				document,
+				name,
+				email,
+				password,
+				confirmPassword
 			)
-		})
-	}, [])
+		}
+	}, [
+		checkFormValidity,
+		name,
+		setName,
+		email,
+		setEmail,
+		password,
+		setPassword,
+		confirmPassword,
+		setConfirmPassword,
+	])
 
 	return (
 		<form className='needs-validation' noValidate onSubmit={onSubmit}>
-			<div className='input-group mb-3'>
-				<i className='ai-user position-absolute top-50 start-0 translate-middle-y ms-3'></i>
+			<div className='form-floating mb-3'>
 				<input
-					className='form-control rounded'
 					type='text'
+					className='form-control'
+					id='name'
 					placeholder='Name'
 					required
+					onChange={(e) => setName(e.target.value)}
 				/>
+				<label htmlFor='name'>Name</label>
 				<div className='invalid-feedback'>
 					Please provide a valid name.
 				</div>
 			</div>
-			<div className='input-group mb-3'>
-				<i className='ai-mail position-absolute top-50 start-0 translate-middle-y ms-3'></i>
+			<div className='form-floating mb-3'>
 				<input
-					className='form-control rounded'
 					type='email'
+					className='form-control'
+					id='email'
 					placeholder='Email'
 					required
+					onChange={(e) => setEmail(e.target.value)}
 				/>
+				<label htmlFor='email'>Email</label>
 				<div className='invalid-feedback'>
 					Please provide a valid email.
 				</div>
 			</div>
-			<div className='input-group mb-3'>
-				<i className='ai-lock position-absolute top-50 start-0 translate-middle-y ms-3'></i>
-				<div className='password-toggle w-100'>
-					<input
-						className='form-control'
-						type={hidePassword ? 'password' : 'text'}
-						placeholder='Password'
-						required
-						minLength='8'
-					/>
-					<div className='invalid-feedback'>
-						Password must have at least 8 characters.
-					</div>
-					{/* <label
-						className='password-toggle-btn'
-						aria-label='Show/hide password'
-					>
-						<input
-							className='password-toggle-check'
-							type='checkbox'
-							onClick={() => setHidePassword(!hidePassword)}
-						/>
-						<span className='password-toggle-indicator'></span>
-					</label> */}
+			<div className='form-floating mb-3'>
+				<input
+					type='password'
+					className='form-control'
+					id='password'
+					placeholder='Password'
+					required
+					onChange={(e) => setPassword(e.target.value)}
+				/>
+				<label htmlFor='password'>Password</label>
+				<div className='invalid-feedback'>
+					Password must have at least 8 characters.
 				</div>
 			</div>
-			<div className='input-group mb-4'>
-				<i className='ai-lock position-absolute top-50 start-0 translate-middle-y ms-3'></i>
-				<div className='password-toggle w-100'>
-					<input
-						className='form-control'
-						type={hideConfirmPassword ? 'password' : 'text'}
-						placeholder='Confirm Password'
-						required
-					/>
-					<div className='invalid-feedback'>
-						The passwords do not match.
-					</div>
-					{/* <label
-						className='password-toggle-btn'
-						aria-label='Show/hide password'
-					>
-						<input
-							className='password-toggle-check'
-							type='checkbox'
-							onClick={() =>
-								setHideConfirmPassword(!hideConfirmPassword)
-							}
-						/>
-						<span className='password-toggle-indicator'></span>
-					</label> */}
-				</div>
+			<div className='form-floating mb-3'>
+				<input
+					type='password'
+					className='form-control'
+					id='confirm-password'
+					placeholder='Confirm'
+					required
+					onChange={(e) => setConfirmPassword(e.target.value)}
+				/>
+				<label htmlFor='confirm-password'>Confirm Password</label>
+				<div className='invalid-feedback'>Passwords must match.</div>
 			</div>
 			{false && ( //! change to login reducer error
 				<div className='alert alert-danger' role='alert'>
