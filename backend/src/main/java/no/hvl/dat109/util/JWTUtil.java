@@ -12,7 +12,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class JWTUtil {
 
-    public String createToken(String id) {
+    public static String createToken(String id) {
 
         String token = null;
         Map<String, Object> payload = new HashMap<>();
@@ -29,7 +29,7 @@ public class JWTUtil {
 
     }
 
-    public boolean verifyToken(String token) {
+    public static boolean verifyToken(String token) {
 
         try {
             JWTVerifier verifier = JWT.require(Config.algorithm).withIssuer(Config.Issuer).build(); // Reusable verifier
