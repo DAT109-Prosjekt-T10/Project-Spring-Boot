@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
-import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Publisher;
-import no.hvl.dat109.repository.AuthorRepository;
 import no.hvl.dat109.repository.PublisherRepository;
 
 @RestController
