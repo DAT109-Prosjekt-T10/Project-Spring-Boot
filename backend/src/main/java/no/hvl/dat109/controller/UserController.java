@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 
@@ -17,10 +18,10 @@ import org.springframework.web.context.request.WebRequest;
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(WebRequest req) {
+    public ResponseEntity<User> registerUser(@RequestParam WebRequest req) {
 
         String email = req.getParameter("email");
 
@@ -36,13 +37,13 @@ public class UserController {
         String passwordHash = PasswordUtil.hashPassword(password);
 
         User newUser = new User(email, name, passwordHash);
-        userRepository.save(newUser);
+        User savedUser = userRepository.save(newUser);
 
-        return ResponseEntity.ok(newUser);
+        return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authorizeUser(WebRequest req) {
+    public ResponseEntity<String> authorizeUser(@RequestParam WebRequest req) {
 
         String email = req.getParameter("email");
         String password = req.getParameter("password");
