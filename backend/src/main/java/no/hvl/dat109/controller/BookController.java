@@ -15,7 +15,7 @@ import no.hvl.dat109.repository.BookRepository;
 import org.springframework.web.context.request.WebRequest;
 
 @RestController
-@RequestMapping(value="/api/books", produces = "application/json")
+@RequestMapping("/api/books")
 public class BookController {
 
 	@Autowired
@@ -34,7 +34,7 @@ public class BookController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Book> getBook(@PathVariable Long id) {
+	public ResponseEntity<Book> getBook(@PathVariable("id") long id) {
 		return bookRepository.findById(id)
 						  .map(book -> new ResponseEntity<>(book, HttpStatus.OK))
 						  .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
@@ -54,25 +54,26 @@ public class BookController {
 		return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.OK);
 	}
 
-	@GetMapping("/{authorIds}")
-	public ResponseEntity<List<Book>> getAllBooksByAuthorId(@PathVariable Long[] authorIds) {
-		List<Book> allBooksByAuthorId = new ArrayList<>();
-		for (Long authorId : authorIds) {
-			List<Book> booksByAuthorId = bookRepository.findByAuthors_Id(authorId);
-			if (!booksByAuthorId.isEmpty())
-				allBooksByAuthorId.addAll(booksByAuthorId);
-		}
-		if (allBooksByAuthorId.isEmpty())
-			return new ResponseEntity<>(allBooksByAuthorId, HttpStatus.NO_CONTENT);
-
-		return new ResponseEntity<>(allBooksByAuthorId, HttpStatus.OK);
-	}
+//	@GetMapping("/{authorIds}")
+//	public ResponseEntity<List<Book>> getAllBooksByAuthorId(@PathVariable Long[] authorIds) {
+//		List<Book> allBooksByAuthorId = new ArrayList<>();
+//		for (Long authorId : authorIds) {
+//			List<Book> booksByAuthorId = bookRepository.findByAuthors_Id(authorId);
+//			if (!booksByAuthorId.isEmpty())
+//				allBooksByAuthorId.addAll(booksByAuthorId);
+//		}
+//		if (allBooksByAuthorId.isEmpty())
+//			return new ResponseEntity<>(allBooksByAuthorId, HttpStatus.NO_CONTENT);
+//
+//		return new ResponseEntity<>(allBooksByAuthorId, HttpStatus.OK);
+//	}
 
 	
 	@PostMapping("")
 	public ResponseEntity<Book> createBook(@RequestBody WebRequest req) {
 
 		String isbn = req.getParameter("isbn");
+		System.out.println(isbn);
 		String name = req.getParameter("name");
 		String published = req.getParameter("published");
 
