@@ -7,49 +7,41 @@ import no.hvl.dat109.util.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(WebRequest req) {
-
-        String email = req.getParameter("email");
+    public ResponseEntity<User> registerUser(@RequestBody User user) {
 
         // Check if email already exists
-        User userWithEmail = userRepository.findByEmail(email);
-        if (userWithEmail == null) {
+        User userWithEmail = userRepository.findByEmail(user.getEmail());
+        if (userWithEmail != null) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        String name = req.getParameter("name");
+        String passwordHash = PasswordUtil.hashPassword(user.getPassword());
 
-        String password = req.getParameter("password");
-        String passwordHash = PasswordUtil.hashPassword(password);
+        User newUser = new User(user.getEmail(), user.getName(), passwordHash);
+        User savedUser = userRepository.save(newUser);
 
-        User newUser = new User(email, name, passwordHash);
-        userRepository.save(newUser);
-
-        return ResponseEntity.ok(newUser);
+        return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authorizeUser(WebRequest req) {
+    public ResponseEntity<String> authorizeUser(@RequestBody User user) {
+        User registeredUser = userRepository.findByEmail(user.getEmail());
 
-        String email = req.getParameter("email");
-        String password = req.getParameter("password");
+        // Check if user exists
 
-        User user = userRepository.findByEmail(email);
+        boolean correctPassword = PasswordUtil.comparePassword(user.getPassword(), user.getPassword());
 
-        boolean correctPassword = PasswordUtil.comparePassword(password, user.getPassword());
+        // TODO throws exception for invalid salt
 
         if (!correctPassword) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
