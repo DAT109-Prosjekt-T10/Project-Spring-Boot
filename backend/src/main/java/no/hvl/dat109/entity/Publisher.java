@@ -19,7 +19,7 @@ public class Publisher {
 	private String name;
 	
 	@ManyToMany(mappedBy = "publishers")
-	private Set<Book> books = new HashSet<Book>();
+	private Set<Long> books = new HashSet<Long>();
 	
 	public Publisher() {
 		super();
