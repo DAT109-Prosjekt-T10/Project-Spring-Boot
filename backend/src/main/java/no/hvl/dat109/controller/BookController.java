@@ -102,12 +102,14 @@ public class BookController {
 	@PostMapping("")
 	public ResponseEntity<Book> createBook(@RequestBody Book book) {
 
-		String isbn = book.getIsbn();
-		String name = book.getName();
-		LocalDate published = book.getPublished();
+//		String isbn = book.getIsbn();
+//		String name = book.getName();
+//		LocalDate published = book.getPublished();
+
+		book.getAuthors().
 
 		try {
-			Book newBook = bookRepository.save(new Book(isbn, name, published));
+			Book newBook = bookRepository.save(book);
 			return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
