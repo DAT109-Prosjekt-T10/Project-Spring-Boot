@@ -105,11 +105,8 @@ public class BookController {
 	@PostMapping("")
 	public ResponseEntity<Book> createBook(@RequestBody Book book) {
 
-//		String isbn = book.getIsbn();
-//		String name = book.getName();
-//		LocalDate published = book.getPublished();
-
-		book.getAuthors().
+//		book.getAuthors()
+		// Legg til book hos author
 
 		try {
 			Book newBook = bookRepository.save(book);

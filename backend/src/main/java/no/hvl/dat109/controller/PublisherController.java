@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.WebRequest;
 
 import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.PublisherRepository;
@@ -29,7 +28,7 @@ public class PublisherController {
 	PublisherRepository publisherRepository;
 	
 	
-	@GetMapping("/api/publisher")
+	@GetMapping("")
 	  public ResponseEntity<List<Publisher>> getAllAuthors(@RequestParam(required = false) String author) {
 	    try {
 	      List<Publisher> publisherList = new ArrayList<Publisher>();
@@ -48,7 +47,7 @@ public class PublisherController {
 	  }
 	
 	
-	@GetMapping("/api/publisher/{id}")
+	@GetMapping("/{id}")
 	  public ResponseEntity<Publisher> getAuthorById(@PathVariable("id") long id) {
 	    Optional<Publisher> publisherData = publisherRepository.findById(id);
 
@@ -59,7 +58,7 @@ public class PublisherController {
 	    }
 	  }
 	
-	@PostMapping("/api/publisher")
+	@PostMapping("")
 	  public ResponseEntity<Publisher> createAuthor(@RequestBody Publisher publisher) {
 	    try {
 	    	
@@ -72,13 +71,13 @@ public class PublisherController {
 	  }
 	
 
-	 @PutMapping("/api/publisher/{id}")
+	 @PutMapping("/{id}")
 	  public ResponseEntity<Publisher> updateAuthor(@PathVariable("id") long id, @RequestBody Publisher publisher) {
 	    Optional<Publisher> publisherData = publisherRepository.findById(id);
 
 	    if (publisherData.isPresent()) {
 	      Publisher _publisher = publisherData.get();
-	      	      
+
 	      return new ResponseEntity<>(publisherRepository.save(_publisher), HttpStatus.OK);
 	    } else {
 	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -91,7 +90,7 @@ public class PublisherController {
 	  * @param id
 	  * @return ResponseEntity<HttpStatus>
 	  */
-	 @DeleteMapping("/api/publisher/{id}")
+	 @DeleteMapping("/{id}")
 	  public ResponseEntity<HttpStatus> deleteAuthor(@PathVariable("id") long id) {
 	    try {
 	      publisherRepository.deleteById(id);

@@ -33,6 +33,10 @@ public class Author {
 	public Author() {
 		super();
 	}
+
+	public void addBook(Book book) {
+		books.add(book);
+	}
 	
 	public Author(String name) {
 		this.name = name;
