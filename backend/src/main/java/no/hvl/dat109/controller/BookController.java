@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +17,7 @@ import no.hvl.dat109.repository.BookRepository;
 import org.springframework.web.context.request.WebRequest;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping(value = "/api/books", produces = "application/json")
 public class BookController {
 
 	@Autowired
@@ -69,23 +71,43 @@ public class BookController {
 //	}
 
 	
+//	@PostMapping("")
+//	public ResponseEntity<Book> createBook(ResponseEntity<Book> book) {
+//
+//		System.out.println(book.getBody().getIsbn());
+////		return ResponseEntity.ok(book.getBody());
+//
+//		Book body = book.getBody();
+//
+//		String isbn = body.getIsbn();
+//		System.out.println(isbn);
+//		String name = body.getName();
+//		LocalDate published = body.getPublished();
+//
+////		LocalDate publishedDate = null;
+////
+////		if (published != null) {
+////			publishedDate = LocalDate.parse(published);
+////		}
+//
+//		try {
+//			Book newBook = bookRepository.save(new Book(isbn, name, published));
+//
+//			return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
+//		} catch (Exception e) {
+//			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+//		}
+//	}
+
 	@PostMapping("")
-	public ResponseEntity<Book> createBook(@RequestBody WebRequest req) {
+	public ResponseEntity<Book> createBook(@RequestBody Book book) {
 
-		String isbn = req.getParameter("isbn");
-		System.out.println(isbn);
-		String name = req.getParameter("name");
-		String published = req.getParameter("published");
-
-		LocalDate publishedDate = null;
-
-		if (published != null) {
-			publishedDate = LocalDate.parse(published);
-		}
+		String isbn = book.getIsbn();
+		String name = book.getName();
+		LocalDate published = book.getPublished();
 
 		try {
-			Book newBook = bookRepository.save(new Book(isbn, name, publishedDate));
-
+			Book newBook = bookRepository.save(new Book(isbn, name, published));
 			return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
