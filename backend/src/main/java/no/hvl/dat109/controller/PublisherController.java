@@ -60,12 +60,10 @@ public class PublisherController {
 	  }
 	
 	@PostMapping("/api/publisher")
-	  public ResponseEntity<Publisher> createAuthor(WebRequest req) {
+	  public ResponseEntity<Publisher> createAuthor(@RequestBody Publisher publisher) {
 	    try {
 	    	
-	    	String name = req.getParameter("name");
-	    
-	    	Publisher publisher = publisherRepository.save(new Publisher(name));
+	    	Publisher savedPublisher = publisherRepository.save(new Publisher(publisher.getName()));
 	      
 	    	return new ResponseEntity<>(publisher, HttpStatus.CREATED);
 	    } catch (Exception e) {
