@@ -3,7 +3,6 @@ import Sidebar from './Sidebar'
 import Dashboard from './dashboard/Dashboard'
 import Books from './books/Books'
 import Authors from './authors/Authors'
-import Libraries from './libraries/Libraries'
 
 const Content = ({ match }) => {
 	const currentUrl = match.path
@@ -17,7 +16,6 @@ const Content = ({ match }) => {
 				{currentUrl === '/' && <Dashboard />}
 				{currentUrl === '/books' && <Books />}
 				{currentUrl === '/authors' && <Authors />}
-				{currentUrl === '/libraries' && <Libraries />}
 			</div>
 		</div>
 	)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import LoginForm from './LoginForm'
 
@@ -6,7 +6,7 @@ const Login = () => {
 	return (
 		<div
 			className='container position-relative zindex-0 pb-4 mb-md-3'
-			style={{ marginTop: '-350px' }}
+			style={{ marginTop: '-450px' }}
 		>
 			<section
 				className='container d-flex justify-content-center align-items-center pt-7 pb-4'
@@ -22,7 +22,7 @@ const Login = () => {
 							</p>
 							<LoginForm />
 						</div>
-						<div class='border-top text-center mt-4 py-4'>
+						<div className='border-top text-center mt-4 py-4'>
 							{' '}
 							<p className='fs-sm mb-0 text-center'>
 								Don't have an account?{' '}

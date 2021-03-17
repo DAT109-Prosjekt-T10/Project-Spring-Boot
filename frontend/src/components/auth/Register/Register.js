@@ -6,7 +6,7 @@ const Register = () => {
 	return (
 		<div
 			className='container position-relative zindex-0 pb-4 mb-md-3'
-			style={{ marginTop: '-350px' }}
+			style={{ marginTop: '-450px' }}
 		>
 			<section
 				className='container d-flex justify-content-center align-items-center pt-7 pb-4'
