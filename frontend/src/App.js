@@ -18,7 +18,6 @@ const App = () => {
 					<Route exact path='/' component={Content} />
 					<Route exact path='/books' component={Content} />
 					<Route exact path='/authors' component={Content} />
-					<Route exact path='/libraries' component={Content} />
 					<Route exact path='/login' component={Login} />
 					<Route exact path='/register' component={Register} />
 					<Route path='*' component={NotFound} />
