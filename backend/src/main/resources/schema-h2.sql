@@ -1,0 +1,4 @@
+-- CREATE DATABASE IF NOT EXISTS
+CREATE SCHEMA IF NOT EXISTS library;
+
+CREATE TABLE users(email VARCHAR(255), name VARCHAR(255), password VARCHAR(255),admin boolean);

@@ -2,12 +2,13 @@ package no.hvl.dat109;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
-@SpringBootApplication
-public class Main {
+@SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
+public class Application {
 
 	/**
 	 * 
@@ -15,7 +16,7 @@ public class Main {
 	 * 
 	 */
 	public static void main(String[] args) {
-		SpringApplication.run(Main.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 
 	/*
