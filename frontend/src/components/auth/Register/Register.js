@@ -1,8 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import RegisterForm from './RegisterForm'
+import { useSelector, useDispatch } from 'react-redux'
+import { registerUser } from '../../../store/actions/auth'
 
 const Register = () => {
+	//* initialize dispatcher
+	const dispatch = useDispatch()
+
+	const handleRegister = (user) => {
+		dispatch(registerUser(user))
+	}
 	return (
 		<div
 			className='container position-relative zindex-0 pb-4 mb-md-3'
@@ -19,7 +27,9 @@ const Register = () => {
 							<p className='fs-ms text-muted mb-4 text-center'>
 								Registration takes less than a minute.
 							</p>
-							<RegisterForm />
+							<RegisterForm
+								handleRegister={(user) => handleRegister(user)}
+							/>
 						</div>
 						<div className='border-top text-center mt-4 py-4'>
 							<p className='fs-sm mb-0 text-center'>

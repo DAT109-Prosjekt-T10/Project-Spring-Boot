@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { checkRegisterFormValidity } from '../../../helpers/validate'
+import {
+	isRegisterFormValid,
+	checkRegisterFormValidity,
+} from '../../../helpers/validate'
 
-const RegisterForm = () => {
+const RegisterForm = ({ handleRegister }) => {
 	//* form utils
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
@@ -14,12 +17,25 @@ const RegisterForm = () => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 
-		//* check form validation
-		setCheckFormValidity(true)
+		//* checks if form is valid
+		if (isRegisterFormValid(name, email, password, confirmPassword)) {
+			//? register user
+			let user = {
+				name,
+				email,
+				password,
+				//? admin: if admin input field is equal, set as true
+			}
 
-		//? log in user
+			//* clear form
+			resetForm()
 
-		//? redirect user to dashboard
+			//* send back user object to Register component and do the logic there
+			handleRegister(user)
+		} else {
+			//* check form validation
+			setCheckFormValidity(true)
+		}
 	}
 
 	//* after submit, check actively for form changes
@@ -45,6 +61,14 @@ const RegisterForm = () => {
 		setConfirmPassword,
 	])
 
+	const resetForm = () => {
+		setCheckFormValidity(false)
+		setName('')
+		setEmail('')
+		setPassword('')
+		setConfirmPassword('')
+	}
+
 	return (
 		<form className='needs-validation' noValidate onSubmit={onSubmit}>
 			<div className='form-floating mb-3'>
@@ -54,6 +78,7 @@ const RegisterForm = () => {
 					id='name'
 					placeholder='Name'
 					required
+					value={name}
 					onChange={(e) => setName(e.target.value)}
 				/>
 				<label htmlFor='name'>Name</label>
@@ -68,6 +93,7 @@ const RegisterForm = () => {
 					id='email'
 					placeholder='Email'
 					required
+					value={email}
 					onChange={(e) => setEmail(e.target.value)}
 				/>
 				<label htmlFor='email'>Email</label>
@@ -82,6 +108,7 @@ const RegisterForm = () => {
 					id='password'
 					placeholder='Password'
 					required
+					value={password}
 					onChange={(e) => setPassword(e.target.value)}
 				/>
 				<label htmlFor='password'>Password</label>
@@ -96,6 +123,7 @@ const RegisterForm = () => {
 					id='confirm-password'
 					placeholder='Confirm'
 					required
+					value={confirmPassword}
 					onChange={(e) => setConfirmPassword(e.target.value)}
 				/>
 				<label htmlFor='confirm-password'>Confirm Password</label>

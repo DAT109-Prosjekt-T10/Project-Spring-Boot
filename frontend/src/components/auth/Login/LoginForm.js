@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
 const LoginForm = () => {
 	//* form utils
@@ -8,6 +9,16 @@ const LoginForm = () => {
 	//* submit handler
 	const onSubmit = (e) => {
 		e.preventDefault()
+
+		let user = {
+			email,
+			password,
+		}
+
+		axios
+			.post('http://localhost:3001/api/user/login', user)
+			.then((res) => console.log(res))
+			.catch((err) => console.log(err))
 
 		//? log in user
 
