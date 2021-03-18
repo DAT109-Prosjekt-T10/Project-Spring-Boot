@@ -122,6 +122,14 @@ public class Book {
         this.description = description;
     }
 
+    public Set<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(Set<Publisher> publishers) {
+        this.publishers = publishers;
+    }
+
     @Override
     public String toString() {
         return "Book{" +

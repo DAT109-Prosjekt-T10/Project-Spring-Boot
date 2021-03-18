@@ -24,7 +24,11 @@ public class Publisher {
 	public Publisher() {
 		super();
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
 	public Publisher(String name) {
 		this.name = name;
 	}
