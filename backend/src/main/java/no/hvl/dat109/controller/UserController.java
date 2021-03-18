@@ -22,12 +22,13 @@ public class UserController {
         // Check if email already exists
         User userWithEmail = userRepository.findByEmail(user.getEmail());
         if (userWithEmail != null) {
+        System.out.println(userWithEmail.toString());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         String passwordHash = PasswordUtil.hashPassword(user.getPassword());
 
-        User newUser = new User(user.getEmail(), user.getName(), passwordHash);
+        User newUser = new User(user.getName(), user.getEmail(), passwordHash);
         User savedUser = userRepository.save(newUser);
 
         return ResponseEntity.ok(savedUser);
@@ -38,17 +39,20 @@ public class UserController {
         User registeredUser = userRepository.findByEmail(user.getEmail());
 
         // Check if user exists
+        if (registeredUser == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
 
-        boolean correctPassword = PasswordUtil.comparePassword(user.getPassword(), user.getPassword());
-
-        // TODO throws exception for invalid salt
+        boolean correctPassword = PasswordUtil.comparePassword(user.getPassword(), registeredUser.getPassword());
 
         if (!correctPassword) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String jwtToken = JWTUtil.createToken(user.getId().toString());
-        return ResponseEntity.ok(jwtToken);
+//        String jwtToken = JWTUtil.createToken(user.getId().toString());
+//        return ResponseEntity.ok(jwtToken);
+
+        return ResponseEntity.ok().build();
 
     }
 
