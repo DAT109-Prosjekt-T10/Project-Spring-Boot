@@ -22,20 +22,20 @@ public class UserController {
         // Check if email already exists
         User userWithEmail = userRepository.findByEmail(user.getEmail());
         if (userWithEmail != null) {
-        System.out.println(userWithEmail.toString());
+            System.out.println(userWithEmail.toString());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         String passwordHash = PasswordUtil.hashPassword(user.getPassword());
 
-        User newUser = new User(user.getName(), user.getEmail(), passwordHash);
+        User newUser = new User(user.getName(), user.getEmail(), passwordHash, user.isAdmin());
         User savedUser = userRepository.save(newUser);
 
         return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authorizeUser(@RequestBody User user) {
+    public ResponseEntity<User> authorizeUser(@RequestBody User user) {
         User registeredUser = userRepository.findByEmail(user.getEmail());
 
         // Check if user exists
@@ -52,7 +52,10 @@ public class UserController {
 //        String jwtToken = JWTUtil.createToken(user.getId().toString());
 //        return ResponseEntity.ok(jwtToken);
 
-        return ResponseEntity.ok().build();
+        // Skjuler passord i JSON-response
+        registeredUser.setPassword(null);
+
+        return ResponseEntity.ok(registeredUser);
 
     }
 
