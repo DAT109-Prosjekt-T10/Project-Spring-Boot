@@ -14,7 +14,7 @@ import {
 	DELETE_BOOK_STARTED,
 	DELETE_BOOK_SUCCESS,
 	DELETE_BOOK_FAILURE,
-} from '../../actions/authors/types'
+} from '../../actions/books/types'
 
 const initialState = {
 	//* set default state
@@ -39,7 +39,7 @@ const initialState = {
 	},
 }
 
-const authorReducer = (state = initialState, action) => {
+const booksReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case GET_BOOKS_STARTED:
 			return {
@@ -156,4 +156,4 @@ const authorReducer = (state = initialState, action) => {
 	}
 }
 
-export default authorReducer
+export default booksReducer
