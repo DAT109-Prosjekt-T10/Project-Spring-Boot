@@ -98,10 +98,10 @@ const Table = ({ data, columns, onAddClick }) => {
 
 const authors = [
 	{ id: 1, name: 'Ida Jackson', books: [] },
-	{ id: 1, name: 'Knut Johansen', books: [] },
-	{ id: 1, name: 'Jan Hårstad', books: [] },
-	{ id: 1, name: 'Tonje Hauge', books: [] },
-	{ id: 1, name: 'Geir Uthaug', books: [] },
+	{ id: 2, name: 'Knut Johansen', books: [] },
+	{ id: 3, name: 'Jan Hårstad', books: [] },
+	{ id: 4, name: 'Tonje Hauge', books: [] },
+	{ id: 5, name: 'Geir Uthaug', books: [] },
 ]
 
 export default Table

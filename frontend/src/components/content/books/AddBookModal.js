@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
-import { Modal } from 'bootstrap'
 
 const AddBookModal = ({ authors, handleSubmit }) => {
 	const [title, setTitle] = useState('')
@@ -26,9 +25,6 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 		}
 
 		handleSubmit(newBook)
-
-		const modal = new Modal(document.getElementById('add-book-modal'))
-		modal.hide()
 	}
 
 	return (
