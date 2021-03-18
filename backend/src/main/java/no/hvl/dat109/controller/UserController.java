@@ -4,6 +4,7 @@ import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.JWTUtil;
 import no.hvl.dat109.util.PasswordUtil;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,23 +20,32 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
 
+        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8) && user.getName().length() > 0)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         // Check if email already exists
         User userWithEmail = userRepository.findByEmail(user.getEmail());
         if (userWithEmail != null) {
-        System.out.println(userWithEmail.toString());
+            System.out.println(userWithEmail.toString());
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
         String passwordHash = PasswordUtil.hashPassword(user.getPassword());
 
-        User newUser = new User(user.getName(), user.getEmail(), passwordHash);
+        User newUser = new User(user.getName(), user.getEmail(), passwordHash, user.isAdmin());
         User savedUser = userRepository.save(newUser);
 
         return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authorizeUser(@RequestBody User user) {
+    public ResponseEntity<User> authorizeUser(@RequestBody User user) {
+
+        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         User registeredUser = userRepository.findByEmail(user.getEmail());
 
         // Check if user exists
@@ -52,7 +62,10 @@ public class UserController {
 //        String jwtToken = JWTUtil.createToken(user.getId().toString());
 //        return ResponseEntity.ok(jwtToken);
 
-        return ResponseEntity.ok().build();
+        // Skjuler passord i JSON-response
+        registeredUser.setPassword(null);
+
+        return ResponseEntity.ok(registeredUser);
 
     }
 
