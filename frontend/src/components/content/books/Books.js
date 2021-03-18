@@ -94,6 +94,27 @@ const Books = () => {
 		},
 		{ id: 2, title: 'Bear the Bear', category: 'Horror', year: '1952' },
 		{ id: 3, title: 'Dunkin Feathers', category: 'Comedy', year: '2005' },
+		{
+			id: 4,
+			title: 'To Kill a Mockingbord',
+			category: 'Comedy',
+			year: '2021',
+		},
+		{
+			id: 5,
+			title: 'Pride and Prejudice',
+			category: 'Fantasy',
+			year: '1972',
+		},
+		{
+			id: 6,
+			title: 'Harry Potter and the Sorcerers Stone',
+			category: 'Sci-Fi',
+			year: '1973',
+		},
+		{ id: 7, title: 'Ulysses', category: 'Westerns', year: '1985' },
+		{ id: 8, title: 'Moby Dick', category: 'Fantasy', year: '2020' },
+		{ id: 9, title: 'War and Peace', category: 'Horror', year: '2002' },
 	]
 
 	return (
