@@ -1,7 +1,5 @@
 package no.hvl.dat109.controller;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
-@RequestMapping(value = "/api/books", produces = "application/json")
+@RequestMapping("/api/books")
 public class BookController {
 
     @Autowired
@@ -32,99 +30,46 @@ public class BookController {
 
         // Fjerner authors array i JSON
         allBooks.forEach(book -> book.setAuthors(null));
+        allBooks.forEach(book -> book.setPublishers(null));
 
-        if (allBooks.isEmpty()) {
-            return new ResponseEntity<>(allBooks, HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(allBooks, HttpStatus.OK);
-        }
+        return new ResponseEntity<>(allBooks, HttpStatus.OK);
 
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBook(@PathVariable("id") long id) {
+    public ResponseEntity<Book> getBookById(@PathVariable("id") long id) {
 
-    	Book book = null;
-
+        Book book;
         try {
             book = bookRepository.findById(id).get();
         } catch (Exception e) {
-        	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
         // Fjerner authors array i JSON
         book.setAuthors(null);
+        book.setPublishers(null);
 
         return ResponseEntity.ok(book);
-
-//        return bookRepository.findById(id)
-//                .map(book -> new ResponseEntity<>(book, HttpStatus.OK))
-//                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     // Endpoint?
-    @GetMapping("/api/publisher/{id}")
-    public ResponseEntity<List<Book>> getAllBooksByPublisherId(@PathVariable Long[] publisherIds) {
-        List<Book> allBooksByPublisherId = new ArrayList<>();
-        for (Long publisherId : publisherIds) {
-            List<Book> booksByPublisherId = bookRepository.findByPublishers_Id(publisherId);
-            if (!booksByPublisherId.isEmpty())
-                allBooksByPublisherId.addAll(booksByPublisherId);
-        }
-        if (allBooksByPublisherId.isEmpty())
-            return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.OK);
-    }
-
-//	@GetMapping("/{authorIds}")
-//	public ResponseEntity<List<Book>> getAllBooksByAuthorId(@PathVariable Long[] authorIds) {
-//		List<Book> allBooksByAuthorId = new ArrayList<>();
-//		for (Long authorId : authorIds) {
-//			List<Book> booksByAuthorId = bookRepository.findByAuthors_Id(authorId);
-//			if (!booksByAuthorId.isEmpty())
-//				allBooksByAuthorId.addAll(booksByAuthorId);
-//		}
-//		if (allBooksByAuthorId.isEmpty())
-//			return new ResponseEntity<>(allBooksByAuthorId, HttpStatus.NO_CONTENT);
-//
-//		return new ResponseEntity<>(allBooksByAuthorId, HttpStatus.OK);
-//	}
-
-
-//	@PostMapping("")
-//	public ResponseEntity<Book> createBook(ResponseEntity<Book> book) {
-//
-//		System.out.println(book.getBody().getIsbn());
-////		return ResponseEntity.ok(book.getBody());
-//
-//		Book body = book.getBody();
-//
-//		String isbn = body.getIsbn();
-//		System.out.println(isbn);
-//		String name = body.getName();
-//		LocalDate published = body.getPublished();
-//
-////		LocalDate publishedDate = null;
-////
-////		if (published != null) {
-////			publishedDate = LocalDate.parse(published);
-////		}
-//
-//		try {
-//			Book newBook = bookRepository.save(new Book(isbn, name, published));
-//
-//			return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
-//		} catch (Exception e) {
-//			return ResponseEntity.status(HttpStatus.CONFLICT).build();
-//		}
-//	}
+//    @GetMapping("/api/publisher/{id}")
+//    public ResponseEntity<List<Book>> getAllBooksByPublisherId(@PathVariable Long[] publisherIds) {
+//        List<Book> allBooksByPublisherId = new ArrayList<>();
+//        for (Long publisherId : publisherIds) {
+//            List<Book> booksByPublisherId = bookRepository.findByPublishers_Id(publisherId);
+//            if (!booksByPublisherId.isEmpty())
+//                allBooksByPublisherId.addAll(booksByPublisherId);
+//        }
+//        if (allBooksByPublisherId.isEmpty())
+//            return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.NO_CONTENT);
+//        return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.OK);
+//    }
 
     @PostMapping("")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
-
-//		book.getAuthors()
-        // Legg til book hos author
-
+        System.out.println(book.toString());
         try {
             Book newBook = bookRepository.save(book);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
@@ -141,9 +86,13 @@ public class BookController {
         if (books.isPresent()) {
             Book getBook = books.get();
 
-            getBook.setName(book.getName());
-            getBook.setIsbn(book.getIsbn());
-            getBook.setPublished(book.getPublished());
+            // TODO Finnes det en enklere løsning for å implementere denne funksjonaliteten?
+            if (book.getTitle() != null) getBook.setTitle(book.getTitle());
+            if (book.getIsbn() != null) getBook.setIsbn(book.getIsbn());
+            if (book.getPublished() != null) getBook.setPublished(book.getPublished());
+            if (book.getCategory() != null) getBook.setCategory(book.getCategory());
+            if (book.getDescription() != null) getBook.setDescription(book.getDescription());
+            if (book.getAuthors() != null) getBook.setAuthors(book.getAuthors());
 
             return new ResponseEntity<>(bookRepository.save(getBook), HttpStatus.OK);
         } else {
@@ -152,12 +101,13 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") long id) {
-        try {
+    public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        if (book.isPresent()) {
             bookRepository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok(book.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

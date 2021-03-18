@@ -5,8 +5,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonView;
+import no.hvl.dat109.Application;
 import org.hibernate.annotations.NaturalId;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class User {
 
@@ -17,7 +21,9 @@ public class User {
 	@NaturalId
 	private String email;
 	
-	private String name, password;
+	private String name;
+
+	private String password;
 	private boolean admin;
 	
 	public User() {

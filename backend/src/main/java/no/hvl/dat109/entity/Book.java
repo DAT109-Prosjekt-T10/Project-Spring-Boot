@@ -15,8 +15,13 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.NaturalId;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Book {
     
@@ -27,14 +32,21 @@ public class Book {
     @NaturalId
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
-    
-    @Column(name = "name", nullable = false)
-    private String name;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "category", nullable = false)
+    private String category;
+
+    @Column(name = "description", nullable = true)
+    private String description;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
+//    @JsonIgnore
     private Set<Author> authors = new HashSet<Author>();
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -42,16 +54,17 @@ public class Book {
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
     private Set<Publisher> publishers = new HashSet<Publisher>();
-    
+
+    @Column(name = "published", nullable = false)
     private LocalDate published;
 
     public Book() {
         super();
     }
 
-    public Book(String isbn, String name, LocalDate published) {
+    public Book(String isbn, String title, LocalDate published) {
         this.isbn = isbn;
-        this.name = name;
+        this.title = title;
         this.published = published;
     }
     
@@ -79,12 +92,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public LocalDate getPublished() {
@@ -95,10 +108,41 @@ public class Book {
         this.published = published;
     }
 
-	@Override
-	public String toString() {
-		return "Book [id=" + id + ", author=" + authors + ", isbn=" + isbn + ", name=" + name + ", published="
-				+ published + "]";
-	}
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(Set<Publisher> publishers) {
+        this.publishers = publishers;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", authors=" + authors +
+                ", publishers=" + publishers +
+                ", published=" + published +
+                '}';
+    }
 }

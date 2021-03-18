@@ -1,6 +1,5 @@
 package no.hvl.dat109.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,81 +22,76 @@ import no.hvl.dat109.repository.PublisherRepository;
 @RestController
 @RequestMapping("/api/publisher")
 public class PublisherController {
-    
-	@Autowired
-	PublisherRepository publisherRepository;
-	
-	
-	@GetMapping("")
-	  public ResponseEntity<List<Publisher>> getAllAuthors(@RequestParam(required = false) String author) {
-	    try {
-	      List<Publisher> publisherList = new ArrayList<Publisher>();
 
-	      publisherRepository.findAll().forEach(publisherList::add);
+    @Autowired
+    PublisherRepository publisherRepository;
 
-	      if (publisherList.isEmpty()) {
-	        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	      }
+    @GetMapping("")
+    public ResponseEntity<List<Publisher>> getAllPublishers(@RequestParam(required = false) String author) {
+        List<Publisher> publishers = publisherRepository.findAll();
 
-	      return new ResponseEntity<>(publisherList, HttpStatus.OK);
-	      
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
-	
-	
-	@GetMapping("/{id}")
-	  public ResponseEntity<Publisher> getAuthorById(@PathVariable("id") long id) {
-	    Optional<Publisher> publisherData = publisherRepository.findById(id);
+        // Fjerner books array i JSON response
+        publishers.forEach(p -> p.setBooks(null));
 
-	    if (publisherData.isPresent()) {
-	      return new ResponseEntity<>(publisherData.get(), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-	
-	@PostMapping("")
-	  public ResponseEntity<Publisher> createAuthor(@RequestBody Publisher publisher) {
-	    try {
-	    	
-	    	Publisher savedPublisher = publisherRepository.save(new Publisher(publisher.getName()));
-	      
-	    	return new ResponseEntity<>(publisher, HttpStatus.CREATED);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
-	
+        return ResponseEntity.ok(publishers);
+    }
 
-	 @PutMapping("/{id}")
-	  public ResponseEntity<Publisher> updateAuthor(@PathVariable("id") long id, @RequestBody Publisher publisher) {
-	    Optional<Publisher> publisherData = publisherRepository.findById(id);
 
-	    if (publisherData.isPresent()) {
-	      Publisher _publisher = publisherData.get();
+    @GetMapping("/{id}")
+    public ResponseEntity<Publisher> getAPublisherById(@PathVariable("id") long id) {
+        Optional<Publisher> publisherData = publisherRepository.findById(id);
 
-	      return new ResponseEntity<>(publisherRepository.save(_publisher), HttpStatus.OK);
-	    } else {
-	      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	    }
-	  }
-	
-	 /**
-	  * Method to delete an author based on the author's id.
-	  * 
-	  * @param id
-	  * @return ResponseEntity<HttpStatus>
-	  */
-	 @DeleteMapping("/{id}")
-	  public ResponseEntity<HttpStatus> deleteAuthor(@PathVariable("id") long id) {
-	    try {
-	      publisherRepository.deleteById(id);
-	      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-	    } catch (Exception e) {
-	      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-	    }
-	  }
-	
+        if (publisherData.isPresent()) {
+            // Fjerner books array i JSON
+            Publisher publisher = publisherData.get();
+            publisher.setBooks(null);
+            return new ResponseEntity<>(publisher, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("")
+    public ResponseEntity<Publisher> createPublisher(@RequestBody Publisher publisher) {
+        try {
+            Publisher savedPublisher = publisherRepository.save(new Publisher(publisher.getName()));
+            return new ResponseEntity<>(savedPublisher, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+        }
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Publisher> updateAuthor(@PathVariable("id") long id, @RequestBody Publisher publisher) {
+        Optional<Publisher> publisherData = publisherRepository.findById(id);
+
+        if (publisherData.isPresent()) {
+            Publisher _publisher = publisherData.get();
+
+            _publisher.setName(publisher.getName());
+            _publisher.setBooks(publisher.getBooks());
+
+            return new ResponseEntity<>(publisherRepository.save(_publisher), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /**
+     * Method to delete an author based on the author's id.
+     *
+     * @param id
+     * @return ResponseEntity<HttpStatus>
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Long> deleteAuthor(@PathVariable("id") long id) {
+        try {
+            publisherRepository.deleteById(id);
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

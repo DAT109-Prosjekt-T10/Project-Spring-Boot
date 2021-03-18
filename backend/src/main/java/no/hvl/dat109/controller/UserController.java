@@ -36,11 +36,16 @@ public class UserController {
         User newUser = new User(user.getName(), user.getEmail(), passwordHash, user.isAdmin());
         User savedUser = userRepository.save(newUser);
 
+        // Skjuler passord i JSON-response
+        savedUser.setPassword(null);
+
         return ResponseEntity.ok(savedUser);
     }
 
     @PostMapping("/login")
     public ResponseEntity<User> authorizeUser(@RequestBody User user) {
+
+        System.out.println(user.toString());
 
         if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -59,7 +64,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-//        String jwtToken = JWTUtil.createToken(user.getId().toString());
+        String jwtToken = JWTUtil.createToken(registeredUser.getId().toString());
 //        return ResponseEntity.ok(jwtToken);
 
         // Skjuler passord i JSON-response

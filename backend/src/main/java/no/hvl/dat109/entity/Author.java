@@ -1,5 +1,9 @@
 package no.hvl.dat109.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +19,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
-@Table
 public class Author {
     
 	@Id

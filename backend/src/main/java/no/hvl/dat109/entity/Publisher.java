@@ -1,5 +1,8 @@
 package no.hvl.dat109.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Publisher {
     
@@ -24,7 +28,11 @@ public class Publisher {
 	public Publisher() {
 		super();
 	}
-	
+
+	public Long getId() {
+		return id;
+	}
+
 	public Publisher(String name) {
 		this.name = name;
 	}
