@@ -4,6 +4,7 @@ import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.JWTUtil;
 import no.hvl.dat109.util.PasswordUtil;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,10 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
+
+        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8) && user.getName().length() > 0)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         // Check if email already exists
         User userWithEmail = userRepository.findByEmail(user.getEmail());
@@ -36,6 +41,11 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<User> authorizeUser(@RequestBody User user) {
+
+        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8))) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         User registeredUser = userRepository.findByEmail(user.getEmail());
 
         // Check if user exists
