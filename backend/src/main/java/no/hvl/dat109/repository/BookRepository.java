@@ -10,13 +10,11 @@ import no.hvl.dat109.entity.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-
-	Book findByNameAllIgnoreCase(String name);
 	
     List<Book> findByPublishers_Id(Long id);
 
     List<Book> findByAuthors_Id(Long id);
 	
-    @Query("SELECT b from Book b WHERE b.name LIKE %?1% OR b.isbn LIKE %?1%")
+    @Query("SELECT b from Book b WHERE b.title LIKE %?1% OR b.isbn LIKE %?1%")
 	public List<Book> search(String keyword);
 }

@@ -1,6 +1,5 @@
 package no.hvl.dat109.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +67,7 @@ public class BookController {
 
     @PostMapping("")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
+        System.out.println(book.toString());
         try {
             Book newBook = bookRepository.save(book);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
@@ -84,9 +84,13 @@ public class BookController {
         if (books.isPresent()) {
             Book getBook = books.get();
 
-            getBook.setName(book.getName());
-            getBook.setIsbn(book.getIsbn());
-            getBook.setPublished(book.getPublished());
+            // TODO Finnes det en enklere løsning for å implementere denne funksjonaliteten?
+            if (book.getTitle() != null) getBook.setTitle(book.getTitle());
+            if (book.getIsbn() != null) getBook.setIsbn(book.getIsbn());
+            if (book.getPublished() != null) getBook.setPublished(book.getPublished());
+            if (book.getCategory() != null) getBook.setCategory(book.getCategory());
+            if (book.getDescription() != null) getBook.setDescription(book.getDescription());
+            if (book.getAuthors() != null) getBook.setAuthors(book.getAuthors());
 
             return new ResponseEntity<>(bookRepository.save(getBook), HttpStatus.OK);
         } else {
