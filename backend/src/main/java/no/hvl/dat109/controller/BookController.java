@@ -30,6 +30,7 @@ public class BookController {
 
         // Fjerner authors array i JSON
         allBooks.forEach(book -> book.setAuthors(null));
+        allBooks.forEach(book -> book.setPublishers(null));
 
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
 
@@ -47,6 +48,7 @@ public class BookController {
 
         // Fjerner authors array i JSON
         book.setAuthors(null);
+        book.setPublishers(null);
 
         return ResponseEntity.ok(book);
     }

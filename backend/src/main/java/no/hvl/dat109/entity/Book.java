@@ -15,8 +15,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.NaturalId;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -44,7 +46,7 @@ public class Book {
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
-    @JsonIgnore
+//    @JsonIgnore
     private Set<Author> authors = new HashSet<Author>();
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })

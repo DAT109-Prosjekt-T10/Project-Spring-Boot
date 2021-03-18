@@ -33,6 +33,9 @@ public class AuthorController {
     @GetMapping("")
     public ResponseEntity<List<Author>> getAllAuthors() {
         List<Author> authors = authorRepository.findAll();
+
+        authors.forEach(a -> a.setBooks(null));
+
         return ResponseEntity.ok(authors);
     }
 
@@ -44,10 +47,12 @@ public class AuthorController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Author> getAuthorById(@PathVariable("id") long id) {
-        Optional<Author> tutorialData = authorRepository.findById(id);
+        Optional<Author> authorData = authorRepository.findById(id);
 
-        if (tutorialData.isPresent()) {
-            return new ResponseEntity<>(tutorialData.get(), HttpStatus.OK);
+        if (authorData.isPresent()) {
+            Author author = authorData.get();
+            author.setBooks(null);
+            return new ResponseEntity<>(author, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

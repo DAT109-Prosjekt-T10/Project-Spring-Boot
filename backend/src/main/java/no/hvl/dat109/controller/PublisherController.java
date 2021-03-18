@@ -29,6 +29,10 @@ public class PublisherController {
     @GetMapping("")
     public ResponseEntity<List<Publisher>> getAllPublishers(@RequestParam(required = false) String author) {
         List<Publisher> publishers = publisherRepository.findAll();
+
+        // Fjerner books array i JSON response
+        publishers.forEach(p -> p.setBooks(null));
+
         return ResponseEntity.ok(publishers);
     }
 
@@ -38,7 +42,10 @@ public class PublisherController {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
 
         if (publisherData.isPresent()) {
-            return new ResponseEntity<>(publisherData.get(), HttpStatus.OK);
+            // Fjerner books array i JSON
+            Publisher publisher = publisherData.get();
+            publisher.setBooks(null);
+            return new ResponseEntity<>(publisher, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
