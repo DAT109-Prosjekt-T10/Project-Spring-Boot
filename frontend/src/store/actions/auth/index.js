@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../config/axios'
 import {
 	LOGIN_USER_STARTED,
 	LOGIN_USER_SUCCESS,

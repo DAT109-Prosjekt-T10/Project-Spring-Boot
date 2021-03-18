@@ -49,8 +49,6 @@ export const checkRegisterFormValidity = (
 }
 
 const isNameValid = (name) => {
-	console.log(name)
-	console.log(name.length)
 	return name.length > 1
 }
 
