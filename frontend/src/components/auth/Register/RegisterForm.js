@@ -129,11 +129,6 @@ const RegisterForm = ({ handleRegister }) => {
 				<label htmlFor='confirm-password'>Confirm Password</label>
 				<div className='invalid-feedback'>Passwords must match.</div>
 			</div>
-			{false && ( //! change to login reducer error
-				<div className='alert alert-danger' role='alert'>
-					An error occured.
-				</div>
-			)}
 			<br />
 			<button
 				className='btn btn-primary d-block w-100'

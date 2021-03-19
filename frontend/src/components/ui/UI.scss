@@ -53,13 +53,9 @@
 /* Spinner */
 
 .cs-page-loading {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+	display: flex;
 	width: 100%;
-	height: 100%;
+	height: 12rem;
 	-webkit-transition: all 0.4s 0.2s ease-in-out;
 	transition: all 0.4s 0.2s ease-in-out;
 	background-color: #fff;
@@ -72,8 +68,8 @@
 	visibility: visible;
 }
 .cs-page-loading-inner {
-	position: absolute;
-	top: 50%;
+	position: relative;
+	top: 70%;
 	left: 0;
 	width: 100%;
 	text-align: center;

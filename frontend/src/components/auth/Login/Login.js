@@ -1,8 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { loginUser } from '../../../store/actions/auth'
 import LoginForm from './LoginForm'
+import Spinner from '../../ui/Spinner'
 
-const Login = () => {
+const Login = ({ history }) => {
+	//* initialize dispatcher
+	const dispatch = useDispatch()
+
+	//* user reducer
+	const user = useSelector((state) => state.user)
+
+	//* method to register user
+	const handleLogin = (userObj) => {
+		dispatch(loginUser(userObj))
+	}
+
+	//* if user is authenticated, redirect to dashboard
+	useEffect(() => {
+		if (user.data) {
+			history.push('/')
+		}
+	}, [user, history])
+
 	return (
 		<div
 			className='container position-relative zindex-0 pb-4 mb-md-3'
@@ -20,7 +41,25 @@ const Login = () => {
 								Sign in to your account using email and
 								password.
 							</p>
-							<LoginForm />
+							{user.loading ? (
+								<Spinner />
+							) : (
+								<>
+									{user.error && (
+										<div
+											className='alert alert-danger'
+											role='alert'
+										>
+											Incorrect email or password.
+										</div>
+									)}
+									<LoginForm
+										handleLogin={(userObj) =>
+											handleLogin(userObj)
+										}
+									/>
+								</>
+							)}
 						</div>
 						<div className='border-top text-center mt-4 py-4'>
 							{' '}

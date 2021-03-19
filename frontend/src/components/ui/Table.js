@@ -25,14 +25,14 @@ const Table = ({ data, columns, onAddClick }) => {
 	const [search, setSearch] = useState('')
 	useEffect(() => {
 		setFilteredData(
-			data.filter(
-				(item) =>
-					item.title.toLowerCase().includes(search.toLowerCase()) ||
-					item.category
+			data.filter((item) => {
+				return Object.keys(item).some((k) =>
+					item[k]
+						.toString()
 						.toLowerCase()
-						.includes(search.toLowerCase()) ||
-					item.year.toLowerCase().includes(search.toLowerCase())
-			)
+						.includes(search.toLowerCase())
+				)
+			})
 		)
 	}, [search, data, setFilteredData])
 

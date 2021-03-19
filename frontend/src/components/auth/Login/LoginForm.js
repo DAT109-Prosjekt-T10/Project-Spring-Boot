@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 
-const LoginForm = () => {
+const LoginForm = ({ handleLogin }) => {
 	//* form utils
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
@@ -15,23 +14,11 @@ const LoginForm = () => {
 			password,
 		}
 
-		axios
-			.post('http://localhost:3001/api/user/login', user)
-			.then((res) => console.log(res))
-			.catch((err) => console.log(err))
-
-		//? log in user
-
-		//? redirect user to dashboard
+		handleLogin(user)
 	}
 
 	return (
 		<form className='needs-validation' noValidate onSubmit={onSubmit}>
-			{false && ( //! change to login reducer error
-				<div className='alert alert-danger' role='alert'>
-					Incorrect email or password.
-				</div>
-			)}
 			<div className='form-floating mb-3'>
 				<input
 					type='email'

@@ -1,14 +1,12 @@
 import axios from '../../../config/axios'
 import {
-	LOGIN_USER_STARTED,
-	LOGIN_USER_SUCCESS,
-	LOGIN_USER_FAILURE,
-	REGISTER_USER_STARTED,
-	REGISTER_USER_SUCCESS,
-	REGISTER_USER_FAILURE,
+	CURRENT_USER_STARTED,
+	CURRENT_USER_SUCCESS,
+	CURRENT_USER_FAILURE,
+	LOGOUT_USER,
 } from './types'
 
-export const loginUser = (obj) => {
+const loginUser = (obj) => {
 	return (dispatch) => {
 		dispatch(loginUserStarted())
 
@@ -22,24 +20,24 @@ export const loginUser = (obj) => {
 }
 
 const loginUserStarted = () => ({
-	type: LOGIN_USER_STARTED,
+	type: CURRENT_USER_STARTED,
 })
 
 const loginUserSuccess = (data) => ({
-	type: LOGIN_USER_SUCCESS,
+	type: CURRENT_USER_SUCCESS,
 	payload: {
 		data,
 	},
 })
 
 const loginUserFailure = (error) => ({
-	type: LOGIN_USER_FAILURE,
+	type: CURRENT_USER_FAILURE,
 	payload: {
 		error,
 	},
 })
 
-export const registerUser = (obj) => {
+const registerUser = (obj) => {
 	return (dispatch) => {
 		dispatch(registerUserStarted())
 
@@ -53,19 +51,26 @@ export const registerUser = (obj) => {
 }
 
 const registerUserStarted = () => ({
-	type: REGISTER_USER_STARTED,
+	type: CURRENT_USER_STARTED,
 })
 
 const registerUserSuccess = (data) => ({
-	type: REGISTER_USER_SUCCESS,
+	type: CURRENT_USER_SUCCESS,
 	payload: {
 		data,
 	},
 })
 
 const registerUserFailure = (error) => ({
-	type: REGISTER_USER_FAILURE,
+	type: CURRENT_USER_FAILURE,
 	payload: {
 		error,
 	},
 })
+
+const logoutUser = () => ({
+	type: LOGOUT_USER,
+	payload: {},
+})
+
+export { logoutUser, loginUser, registerUser }

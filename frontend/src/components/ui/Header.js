@@ -1,9 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link, NavLink } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 import logo from '../assets/images/logo-libsys.png'
+import { useDispatch } from 'react-redux'
+import { logoutUser } from '../../store/actions/auth'
 
-const Header = () => {
-	const [currentUser, setCurrentUser] = useState()
+const Header = ({ history }) => {
+	const user = useSelector((state) => state.user)
+	const dispatch = useDispatch()
+
+	const handleLogout = () => {
+		dispatch(logoutUser())
+		if (user.data === null) history.push('/logout')
+	}
+
 	return (
 		<header className='header navbar navbar-expand-lg navbar-dark bg-gradient navbar-floating navbar-sticky'>
 			<div className='container px-0 px-xl-3'>
@@ -32,7 +42,7 @@ const Header = () => {
 						width='153'
 					/>
 				</Link>
-				{currentUser ? (
+				{user.data ? (
 					<div className='d-flex align-items-center order-lg-3 ms-lg-auto'>
 						<div className='navbar-tool dropdown'>
 							<div className='navbar-tool-icon-box'>
@@ -43,7 +53,7 @@ const Header = () => {
 								to='/'
 							>
 								<small>Hello,</small>
-								Markus
+								{user.data.name}
 							</Link>
 							<ul
 								className='dropdown-menu dropdown-menu-end'
@@ -63,7 +73,7 @@ const Header = () => {
 								<li>
 									<button
 										className='dropdown-item d-flex align-items-center mt-2'
-										//onClick={handleLogout}
+										onClick={handleLogout}
 									>
 										<i className='ai-log-out font-size-base opacity-60 me-2'></i>
 										Sign out
