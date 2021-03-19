@@ -18,7 +18,7 @@ const RentedBooks = ({ rentedBooks }) => {
 			</small>
 			<div className='accordion' id='booksAccordion'>
 				{rentedBooks.map((book) => {
-					return <Book book={book} />
+					return <Book key={book.id} book={book} />
 				})}
 			</div>
 		</>

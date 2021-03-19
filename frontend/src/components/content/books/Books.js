@@ -1,10 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { Modal } from 'bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
+import { getAllBooks } from '../../../store/actions/books'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Table from '../../ui/Table'
-import { Modal } from 'bootstrap'
+import Spinner from '../../ui/Spinner'
 
 const Books = () => {
+	//* book to be deleted
 	const [deleteBook, setDeleteBook] = useState({})
+
+	const books = useSelector((state) => state.books)
+
+	//* initialize dispatcher
+	const dispatch = useDispatch()
+
+	//* dispatch action
+	const getData = useCallback(() => {
+		dispatch(getAllBooks())
+	}, [dispatch])
+
+	useEffect(getData, [getData])
 
 	const handleAddClick = (book) => {
 		console.log('add btn clicked')
@@ -85,7 +101,7 @@ const Books = () => {
 		},
 	]
 
-	const books = [
+	const booksdt = [
 		{
 			id: 1,
 			title: 'Conan the Barbarian',
@@ -122,19 +138,25 @@ const Books = () => {
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
 					<h1 className='h3 mb-3 text-center text-sm-start'>Books</h1>
-					<div id='data-table' className='row mt-3'>
-						<Table
-							data={books}
-							columns={columns}
-							onAddClick={(book) => handleAddClick(book)}
-						/>
-						<ConfirmationModal
-							item={deleteBook}
-							// handleClick={() =>
-							// 	// removeBook(deleteBook.id)
-							// }
-						/>
-					</div>
+					{!books.loading && books.data.length !== 0 ? (
+						<div id='data-table' className='row mt-3'>
+							<Table
+								data={booksdt}
+								columns={columns}
+								onAddClick={(book) => handleAddClick(book)}
+							/>
+							<ConfirmationModal
+								item={deleteBook}
+								// handleClick={() =>
+								// 	// removeBook(deleteBook.id)
+								// }
+							/>
+						</div>
+					) : (
+						<div className='d-flex justify-content-center text-center'>
+							<Spinner />
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

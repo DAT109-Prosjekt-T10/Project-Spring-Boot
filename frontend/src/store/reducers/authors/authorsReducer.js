@@ -18,7 +18,7 @@ import {
 
 const initialState = {
 	//* set default state
-	data: undefined,
+	data: [],
 	error: undefined,
 	loading: false,
 	success: false,

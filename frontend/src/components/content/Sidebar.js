@@ -1,7 +1,16 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logoutUser } from '../../store/actions/auth'
 
-const Sidebar = () => {
+const Sidebar = ({ user, history }) => {
+	const dispatch = useDispatch()
+
+	const handleLogout = () => {
+		dispatch(logoutUser())
+		if (user.data === null) history.push('/logout')
+	}
+
 	return (
 		<div className='col-lg-4 mb-4 mb-lg-0'>
 			<div className='bg-light rounded-3 shadow-lg'>
@@ -13,7 +22,7 @@ const Sidebar = () => {
 						></i>
 					</div>
 
-					<h6 className='mb-0 pt-1'>Markus Bjermeland</h6>
+					<h6 className='mb-0 pt-1'>{user.data.name}</h6>
 				</div>
 				<div className='d-lg-none px-4 pb-4 text-center'>
 					<a
@@ -60,7 +69,7 @@ const Sidebar = () => {
 					</h3>
 					<button
 						className='d-flex align-items-center nav-link-style px-4 py-3 btn'
-						//onClick={handleLogout}
+						onClick={handleLogout}
 					>
 						<i className='ai-log-out fs-lg opacity-60 me-2'></i>
 						Sign out

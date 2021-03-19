@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from '../../../config/axios'
 import {
 	POST_BOOK_STARTED,
 	POST_BOOK_SUCCESS,
@@ -22,7 +22,7 @@ export const addBook = (obj) => {
 		dispatch(addBookStarted())
 
 		axios
-			.post('/books', obj)
+			.post('/api/books', obj)
 			.then((res) => dispatch(addBookSuccess(res.data)))
 			.catch((err) => {
 				dispatch(addBookFailure(err.message))
@@ -53,7 +53,7 @@ export const getBookById = (id) => {
 		dispatch(getBookByIdStarted())
 
 		axios
-			.get(`/books/${id}`)
+			.get(`/api/books/${id}`)
 			.then((res) => dispatch(getBookByIdSuccess(res.data)))
 			.catch((err) => {
 				dispatch(getBookByIdFailure(err.message))
@@ -79,31 +79,31 @@ const getBookByIdFailure = (error) => ({
 	},
 })
 
-export const getBooks = () => {
+export const getAllBooks = () => {
 	return async (dispatch) => {
-		dispatch(getBooksStarted())
+		dispatch(getAllBooksStarted())
 
 		axios
-			.get('/books')
-			.then((res) => dispatch(getBooksSuccess(res.data)))
+			.get('/api/books')
+			.then((res) => dispatch(getAllBooksSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getBooksFailure(err.message))
+				dispatch(getAllBooksFailure(err.message))
 			})
 	}
 }
 
-const getBooksStarted = () => ({
+const getAllBooksStarted = () => ({
 	type: GET_BOOKS_STARTED,
 })
 
-const getBooksSuccess = (data) => ({
+const getAllBooksSuccess = (data) => ({
 	type: GET_BOOKS_SUCCESS,
 	payload: {
 		data,
 	},
 })
 
-const getBooksFailure = (error) => ({
+const getAllBooksFailure = (error) => ({
 	type: GET_BOOKS_FAILURE,
 	payload: {
 		error,
@@ -115,7 +115,7 @@ export const updateBook = (id, obj) => {
 		dispatch(updateBookStarted())
 
 		axios
-			.put(`/books/${id}`, obj)
+			.put(`/api/books/${id}`, obj)
 			.then((res) => dispatch(updateBookSuccess(res.data)))
 			.catch((err) => {
 				dispatch(updateBookFailure(err.message))
@@ -146,7 +146,7 @@ export const deleteBook = (id) => {
 		dispatch(deleteBookStarted())
 
 		axios
-			.delete(`/books/${id}`)
+			.delete(`/api/books/${id}`)
 			.then((res) => dispatch(deleteBookSuccess(res.data)))
 			.catch((err) => {
 				dispatch(deleteBookFailure(err.message))

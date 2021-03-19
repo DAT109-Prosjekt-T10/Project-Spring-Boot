@@ -9,6 +9,7 @@ import Background from './components/ui/Background'
 import Login from './components/auth/Login/Login'
 import Register from './components/auth/Register/Register'
 import NotFound from './components/ui/NotFound'
+import PrivateRoute from './config/PrivateRoute'
 
 const App = () => {
 	return (
@@ -18,9 +19,13 @@ const App = () => {
 					<Header />
 					<Background />
 					<Switch>
-						<Route exact path='/' component={Content} />
-						<Route exact path='/books' component={Content} />
-						<Route exact path='/authors' component={Content} />
+						<PrivateRoute exact path='/' component={Content} />
+						<PrivateRoute exact path='/books' component={Content} />
+						<PrivateRoute
+							exact
+							path='/authors'
+							component={Content}
+						/>
 						<Route exact path='/login' component={Login} />
 						<Route exact path='/register' component={Register} />
 						<Route path='*' component={NotFound} />
