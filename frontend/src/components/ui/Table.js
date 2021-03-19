@@ -21,7 +21,7 @@ const Table = ({ data, columns, onAddClick }) => {
 		setTotalRows(filteredData.length)
 	}, [filteredData])
 
-	//* search query
+	//* search query, searches against all fields
 	const [search, setSearch] = useState('')
 	useEffect(() => {
 		setFilteredData(

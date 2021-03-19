@@ -9,6 +9,10 @@
 /* Data Table */
 
 #data-table {
+	.rdt_TableBody {
+		min-height: 10rem;
+	}
+
 	.dropdown-menu {
 		min-width: 0rem;
 	}

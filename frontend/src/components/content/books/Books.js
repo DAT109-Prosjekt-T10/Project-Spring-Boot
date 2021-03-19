@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Modal } from 'bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
-import { getAllBooks } from '../../../store/actions/books'
+import dayjs from 'dayjs'
+import { getAllBooks, deleteBook } from '../../../store/actions/books'
 import ConfirmationModal from '../../ui/ConfirmationModal'
-import Table from '../../ui/Table'
 import Spinner from '../../ui/Spinner'
+import Table from '../../ui/Table'
+import Alert from '../../ui/Alert'
 
 const Books = () => {
 	//* book to be deleted
-	const [deleteBook, setDeleteBook] = useState({})
+	const [deletedBook, setDeletedBook] = useState({})
 
 	const books = useSelector((state) => state.books)
 
@@ -43,10 +45,10 @@ const Books = () => {
 
 	const handleDeleteClick = (bookId) => {
 		//* find book by id
-		const book = books.find((b) => b.id === bookId)
+		const book = books.data.find((b) => b.id === bookId)
 		if (book) {
 			//* set delete book to found book
-			setDeleteBook(book)
+			setDeletedBook(book)
 
 			//* open confirmation modal
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
@@ -66,10 +68,13 @@ const Books = () => {
 			right: true,
 		},
 		{
-			name: 'Year',
-			selector: 'year',
+			name: 'Published',
+			selector: 'published',
 			sortable: true,
 			right: true,
+			cell: (row) => (
+				<span>{dayjs(row.published).format('DD MMMM YYYY')}</span>
+			),
 		},
 		{
 			name: '',
@@ -101,55 +106,62 @@ const Books = () => {
 		},
 	]
 
-	const booksdt = [
-		{
-			id: 1,
-			title: 'Conan the Barbarian',
-			category: 'Action',
-			year: '1982',
-		},
-		{ id: 2, title: 'Bear the Bear', category: 'Horror', year: '1952' },
-		{ id: 3, title: 'Dunkin Feathers', category: 'Comedy', year: '2005' },
-		{
-			id: 4,
-			title: 'To Kill a Mockingbord',
-			category: 'Comedy',
-			year: '2021',
-		},
-		{
-			id: 5,
-			title: 'Pride and Prejudice',
-			category: 'Fantasy',
-			year: '1972',
-		},
-		{
-			id: 6,
-			title: 'Harry Potter and the Sorcerers Stone',
-			category: 'Sci-Fi',
-			year: '1973',
-		},
-		{ id: 7, title: 'Ulysses', category: 'Westerns', year: '1985' },
-		{ id: 8, title: 'Moby Dick', category: 'Fantasy', year: '2020' },
-		{ id: 9, title: 'War and Peace', category: 'Horror', year: '2002' },
-	]
+	// const booksdt = [
+	// 	{
+	// 		id: 1,
+	// 		title: 'Conan the Barbarian',
+	// 		category: 'Action',
+	// 		year: '1982',
+	// 	},
+	// 	{ id: 2, title: 'Bear the Bear', category: 'Horror', year: '1952' },
+	// 	{ id: 3, title: 'Dunkin Feathers', category: 'Comedy', year: '2005' },
+	// 	{
+	// 		id: 4,
+	// 		title: 'To Kill a Mockingbord',
+	// 		category: 'Comedy',
+	// 		year: '2021',
+	// 	},
+	// 	{
+	// 		id: 5,
+	// 		title: 'Pride and Prejudice',
+	// 		category: 'Fantasy',
+	// 		year: '1972',
+	// 	},
+	// 	{
+	// 		id: 6,
+	// 		title: 'Harry Potter and the Sorcerers Stone',
+	// 		category: 'Sci-Fi',
+	// 		year: '1973',
+	// 	},
+	// 	{ id: 7, title: 'Ulysses', category: 'Westerns', year: '1985' },
+	// 	{ id: 8, title: 'Moby Dick', category: 'Fantasy', year: '2020' },
+	// 	{ id: 9, title: 'War and Peace', category: 'Horror', year: '2002' },
+	// ]
 
 	return (
 		<div className='col-lg-8'>
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
-					<h1 className='h3 mb-3 text-center text-sm-start'>Books</h1>
+					<h1 className='h3 mb-4 text-center text-sm-start'>Books</h1>
+					{books.delete.error && (
+						<Alert
+							text={`An error occured while trying to delete ${deletedBook.title}`}
+							type='danger'
+							icon='triangle'
+						/>
+					)}
 					{!books.loading && books.data.length !== 0 ? (
-						<div id='data-table' className='row mt-3'>
+						<div id='data-table' className='row mt-2'>
 							<Table
-								data={booksdt}
+								data={books.data}
 								columns={columns}
 								onAddClick={(book) => handleAddClick(book)}
 							/>
 							<ConfirmationModal
-								item={deleteBook}
-								// handleClick={() =>
-								// 	// removeBook(deleteBook.id)
-								// }
+								item={deletedBook}
+								handleClick={() =>
+									dispatch(deleteBook(deletedBook.id))
+								}
 							/>
 						</div>
 					) : (
