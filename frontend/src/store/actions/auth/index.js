@@ -6,7 +6,7 @@ import {
 	LOGOUT_USER,
 } from './types'
 
-const loginUser = (obj) => {
+export const loginUser = (obj) => {
 	return (dispatch) => {
 		dispatch(loginUserStarted())
 
@@ -37,7 +37,7 @@ const loginUserFailure = (error) => ({
 	},
 })
 
-const registerUser = (obj) => {
+export const registerUser = (obj) => {
 	return (dispatch) => {
 		dispatch(registerUserStarted())
 
@@ -68,9 +68,7 @@ const registerUserFailure = (error) => ({
 	},
 })
 
-const logoutUser = () => ({
+export const logoutUser = () => ({
 	type: LOGOUT_USER,
 	payload: {},
 })
-
-export { logoutUser, loginUser, registerUser }
