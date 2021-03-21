@@ -42,14 +42,14 @@ public class Book {
     @Column(name = "description", nullable = true)
     private String description;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
 //    @JsonIgnore
     private Set<Author> authors = new HashSet<Author>();
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
