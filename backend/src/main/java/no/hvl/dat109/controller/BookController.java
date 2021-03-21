@@ -101,13 +101,19 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Book> deleteBook(@PathVariable("id") long id) {
-        Optional<Book> book = bookRepository.findById(id);
-        if (book.isPresent()) {
+    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
+//        Optional<Book> book = bookRepository.findById(id);
+//        if (book.isPresent()) {
+//            bookRepository.deleteById(id);
+//            return ResponseEntity.ok(book.get());
+//        } else {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//        }
+        try {
             bookRepository.deleteById(id);
-            return ResponseEntity.ok(book.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return new ResponseEntity<>(id, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
