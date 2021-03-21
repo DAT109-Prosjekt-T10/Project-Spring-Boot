@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
-import isbnChecker from 'node-isbn'
 
-const AddBookModal = ({ authors, handleSubmit }) => {
+const EditBookModal = ({ book, handleSubmit }) => {
 	const [title, setTitle] = useState('')
 	const [published, setPublished] = useState('')
 	const [publisher, setPublisher] = useState('')
@@ -11,14 +10,27 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 	const [description, setDescription] = useState('')
 	const [selectedAuthors, setSelectedAuthors] = useState([])
 
-	//* isbn checker util
-	const [checkIsbn, setCheckIsbn] = useState('')
+	const authors = []
+
+	useEffect(() => {
+		setTitle(book.title)
+		setPublished(book.published)
+		setPublisher(book.publisher)
+		setIsbn(book.isbn)
+		setCategory(book.category)
+		setDescription(book.description)
+		if (book.authors) {
+			//! maybe change format?
+			setSelectedAuthors(book.authors)
+		}
+	}, [book])
 
 	//* submit form
 	const onSubmit = (e) => {
 		e.preventDefault()
 
-		const newBook = {
+		const editBook = {
+			...book,
 			title,
 			published:
 				published.length !== 4 ? published : `${published}-01-01`,
@@ -29,32 +41,14 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 			authors: [],
 		}
 
-		handleSubmit(newBook)
+		console.log(editBook)
+
+		handleSubmit(editBook)
 
 		resetForm()
 	}
 
-	//* finds book details by isbn
-	const findBookByIsbn = () => {
-		isbnChecker.resolve(checkIsbn).then((book) => {
-			setTitle(book.title)
-			setPublished(book.publishedDate)
-			setPublisher(book.publisher ? book.published : '')
-			setIsbn(checkIsbn)
-			setCategory(book.categories[0])
-			setDescription(book.description)
-			setSelectedAuthors(
-				book.authors.map((author) => {
-					return {
-						name: author,
-					}
-				})
-			)
-		})
-	}
-
 	const resetForm = () => {
-		setCheckIsbn('')
 		setTitle('')
 		setPublished('')
 		setPublisher('')
@@ -67,14 +61,14 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 	return (
 		<div
 			className='modal fade'
-			id='add-book-modal'
+			id='edit-book-modal'
 			tabIndex='-1'
 			role='dialog'
 		>
 			<div className='modal-dialog' role='document'>
 				<div className='modal-content'>
 					<div className='modal-header'>
-						<h5 className='modal-title'>Add new book</h5>
+						<h5 className='modal-title'>Edit book</h5>
 						<button
 							type='button'
 							className='btn-close'
@@ -84,31 +78,6 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 					</div>
 					<form onSubmit={onSubmit}>
 						<div className='modal-body'>
-							<div className='row mb-3'>
-								<div className='col'>
-									<div className='form-floating'>
-										<div className='input-group'>
-											<input
-												className='form-control'
-												type='text'
-												id='isbn'
-												placeholder='ISBN'
-												value={checkIsbn}
-												onChange={(e) =>
-													setCheckIsbn(e.target.value)
-												}
-											/>
-											<button
-												className='btn btn-primary'
-												type='button'
-												onClick={findBookByIsbn}
-											>
-												Find book
-											</button>
-										</div>
-									</div>
-								</div>
-							</div>
 							<div className='row mb-3'>
 								<div className='col'>
 									<div className='form-floating'>
@@ -279,7 +248,7 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 								type='submit'
 								className='btn btn-primary btn-sm'
 							>
-								Add book
+								Save
 							</button>
 						</div>
 					</form>
@@ -289,4 +258,4 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 	)
 }
 
-export default AddBookModal
+export default EditBookModal

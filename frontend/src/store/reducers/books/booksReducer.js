@@ -46,6 +46,9 @@ const booksReducer = (state = initialState, action) => {
 				...state,
 				loading: true,
 				success: false,
+				update: initialState.update,
+				delete: initialState.delete,
+				post: initialState.post,
 			}
 		case GET_BOOKS_SUCCESS:
 			return {
@@ -64,23 +67,24 @@ const booksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				update: {
+					...state.update,
 					loading: true,
 					success: false,
 					error: null,
 				},
 			}
 		case UPDATE_BOOK_SUCCESS:
-			//* find the index of element that is being updated in state
-			const index = state.data.findIndex(
-				(book) => book.id === action.payload.data.id
-			)
-
-			//* add updated element in state
-			state.data[index] = action.payload.data
 			return {
 				...state,
-				data: [...state.data],
+				data: [
+					...state.data.map((book) =>
+						book.id === action.payload.data.id
+							? action.payload.data
+							: book
+					),
+				],
 				update: {
+					...state.update,
 					loading: false,
 					success: true,
 				},
@@ -89,6 +93,7 @@ const booksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				update: {
+					...state.update,
 					loading: false,
 					error: action.payload.error,
 				},
@@ -97,6 +102,7 @@ const booksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				delete: {
+					...state.delete,
 					loading: true,
 					success: false,
 					error: null,
@@ -112,6 +118,7 @@ const booksReducer = (state = initialState, action) => {
 					),
 				],
 				delete: {
+					...state.delete,
 					loading: false,
 					success: true,
 				},
@@ -120,6 +127,7 @@ const booksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				delete: {
+					...state.delete,
 					loading: false,
 					error: action.payload.error,
 				},
@@ -128,6 +136,7 @@ const booksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				post: {
+					...state.post,
 					loading: true,
 					success: false,
 					error: null,
@@ -138,6 +147,7 @@ const booksReducer = (state = initialState, action) => {
 				...state,
 				data: [...state.data, action.payload.data],
 				post: {
+					...state.post,
 					loading: false,
 					success: true,
 				},
@@ -146,6 +156,7 @@ const booksReducer = (state = initialState, action) => {
 			return {
 				...state,
 				post: {
+					...state.post,
 					loading: false,
 					error: action.payload.error,
 				},

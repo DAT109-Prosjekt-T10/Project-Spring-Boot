@@ -2,13 +2,25 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Modal } from 'bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
-import { getAllBooks, addBook, deleteBook } from '../../../store/actions/books'
+import {
+	getAllBooks,
+	addBook,
+	updateBook,
+	deleteBook,
+} from '../../../store/actions/books'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
+import EditBookModal from './EditBookModal'
 
 const Books = () => {
+	//* book to be edited
+	const [editedBook, setEditedBook] = useState({})
+
+	//* initializes edit book modal
+	const [editModal, setEditModal] = useState()
+
 	//* book to be deleted
 	const [deletedBook, setDeletedBook] = useState({})
 
@@ -35,10 +47,15 @@ const Books = () => {
 		// })
 
 		dispatch(addBook(book))
+	}
 
-		//? createBook(newBook)
-		//? if success, show success message
-		//? if error, show error message
+	const handleEditClick = (book) => {
+		const modal = new Modal(document.getElementById('edit-book-modal'))
+		if (modal) {
+			setEditedBook(book)
+			setEditModal(modal)
+			modal.show()
+		}
 	}
 
 	const handleDeleteClick = (bookId) => {
@@ -89,7 +106,10 @@ const Books = () => {
 						<i className='ai-menu'></i>
 					</button>
 					<div className='dropdown-menu'>
-						<button className='dropdown-item'>
+						<button
+							className='dropdown-item'
+							onClick={() => handleEditClick(row)} //* opens edit modal
+						>
 							<i className='ai-edit me-1'></i> Edit
 						</button>
 						<button
@@ -143,6 +163,13 @@ const Books = () => {
 						</div>
 					)}
 				</div>
+				<EditBookModal
+					book={editedBook}
+					handleSubmit={(book) => {
+						dispatch(updateBook(book.id, book))
+						editModal.hide()
+					}}
+				/>
 			</div>
 		</div>
 	)
