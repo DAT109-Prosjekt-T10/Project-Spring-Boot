@@ -61,6 +61,10 @@ button:focus {
 	outline: none;
 }
 
+.form-floating textarea {
+	min-height: 8rem !important;
+}
+
 /* End General */
 
 /* Auth Forms */

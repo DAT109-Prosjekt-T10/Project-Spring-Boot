@@ -145,12 +145,13 @@ export const deleteBook = (id) => {
 	return async (dispatch) => {
 		dispatch(deleteBookStarted())
 
-		axios
-			.delete(`/api/books/${id}`)
-			.then((res) => dispatch(deleteBookSuccess(res.data)))
-			.catch((err) => {
-				dispatch(deleteBookFailure(err.message))
-			})
+		//! this endpoint is not ready yet, causes trouble
+		// axios
+		// 	.delete(`/api/books/${id}`)
+		// 	.then((res) => dispatch(deleteBookSuccess(res.data)))
+		// 	.catch((err) => {
+		// 		dispatch(deleteBookFailure(err.message))
+		// 	})
 	}
 }
 
