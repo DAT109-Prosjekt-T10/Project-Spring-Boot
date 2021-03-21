@@ -64,6 +64,7 @@ const authorReducer = (state = initialState, action) => {
 			return {
 				...state,
 				update: {
+					...state.update,
 					loading: true,
 					success: false,
 					error: null,
@@ -81,6 +82,7 @@ const authorReducer = (state = initialState, action) => {
 				...state,
 				data: [...state.data],
 				update: {
+					...state.update,
 					loading: false,
 					success: true,
 				},
@@ -89,6 +91,7 @@ const authorReducer = (state = initialState, action) => {
 			return {
 				...state,
 				update: {
+					...state.update,
 					loading: false,
 					error: action.payload.error,
 				},
@@ -97,6 +100,7 @@ const authorReducer = (state = initialState, action) => {
 			return {
 				...state,
 				delete: {
+					...state.delete,
 					loading: true,
 					success: false,
 					error: null,
@@ -112,6 +116,7 @@ const authorReducer = (state = initialState, action) => {
 					),
 				],
 				delete: {
+					...state.delete,
 					loading: false,
 					success: true,
 				},
@@ -120,6 +125,7 @@ const authorReducer = (state = initialState, action) => {
 			return {
 				...state,
 				delete: {
+					...state.delete,
 					loading: false,
 					error: action.payload.error,
 				},
@@ -128,6 +134,7 @@ const authorReducer = (state = initialState, action) => {
 			return {
 				...state,
 				post: {
+					...state.post,
 					loading: true,
 					success: false,
 					error: null,
@@ -138,6 +145,7 @@ const authorReducer = (state = initialState, action) => {
 				...state,
 				data: [...state.data, action.payload.data],
 				post: {
+					...state.post,
 					loading: false,
 					success: true,
 				},
@@ -146,6 +154,7 @@ const authorReducer = (state = initialState, action) => {
 			return {
 				...state,
 				post: {
+					...state.post,
 					loading: false,
 					error: action.payload.error,
 				},
