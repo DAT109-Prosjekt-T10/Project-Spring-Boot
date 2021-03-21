@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
+import isbnChecker from 'node-isbn'
 
 const AddBookModal = ({ authors, handleSubmit }) => {
 	const [title, setTitle] = useState('')
@@ -7,7 +8,11 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 	const [publisher, setPublisher] = useState('')
 	const [isbn, setIsbn] = useState('')
 	const [category, setCategory] = useState('')
+	const [description, setDescription] = useState('')
 	const [selectedAuthors, setSelectedAuthors] = useState([])
+
+	//* isbn checker util
+	const [checkIsbn, setCheckIsbn] = useState('')
 
 	//* submit form
 	const onSubmit = (e) => {
@@ -17,14 +22,51 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 
 		const newBook = {
 			title,
-			published,
-			publisher,
+			published:
+				published.length !== 4 ? published : `${published}-01-01`,
+			// publisher: [publisher],
 			isbn,
 			category,
-			authors: selectedAuthors,
+			description: description ? description : '',
+			authors: [],
 		}
 
+		console.log(newBook)
+
 		handleSubmit(newBook)
+
+		resetForm()
+	}
+
+	//* finds book details by isbn
+	const findBookByIsbn = () => {
+		isbnChecker.resolve(checkIsbn).then((book) => {
+			console.log(book)
+			setTitle(book.title)
+			setPublished(book.publishedDate)
+			setPublisher(book.publisher ? book.published : '')
+			setIsbn(checkIsbn)
+			setCategory(book.categories[0])
+			setDescription(book.description)
+			setSelectedAuthors(
+				book.authors.map((author) => {
+					return {
+						name: author,
+					}
+				})
+			)
+		})
+	}
+
+	const resetForm = () => {
+		setCheckIsbn('')
+		setTitle('')
+		setPublished('')
+		setPublisher('')
+		setIsbn('')
+		setCategory('')
+		setDescription('')
+		setSelectedAuthors([])
 	}
 
 	return (
@@ -50,6 +92,31 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 							<div className='row mb-3'>
 								<div className='col'>
 									<div className='form-floating'>
+										<div className='input-group'>
+											<input
+												className='form-control'
+												type='text'
+												id='isbn'
+												placeholder='ISBN'
+												value={checkIsbn}
+												onChange={(e) =>
+													setCheckIsbn(e.target.value)
+												}
+											/>
+											<button
+												className='btn btn-primary'
+												type='button'
+												onClick={findBookByIsbn}
+											>
+												Find book
+											</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className='row mb-3'>
+								<div className='col'>
+									<div className='form-floating'>
 										<input
 											className='form-control'
 											type='text'
@@ -61,7 +128,7 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 												setTitle(e.target.value)
 											}
 										/>
-										<label htmlFor='title'>Title</label>
+										<label htmlFor='published'>Title</label>
 									</div>
 								</div>
 							</div>
@@ -91,7 +158,6 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 											type='text'
 											id='publisher'
 											placeholder='Publisher'
-											required
 											value={publisher}
 											onChange={(e) =>
 												setPublisher(e.target.value)
@@ -148,6 +214,14 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 											placeholder={'Select authors..'}
 											className='react-select'
 											classNamePrefix='react-select-inner'
+											value={selectedAuthors.map(
+												(author) => {
+													return {
+														label: author.name,
+														value: author.id,
+													}
+												}
+											)}
 											//* map authors into correct format
 											options={authors.map((author) => {
 												return {
@@ -176,6 +250,24 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 												)
 											}
 										/>
+									</div>
+								</div>
+							</div>
+							<div className='row mb-3'>
+								<div className='col'>
+									<div className='form-floating'>
+										<textarea
+											className='form-control'
+											id='description'
+											placeholder='Description'
+											value={description}
+											onChange={(e) =>
+												setDescription(e.target.value)
+											}
+										/>
+										<label htmlFor='description'>
+											Description
+										</label>
 									</div>
 								</div>
 							</div>

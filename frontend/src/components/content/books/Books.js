@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Modal } from 'bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
-import { getAllBooks, deleteBook } from '../../../store/actions/books'
+import { getAllBooks, addBook, deleteBook } from '../../../store/actions/books'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
@@ -25,10 +25,6 @@ const Books = () => {
 	useEffect(getData, [getData])
 
 	const handleAddClick = (book) => {
-		console.log('add btn clicked')
-
-		console.log(book)
-
 		// selectedAuthors.forEach((author) => {
 		// 	//* no author id means it is a new author, therefor create it
 		// 	if (!author.id) {
@@ -37,6 +33,8 @@ const Books = () => {
 		// 		//* to use when posting new book
 		// 	}
 		// })
+
+		dispatch(addBook(book))
 
 		//? createBook(newBook)
 		//? if success, show success message
@@ -106,43 +104,18 @@ const Books = () => {
 		},
 	]
 
-	// const booksdt = [
-	// 	{
-	// 		id: 1,
-	// 		title: 'Conan the Barbarian',
-	// 		category: 'Action',
-	// 		year: '1982',
-	// 	},
-	// 	{ id: 2, title: 'Bear the Bear', category: 'Horror', year: '1952' },
-	// 	{ id: 3, title: 'Dunkin Feathers', category: 'Comedy', year: '2005' },
-	// 	{
-	// 		id: 4,
-	// 		title: 'To Kill a Mockingbord',
-	// 		category: 'Comedy',
-	// 		year: '2021',
-	// 	},
-	// 	{
-	// 		id: 5,
-	// 		title: 'Pride and Prejudice',
-	// 		category: 'Fantasy',
-	// 		year: '1972',
-	// 	},
-	// 	{
-	// 		id: 6,
-	// 		title: 'Harry Potter and the Sorcerers Stone',
-	// 		category: 'Sci-Fi',
-	// 		year: '1973',
-	// 	},
-	// 	{ id: 7, title: 'Ulysses', category: 'Westerns', year: '1985' },
-	// 	{ id: 8, title: 'Moby Dick', category: 'Fantasy', year: '2020' },
-	// 	{ id: 9, title: 'War and Peace', category: 'Horror', year: '2002' },
-	// ]
-
 	return (
 		<div className='col-lg-8'>
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
 					<h1 className='h3 mb-4 text-center text-sm-start'>Books</h1>
+					{books.post.error && (
+						<Alert
+							text={`An error occured while trying to add a new book`}
+							type='danger'
+							icon='triangle'
+						/>
+					)}
 					{books.delete.error && (
 						<Alert
 							text={`An error occured while trying to delete ${deletedBook.title}`}
