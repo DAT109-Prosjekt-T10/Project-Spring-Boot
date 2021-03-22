@@ -3,7 +3,7 @@ import DataTable from 'react-data-table-component'
 import AddBookModal from '../content/books/AddBookModal'
 import { Modal } from 'bootstrap'
 
-const Table = ({ data, columns, onAddClick }) => {
+const Table = ({ data, columns, onAddClick, onRowClick }) => {
 	const [filteredData, setFilteredData] = useState(data)
 
 	//* pagination
@@ -78,6 +78,8 @@ const Table = ({ data, columns, onAddClick }) => {
 				columns={columns}
 				data={filteredData}
 				actions={actions}
+				onRowClicked={(row) => onRowClick(row)}
+				pointerOnHover
 				highlightOnHover
 				pagination
 				paginationServer
