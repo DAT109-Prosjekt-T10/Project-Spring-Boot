@@ -13,17 +13,18 @@ import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
 import EditBookModal from './EditBookModal'
+import DetailsBookModal from './DetailsBookModal'
 
 const Books = () => {
-	//* book to be edited
+	//* book to be edited, deleted and showed details
 	const [editedBook, setEditedBook] = useState({})
+	const [deletedBook, setDeletedBook] = useState({})
+	const [detailedBook, setDetailedBook] = useState({})
 
 	//* initializes edit book modal
 	const [editModal, setEditModal] = useState()
 
-	//* book to be deleted
-	const [deletedBook, setDeletedBook] = useState({})
-
+	//* book state
 	const books = useSelector((state) => state.books)
 
 	//* initialize dispatcher
@@ -35,6 +36,16 @@ const Books = () => {
 	}, [dispatch])
 
 	useEffect(getData, [getData])
+
+	//* handlers
+
+	const handleRowClick = (book) => {
+		const modal = new Modal(document.getElementById('detailed-book-modal'))
+		if (modal) {
+			setDetailedBook(book)
+			modal.show()
+		}
+	}
 
 	const handleAddClick = (book) => {
 		// selectedAuthors.forEach((author) => {
@@ -138,7 +149,7 @@ const Books = () => {
 					)}
 					{books.delete.error && (
 						<Alert
-							text={`An error occured while trying to delete ${deletedBook.title}`}
+							text={`An error occured while trying to delete ${deletedBook.title} (${books.delete.error})`}
 							type='danger'
 							icon='triangle'
 						/>
@@ -146,15 +157,12 @@ const Books = () => {
 					{!books.loading && books.data.length !== 0 ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
-								data={books.data}
+								data={books.data.sort((a, b) =>
+									a.title.localeCompare(b.title)
+								)}
 								columns={columns}
 								onAddClick={(book) => handleAddClick(book)}
-							/>
-							<ConfirmationModal
-								item={deletedBook}
-								handleClick={() =>
-									dispatch(deleteBook(deletedBook.id))
-								}
+								onRowClick={(book) => handleRowClick(book)}
 							/>
 						</div>
 					) : (
@@ -163,12 +171,17 @@ const Books = () => {
 						</div>
 					)}
 				</div>
+				<DetailsBookModal book={detailedBook} />
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
 						dispatch(updateBook(book.id, book))
 						editModal.hide()
 					}}
+				/>
+				<ConfirmationModal
+					item={deletedBook}
+					handleClick={() => dispatch(deleteBook(deletedBook.id))}
 				/>
 			</div>
 		</div>
