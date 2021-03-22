@@ -34,7 +34,7 @@ public class AuthorController {
     public ResponseEntity<List<Author>> getAllAuthors() {
         List<Author> authors = authorRepository.findAll();
 
-        authors.forEach(a -> a.setBooks(null));
+//        authors.forEach(a -> a.setBooks(null));
 
         return ResponseEntity.ok(authors);
     }
@@ -51,7 +51,6 @@ public class AuthorController {
 
         if (authorData.isPresent()) {
             Author author = authorData.get();
-            author.setBooks(null);
             return new ResponseEntity<>(author, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

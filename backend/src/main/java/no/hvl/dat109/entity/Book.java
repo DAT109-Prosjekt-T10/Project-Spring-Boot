@@ -1,26 +1,20 @@
 package no.hvl.dat109.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.NaturalId;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.NaturalId;
-
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope = Book.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Book {
@@ -46,13 +40,14 @@ public class Book {
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
-//    @JsonIgnore
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Author> authors = new HashSet<Author>();
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Publisher> publishers = new HashSet<Publisher>();
 
     @Column(name = "published", nullable = false)
