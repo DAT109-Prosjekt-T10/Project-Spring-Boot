@@ -29,10 +29,6 @@ public class PublisherController {
     @GetMapping("")
     public ResponseEntity<List<Publisher>> getAllPublishers(@RequestParam(required = false) String author) {
         List<Publisher> publishers = publisherRepository.findAll();
-
-        // Fjerner books array i JSON response
-        publishers.forEach(p -> p.setBooks(null));
-
         return ResponseEntity.ok(publishers);
     }
 
@@ -40,15 +36,9 @@ public class PublisherController {
     @GetMapping("/{id}")
     public ResponseEntity<Publisher> getAPublisherById(@PathVariable("id") long id) {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
-
-        if (publisherData.isPresent()) {
-            // Fjerner books array i JSON
-            Publisher publisher = publisherData.get();
-            publisher.setBooks(null);
-            return new ResponseEntity<>(publisher, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return publisherData
+                .map(publisher -> new ResponseEntity<>(publisher, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
