@@ -1,21 +1,16 @@
 package no.hvl.dat109.controller;
 
-import java.util.List;
-import java.util.Optional;
-
+import no.hvl.dat109.entity.Book;
+import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.service.AuthorService;
+import no.hvl.dat109.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import no.hvl.dat109.entity.Book;
-import no.hvl.dat109.repository.BookRepository;
-
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/books")
@@ -24,13 +19,19 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private AuthorService authorService;
+
+    @Autowired
+    private PublisherService publisherService;
+
     @GetMapping("")
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> allBooks = bookRepository.findAll();
 
         // Fjerner authors array i JSON
-        allBooks.forEach(book -> book.setAuthors(null));
-        allBooks.forEach(book -> book.setPublishers(null));
+//        allBooks.forEach(book -> book.setAuthors(null));
+//        allBooks.forEach(book -> book.setPublishers(null));
 
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
 
@@ -46,9 +47,17 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
+//        for (Author a : book.getAuthors()) {
+//            a.setBooks(null);
+//        }
+
+//        for (Publisher a : book.getPublishers()) {
+//            a.setBooks(null);
+//        }
+
         // Fjerner authors array i JSON
-        book.setAuthors(null);
-        book.setPublishers(null);
+//        book.setAuthors(null);
+//        book.setPublishers(null);
 
         return ResponseEntity.ok(book);
     }
@@ -70,6 +79,13 @@ public class BookController {
     @PostMapping("")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         System.out.println(book.toString());
+//
+        // Check that all authors and all publishers exist. Else: return 400 bad request
+        if (authorService.atLeastOneAuthorNotExists(book.getAuthors()) ||
+                publisherService.atLeastOnePublisherNotExists(book.getPublishers())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
         try {
             Book newBook = bookRepository.save(book);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
@@ -92,9 +108,22 @@ public class BookController {
             if (book.getPublished() != null) getBook.setPublished(book.getPublished());
             if (book.getCategory() != null) getBook.setCategory(book.getCategory());
             if (book.getDescription() != null) getBook.setDescription(book.getDescription());
-            if (book.getAuthors() != null) getBook.setAuthors(book.getAuthors());
 
-            return new ResponseEntity<>(bookRepository.save(getBook), HttpStatus.OK);
+            // TODO find authors/publishers by id and add to object to be able to edit authors/publishers for a book
+
+//            System.out.println(book.getAuthors() + " " + book.getAuthors().isEmpty());
+//            System.out.println(book.getPublishers() + " " + book.getPublishers().isEmpty());
+//
+//            if (book.getAuthors() != null && !book.getAuthors().isEmpty()) getBook.setAuthors(book.getAuthors());
+//            if (book.getPublishers() != null && !book.getPublishers().isEmpty()) getBook.setPublishers(book.getPublishers());
+
+            Book savedBook = bookRepository.save(getBook);
+
+            // Fjerner authors og publishers array i JSON response
+            savedBook.setAuthors(null);
+            savedBook.setPublishers(null);
+
+            return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
