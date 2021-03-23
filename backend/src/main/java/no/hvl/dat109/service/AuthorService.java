@@ -21,4 +21,17 @@ public class AuthorService {
         return authors.stream().anyMatch(a -> !authorExists(a.getId()));
     }
 
+    public void createNewAuthorsIfNotExist(Set<Author> authors) {
+
+        for (Author a : authors) {
+            if (a.getId() == null) {
+                if (a.getName() != null) {
+                    Author savedAuthor = authorRepository.save(a);
+                    System.out.println("Created new author " + savedAuthor);
+                }
+            }
+        }
+
+    }
+
 }
