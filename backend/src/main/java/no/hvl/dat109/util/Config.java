@@ -23,8 +23,10 @@ public class Config {
     private static String[] PublicRoutes = { "/api/user/**", "/" };
     public static List<String> UnprotectedRoutes = Arrays.asList(PublicRoutes);
 
-    public static String AllowedOrigin = "http://localhost:3000";
+    public static String[] AllowedOrigins = { "localhost:3000", "localhost" };
 
-    public static int ExpireTime = 1000*60*60*24;
+    public static String[] AllowedMethods = { "GET", "PUT", "POST", "DELETE" };
+
+    public static int ExpireTime = 1000 * 60 * 60 * 24;
 
 }
