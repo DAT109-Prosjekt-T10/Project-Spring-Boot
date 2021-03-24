@@ -40,6 +40,7 @@ public class Book {
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
+    @Column(name = "authors", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<Author> authors = new HashSet<Author>();
     
@@ -47,6 +48,7 @@ public class Book {
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
+    @Column(name = "authors", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<Publisher> publishers = new HashSet<Publisher>();
 
