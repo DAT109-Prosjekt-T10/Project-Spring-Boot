@@ -3,6 +3,8 @@ package no.hvl.dat109.controller;
 import java.util.List;
 import java.util.Optional;
 
+import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,10 @@ import no.hvl.dat109.repository.AuthorRepository;
 public class AuthorController {
 
     @Autowired
-    AuthorRepository authorRepository;
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private BookService bookService;
 
     /**
      * Method to fetch all authors.
@@ -33,9 +38,6 @@ public class AuthorController {
     @GetMapping("")
     public ResponseEntity<List<Author>> getAllAuthors() {
         List<Author> authors = authorRepository.findAll();
-
-//        authors.forEach(a -> a.setBooks(null));
-
         return ResponseEntity.ok(authors);
     }
 
@@ -105,6 +107,8 @@ public class AuthorController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteAuthor(@PathVariable("id") long id) {
         try {
+            Author author = authorRepository.findById(id).get();
+            bookService.removeAuthorFromBooks(author);
             authorRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {

@@ -5,11 +5,7 @@ import com.fasterxml.jackson.annotation.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -25,7 +21,7 @@ public class Publisher {
 
     private String name;
 
-    @ManyToMany(mappedBy = "publishers")
+    @ManyToMany(mappedBy = "publishers", cascade = {CascadeType.MERGE})
     @JsonIdentityReference(alwaysAsId = true)
     private Set<Book> books = new HashSet<Book>();
 
