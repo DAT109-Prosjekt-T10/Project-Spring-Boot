@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.SecondaryTable;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -31,13 +30,7 @@ public class BookController {
     @GetMapping("")
     public ResponseEntity<List<Book>> getAllBooks() {
         List<Book> allBooks = bookRepository.findAll();
-
-        // Fjerner authors array i JSON
-//        allBooks.forEach(book -> book.setAuthors(null));
-//        allBooks.forEach(book -> book.setPublishers(null));
-
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
-
     }
 
     @GetMapping("/{id}")
@@ -49,35 +42,8 @@ public class BookController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
-//        for (Author a : book.getAuthors()) {
-//            a.setBooks(null);
-//        }
-
-//        for (Publisher a : book.getPublishers()) {
-//            a.setBooks(null);
-//        }
-
-        // Fjerner authors array i JSON
-//        book.setAuthors(null);
-//        book.setPublishers(null);
-
         return ResponseEntity.ok(book);
     }
-
-    // Endpoint?
-//    @GetMapping("/api/publisher/{id}")
-//    public ResponseEntity<List<Book>> getAllBooksByPublisherId(@PathVariable Long[] publisherIds) {
-//        List<Book> allBooksByPublisherId = new ArrayList<>();
-//        for (Long publisherId : publisherIds) {
-//            List<Book> booksByPublisherId = bookRepository.findByPublishers_Id(publisherId);
-//            if (!booksByPublisherId.isEmpty())
-//                allBooksByPublisherId.addAll(booksByPublisherId);
-//        }
-//        if (allBooksByPublisherId.isEmpty())
-//            return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.NO_CONTENT);
-//        return new ResponseEntity<>(allBooksByPublisherId, HttpStatus.OK);
-//    }
 
     @PostMapping("")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
@@ -99,6 +65,7 @@ public class BookController {
             Book newBook = bookRepository.save(book);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
@@ -139,18 +106,11 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
-//        Optional<Book> book = bookRepository.findById(id);
-//        if (book.isPresent()) {
-//            bookRepository.deleteById(id);
-//            return ResponseEntity.ok(book.get());
-//        } else {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-//        }
-        try {
+    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {try {
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
