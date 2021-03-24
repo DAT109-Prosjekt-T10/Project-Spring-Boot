@@ -53,7 +53,7 @@ public class BookController {
         // If any author object only contains name create new author object
         Set<Author> authors = book.getAuthors();
         if (authors != null) {
-                authorService.createNewAuthorsIfNotExist(authors);
+            authorService.createNewAuthorsIfNotExist(authors);
         }
 
         // If any publisher object only contains name create new publisher object
@@ -86,19 +86,12 @@ public class BookController {
             if (book.getCategory() != null) getBook.setCategory(book.getCategory());
             if (book.getDescription() != null) getBook.setDescription(book.getDescription());
 
-            // TODO find authors/publishers by id and add to object to be able to edit authors/publishers for a book
-
-//            System.out.println(book.getAuthors() + " " + book.getAuthors().isEmpty());
-//            System.out.println(book.getPublishers() + " " + book.getPublishers().isEmpty());
-//
-//            if (book.getAuthors() != null && !book.getAuthors().isEmpty()) getBook.setAuthors(book.getAuthors());
-//            if (book.getPublishers() != null && !book.getPublishers().isEmpty()) getBook.setPublishers(book.getPublishers());
+            if (book.getAuthors() != null && !book.getAuthors().isEmpty())
+                getBook.setAuthors(authorService.findAuthorObjectsFromIds(book.getAuthors()));
+            if (book.getPublishers() != null && !book.getPublishers().isEmpty())
+                getBook.setPublishers(publisherService.findPublisherObjectsFromIds(book.getPublishers()));
 
             Book savedBook = bookRepository.save(getBook);
-
-            // Fjerner authors og publishers array i JSON response
-            savedBook.setAuthors(null);
-            savedBook.setPublishers(null);
 
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
@@ -107,7 +100,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {try {
+    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
+        try {
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
