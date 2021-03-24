@@ -1,5 +1,7 @@
 package no.hvl.dat109.util;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,8 +20,12 @@ public class JWTUtil {
         Map<String, Object> payload = new HashMap<>();
         payload.put("id", id);
 
+        Calendar TimeNow = Calendar.getInstance();
+        long timeInSecs = TimeNow.getTimeInMillis();
+
         try {
-            token = JWT.create().withIssuer(Config.Issuer).withPayload(payload).sign(Config.algorithm);
+            token = JWT.create().withIssuer(Config.Issuer).withPayload(payload)
+                    .withExpiresAt(new Date(timeInSecs + Config.ExpireTime)).sign(Config.algorithm);
         } catch (JWTCreationException exception) {
             // Add error handling
             exception.printStackTrace();

@@ -1,5 +1,6 @@
 package no.hvl.dat109.controller;
 
+import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.service.AuthorService;
@@ -9,8 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.SecondaryTable;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/books")
@@ -79,12 +82,18 @@ public class BookController {
     @PostMapping("")
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         System.out.println(book.toString());
-//
-        // Check that all authors and all publishers exist. Else: return 400 bad request
-        if (authorService.atLeastOneAuthorNotExists(book.getAuthors()) ||
-                publisherService.atLeastOnePublisherNotExists(book.getPublishers())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        // If any author object only contains name create new author object
+        Set<Author> authors = book.getAuthors();
+        if (authors != null) {
+                authorService.createNewAuthorsIfNotExist(authors);
         }
+
+        // Check that all authors and all publishers exist. Else: return 400 bad request
+//        if (authorService.atLeastOneAuthorNotExists(book.getAuthors()) ||
+//                publisherService.atLeastOnePublisherNotExists(book.getPublishers())) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+//        }
 
         try {
             Book newBook = bookRepository.save(book);
