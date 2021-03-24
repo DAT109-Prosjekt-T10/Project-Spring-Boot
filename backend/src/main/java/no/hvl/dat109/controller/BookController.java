@@ -2,6 +2,7 @@ package no.hvl.dat109.controller;
 
 import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
+import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
@@ -55,11 +56,11 @@ public class BookController {
                 authorService.createNewAuthorsIfNotExist(authors);
         }
 
-        // Check that all authors and all publishers exist. Else: return 400 bad request
-//        if (authorService.atLeastOneAuthorNotExists(book.getAuthors()) ||
-//                publisherService.atLeastOnePublisherNotExists(book.getPublishers())) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
+        // If any publisher object only contains name create new publisher object
+        Set<Publisher> publishers = book.getPublishers();
+        if (publishers != null) {
+            publisherService.createNewPublisherIfNotExist(publishers);
+        }
 
         try {
             Book newBook = bookRepository.save(book);
