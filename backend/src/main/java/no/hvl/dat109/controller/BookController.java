@@ -2,6 +2,7 @@ package no.hvl.dat109.controller;
 
 import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
+import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
@@ -52,14 +53,14 @@ public class BookController {
         // If any author object only contains name create new author object
         Set<Author> authors = book.getAuthors();
         if (authors != null) {
-                authorService.createNewAuthorsIfNotExist(authors);
+            authorService.createNewAuthorsIfNotExist(authors);
         }
 
-        // Check that all authors and all publishers exist. Else: return 400 bad request
-//        if (authorService.atLeastOneAuthorNotExists(book.getAuthors()) ||
-//                publisherService.atLeastOnePublisherNotExists(book.getPublishers())) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-//        }
+        // If any publisher object only contains name create new publisher object
+        Set<Publisher> publishers = book.getPublishers();
+        if (publishers != null) {
+            publisherService.createNewPublisherIfNotExist(publishers);
+        }
 
         try {
             Book newBook = bookRepository.save(book);
@@ -85,19 +86,12 @@ public class BookController {
             if (book.getCategory() != null) getBook.setCategory(book.getCategory());
             if (book.getDescription() != null) getBook.setDescription(book.getDescription());
 
-            // TODO find authors/publishers by id and add to object to be able to edit authors/publishers for a book
-
-//            System.out.println(book.getAuthors() + " " + book.getAuthors().isEmpty());
-//            System.out.println(book.getPublishers() + " " + book.getPublishers().isEmpty());
-//
-//            if (book.getAuthors() != null && !book.getAuthors().isEmpty()) getBook.setAuthors(book.getAuthors());
-//            if (book.getPublishers() != null && !book.getPublishers().isEmpty()) getBook.setPublishers(book.getPublishers());
+            if (book.getAuthors() != null && !book.getAuthors().isEmpty())
+                getBook.setAuthors(authorService.findAuthorObjectsFromIds(book.getAuthors()));
+            if (book.getPublishers() != null && !book.getPublishers().isEmpty())
+                getBook.setPublishers(publisherService.findPublisherObjectsFromIds(book.getPublishers()));
 
             Book savedBook = bookRepository.save(getBook);
-
-            // Fjerner authors og publishers array i JSON response
-            savedBook.setAuthors(null);
-            savedBook.setPublishers(null);
 
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
@@ -106,7 +100,8 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {try {
+    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
+        try {
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
