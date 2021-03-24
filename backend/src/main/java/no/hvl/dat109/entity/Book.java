@@ -1,22 +1,21 @@
 package no.hvl.dat109.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import org.hibernate.annotations.NaturalId;
+
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-
-import org.hibernate.annotations.NaturalId;
-
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id",
+        scope = Book.class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class Book {
     
@@ -27,31 +26,42 @@ public class Book {
     @NaturalId
     @Column(name = "isbn", nullable = false, unique = true)
     private String isbn;
+
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Column(name = "category", nullable = false)
+    private String category;
+
+    @Column(name = "description", nullable = true)
+    private String description;
     
-    @Column(name = "name", nullable = false)
-    private String name;
-    
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REMOVE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
+    @Column(name = "authors", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Author> authors = new HashSet<Author>();
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
+    @Column(name = "authors", nullable = false)
+    @JsonIdentityReference(alwaysAsId = true)
     private Set<Publisher> publishers = new HashSet<Publisher>();
-    
+
+    @Column(name = "published", nullable = false)
     private LocalDate published;
 
     public Book() {
         super();
     }
 
-    public Book(String isbn, String name, LocalDate published) {
+    public Book(String isbn, String title, LocalDate published) {
         this.isbn = isbn;
-        this.name = name;
+        this.title = title;
         this.published = published;
     }
     
@@ -79,12 +89,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public LocalDate getPublished() {
@@ -95,10 +105,41 @@ public class Book {
         this.published = published;
     }
 
-	@Override
-	public String toString() {
-		return "Book [id=" + id + ", author=" + authors + ", isbn=" + isbn + ", name=" + name + ", published="
-				+ published + "]";
-	}
+    public String getCategory() {
+        return category;
+    }
 
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<Publisher> getPublishers() {
+        return publishers;
+    }
+
+    public void setPublishers(Set<Publisher> publishers) {
+        this.publishers = publishers;
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "id=" + id +
+                ", isbn='" + isbn + '\'' +
+                ", title='" + title + '\'' +
+                ", category='" + category + '\'' +
+                ", description='" + description + '\'' +
+                ", authors=" + authors +
+                ", publishers=" + publishers +
+                ", published=" + published +
+                '}';
+    }
 }

@@ -1,0 +1,78 @@
+/* Mixins */
+
+@mixin font-smoothing {
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+/* End mixins */
+
+/* General */
+
+html * {
+	@include font-smoothing;
+}
+
+// Sticky footer
+html,
+body {
+	height: 100%;
+}
+body {
+	background-color: #f7f7fc;
+	display: flex;
+	flex-direction: column;
+}
+.page-wrapper {
+	flex: 1 0 auto;
+}
+.footer {
+	flex-shrink: 0;
+}
+
+// Links
+$link-transition: color 0.2s ease-in-out !default;
+
+a:focus {
+	outline: none;
+}
+a {
+	transition: $link-transition;
+}
+
+// Images
+// Responsive images (ensure images don't scale beyond their parents)
+img,
+figure {
+	max-width: 100%;
+	height: auto;
+	vertical-align: middle;
+}
+svg {
+	max-width: 100%;
+}
+
+small {
+	font-weight: inherit;
+}
+
+// Disable button :focus outline
+button:focus {
+	outline: none;
+}
+
+/* End General */
+
+/* Auth Forms */
+
+.signin-form::after {
+	display: none;
+}
+
+.was-validated .form-control:invalid ~ .ai-user::before {
+	position: relative;
+	bottom: 11px !important;
+	background: red;
+}
+
+/* End Auth Forms */
