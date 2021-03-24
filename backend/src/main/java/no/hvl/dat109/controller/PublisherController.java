@@ -56,7 +56,7 @@ public class PublisherController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Publisher> updateAuthor(@PathVariable("id") long id, @RequestBody Publisher publisher) {
+    public ResponseEntity<Publisher> updatePublisher(@PathVariable("id") long id, @RequestBody Publisher publisher) {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
 
         if (publisherData.isPresent()) {
@@ -78,7 +78,7 @@ public class PublisherController {
      * @return ResponseEntity<HttpStatus>
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteAuthor(@PathVariable("id") long id) {
+    public ResponseEntity<Long> deletePublisher(@PathVariable("id") long id) {
         try {
             Publisher publisher = publisherRepository.findById(id).get();
             bookService.removePublisherFromBooks(publisher);
