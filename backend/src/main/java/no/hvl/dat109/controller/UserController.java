@@ -1,5 +1,6 @@
 package no.hvl.dat109.controller;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.JWTUtil;
@@ -18,7 +19,11 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
+
+        if (user.getEmail() == null || user.getPassword() == null || user.getName() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8) && user.getName().length() > 0)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -39,13 +44,17 @@ public class UserController {
         // Skjuler passord i JSON-response
         savedUser.setPassword(null);
 
-        return ResponseEntity.ok(savedUser);
+        String token = JWTUtil.createToken(savedUser.getName());
+
+        return ResponseEntity.ok(token);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> authorizeUser(@RequestBody User user) {
+    public ResponseEntity<String> authorizeUser(@RequestBody User user) {
 
-        System.out.println(user.toString());
+        if (user.getEmail() == null || user.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
 
         if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8))) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -64,13 +73,9 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String jwtToken = JWTUtil.createToken(registeredUser.getId().toString());
-//        return ResponseEntity.ok(jwtToken);
+        String token = JWTUtil.createToken(registeredUser.getName());
 
-        // Skjuler passord i JSON-response
-        registeredUser.setPassword(null);
-
-        return ResponseEntity.ok(registeredUser);
+        return ResponseEntity.ok(token);
 
     }
 
