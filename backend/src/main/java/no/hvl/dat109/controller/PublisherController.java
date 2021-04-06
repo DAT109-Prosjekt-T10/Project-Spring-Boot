@@ -3,6 +3,7 @@ package no.hvl.dat109.controller;
 import java.util.List;
 import java.util.Optional;
 
+import no.hvl.dat109.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +25,16 @@ import no.hvl.dat109.repository.PublisherRepository;
 public class PublisherController {
 
     @Autowired
-    PublisherRepository publisherRepository;
+    private PublisherRepository publisherRepository;
+
+    @Autowired
+    private BookService bookService;
 
     @GetMapping("")
     public ResponseEntity<List<Publisher>> getAllPublishers(@RequestParam(required = false) String author) {
         List<Publisher> publishers = publisherRepository.findAll();
         return ResponseEntity.ok(publishers);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Publisher> getAPublisherById(@PathVariable("id") long id) {
@@ -53,7 +56,7 @@ public class PublisherController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Publisher> updateAuthor(@PathVariable("id") long id, @RequestBody Publisher publisher) {
+    public ResponseEntity<Publisher> updatePublisher(@PathVariable("id") long id, @RequestBody Publisher publisher) {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
 
         if (publisherData.isPresent()) {
@@ -75,8 +78,10 @@ public class PublisherController {
      * @return ResponseEntity<HttpStatus>
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteAuthor(@PathVariable("id") long id) {
+    public ResponseEntity<Long> deletePublisher(@PathVariable("id") long id) {
         try {
+            Publisher publisher = publisherRepository.findById(id).get();
+            bookService.removePublisherFromBooks(publisher);
             publisherRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {

@@ -36,7 +36,7 @@ public class Book {
     @Column(name = "description", nullable = true)
     private String description;
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.REMOVE })
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "author_id") })
@@ -48,7 +48,7 @@ public class Book {
     @JoinTable(
     		joinColumns = { @JoinColumn(name = "book_id") }, 
     		inverseJoinColumns = { @JoinColumn(name = "publisher_id") })
-    @Column(name = "authors", nullable = false)
+    @Column(name = "publishers", nullable = false)
     @JsonIdentityReference(alwaysAsId = true)
     private Set<Publisher> publishers = new HashSet<Publisher>();
 
