@@ -27,7 +27,7 @@ public class Config {
 
     public static String[] AllowedOrigins = { HTTP.concat("localhost:3000") };
 
-    public static String[] AllowedMethods = { "GET", "PUT", "POST", "DELETE" };
+    public static String[] AllowedMethods = { "GET", "PUT", "POST", "DELETE", "Authorization" };
 
     public static int ExpireTime = 1000 * 60 * 60 * 24;
 

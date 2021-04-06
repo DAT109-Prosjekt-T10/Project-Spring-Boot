@@ -8,7 +8,7 @@ const Sidebar = ({ user, history }) => {
 
 	const handleLogout = () => {
 		dispatch(logoutUser())
-		if (user.data === null) history.push('/logout')
+		history.push('/login')
 	}
 
 	return (
@@ -22,7 +22,7 @@ const Sidebar = ({ user, history }) => {
 						></i>
 					</div>
 
-					<h6 className='mb-0 pt-1'>{user.data.name}</h6>
+					<h6 className='mb-0 pt-1'>{user.id}</h6>
 				</div>
 				<div className='d-lg-none px-4 pb-4 text-center'>
 					<a

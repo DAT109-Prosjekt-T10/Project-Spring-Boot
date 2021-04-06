@@ -17,6 +17,8 @@ public class AuthServiceInterceptor implements HandlerInterceptor {
                         throws Exception {
 
                 String token = request.getHeader("Authorization");
+                
+                System.out.println(token);
 
                 if (token != null) {
                         System.out.println("Token verified");

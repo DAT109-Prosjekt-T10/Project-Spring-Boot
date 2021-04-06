@@ -20,6 +20,7 @@ const userReducer = (state = initialState, action) => {
 				loading: true,
 			}
 		case CURRENT_USER_SUCCESS:
+			localStorage.setItem('user', action.payload.data)
 			return {
 				...state,
 				data: action.payload.data,
@@ -32,6 +33,7 @@ const userReducer = (state = initialState, action) => {
 				loading: false,
 			}
 		case LOGOUT_USER:
+			localStorage.removeItem('user')
 			return {
 				state: initialState,
 			}
