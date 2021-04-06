@@ -33,7 +33,7 @@ public class Book {
     @Column(name = "category", nullable = false)
     private String category;
 
-    @Column(name = "description", nullable = true)
+    @Column(name = "description", nullable = true, length = 1000)
     private String description;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
