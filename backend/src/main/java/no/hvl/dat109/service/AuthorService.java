@@ -5,8 +5,6 @@ import no.hvl.dat109.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,8 +19,13 @@ public class AuthorService {
         return authorRepository.findById(id).isPresent();
     }
 
-    public boolean atLeastOneAuthorNotExists(Set<Author> authors) {
-        return authors.stream().anyMatch(a -> !authorExists(a.getId()));
+    public long authorWithNameExists(String name) {
+        Author author = authorRepository.findByName(name);
+        if (author != null) {
+            return author.getId();
+        } else {
+            return -1;
+        }
     }
 
     public void createNewAuthorsIfNotExist(Set<Author> authors) {

@@ -2,10 +2,13 @@ package no.hvl.dat109.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.entity.Book;
+import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,6 +32,10 @@ public class AuthorController {
 
     @Autowired
     private BookService bookService;
+
+
+    @Autowired
+    private AuthorService authorService;
 
     /**
      * Method to fetch all authors.
@@ -68,10 +75,14 @@ public class AuthorController {
     @PostMapping("")
     public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
         try {
-            Author _author = authorRepository.save(author);
-            return new ResponseEntity<>(_author, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            if (authorService.authorWithNameExists(author.getName()) == -1) {
+                Author savedAuthor = authorRepository.save(author);
+                return ResponseEntity.ok(savedAuthor);
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
@@ -84,13 +95,35 @@ public class AuthorController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id, @RequestBody Author author) {
-        Optional<Author> tutorialData = authorRepository.findById(id);
+        Optional<Author> fetchedAuthor = authorRepository.findById(id);
 
-        if (tutorialData.isPresent()) {
-            Author _author = tutorialData.get();
+        if (fetchedAuthor.isPresent()) {
+            Author _author = fetchedAuthor.get();
 
-            _author.setName(author.getName());
-            _author.setBooks(author.getBooks());
+
+            // Add author to books
+            if (author.getBooks() != null && !author.getBooks().isEmpty()) {
+                if (author.getBooks().stream().allMatch(b -> bookService.bookExists(b.getId()))) {
+                    bookService.removeAuthorFromBooks(_author);
+                    bookService.addAuthorToBooks(_author, author.getBooks());
+//                    _author.setBooks(author.getBooks());
+                } else {
+                    return ResponseEntity.status(400).build();
+                }
+            }
+
+//            _author = authorRepository.findById(id).get();
+
+            if (author.getName() != null) {
+                // Check if name already exists
+                long idWithName = authorService.authorWithNameExists(author.getName());
+                System.out.println(idWithName);
+                if (idWithName == id || idWithName == -1) {
+                    _author.setName(author.getName());
+                } else {
+                    return ResponseEntity.status(409).build();
+                }
+            }
 
             return new ResponseEntity<>(authorRepository.save(_author), HttpStatus.OK);
         } else {
