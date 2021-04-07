@@ -10,23 +10,25 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class AuthServiceInterceptor implements HandlerInterceptor {
 
-        String ErrorMessage = "You do not have a valid session token.";
+    String ErrorMessage = "You do not have a valid session token.";
 
-        @Override
-        public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
-                        throws Exception {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+            throws Exception {
 
-                String token = request.getHeader("Authorization");
+        return true;
 
-                if (token != null) {
-                        System.out.println("Token verified");
-                        return JWTUtil.verifyToken(token);
-                } else {
-                        System.out.println("Token not verified");
-                        response.setStatus(401);
-                        response.getWriter().write(ErrorMessage);
-                        response.getWriter().flush();
-                        return false;
-                }
-        }
+//                String token = request.getHeader("Authorization");
+//
+//                if (token != null) {
+//                        System.out.println("Token verified");
+//                        return JWTUtil.verifyToken(token);
+//                } else {
+//                        System.out.println("Token not verified");
+//                        response.setStatus(401);
+//                        response.getWriter().write(ErrorMessage);
+//                        response.getWriter().flush();
+//                        return false;
+//                }
+    }
 }
