@@ -44,11 +44,18 @@ public class OrderController {
         boolean userExists = userService.userExists(order.getUser().getId());
 
         if (bookExists && userExists) {
-            // TODO Check if book is available
-            Order savedOrder = orderRepository.save(order);
-            return ResponseEntity.ok(savedOrder);
+
+            if (bookService.bookIsAvailable(order.getBook().getId(), order.getDateFrom(), order.getDateTo())) {
+                Order savedOrder = orderRepository.save(order);
+                return ResponseEntity.ok(savedOrder);
+            } else {
+                // TODO Create APIError class for error message! https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
+                return ResponseEntity.status(400).build();
+            }
+
         }
 
+        // TODO Create APIError class for error message!
         return ResponseEntity.status(400).build();
 
     }

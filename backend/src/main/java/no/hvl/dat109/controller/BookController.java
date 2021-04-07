@@ -103,6 +103,7 @@ public class BookController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
         try {
+            // TODO If there are orders on book in the future, do not delete
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
