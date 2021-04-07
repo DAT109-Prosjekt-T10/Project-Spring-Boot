@@ -16,19 +16,26 @@ public class AuthServiceInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
 
-        return true;
+        String token = request.getHeader("Authorization");
 
-//                String token = request.getHeader("Authorization");
-//
-//                if (token != null) {
-//                        System.out.println("Token verified");
-//                        return JWTUtil.verifyToken(token);
-//                } else {
-//                        System.out.println("Token not verified");
-//                        response.setStatus(401);
-//                        response.getWriter().write(ErrorMessage);
-//                        response.getWriter().flush();
-//                        return false;
-//                }
+        if (token != null) {
+            if (JWTUtil.verifyToken(token)) {
+                System.out.println("Token verified");
+                return true;
+            } else {
+                System.out.println("Token not verified");
+                response.setStatus(401);
+                response.getWriter().write(ErrorMessage);
+                response.getWriter().flush();
+                return false;
+            }
+
+        } else {
+            System.out.println("No token");
+            response.setStatus(401);
+            response.getWriter().write(ErrorMessage);
+            response.getWriter().flush();
+            return false;
+        }
     }
 }
