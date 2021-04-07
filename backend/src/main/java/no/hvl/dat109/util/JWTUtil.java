@@ -14,11 +14,12 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 
 public class JWTUtil {
 
-    public static String createToken(String id) {
+    public static String createToken(String id, boolean admin) {
 
         String token = null;
         Map<String, Object> payload = new HashMap<>();
         payload.put("id", id);
+        payload.put("admin", admin);
 
         Calendar TimeNow = Calendar.getInstance();
         long timeInSecs = TimeNow.getTimeInMillis();
