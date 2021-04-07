@@ -55,6 +55,9 @@ public class Book {
     @Column(name = "published", nullable = false)
     private LocalDate published;
 
+    @OneToMany(mappedBy = "book")
+    private Set<Order> bookOrders;
+
     public Book() {
         super();
     }
@@ -127,6 +130,14 @@ public class Book {
 
     public void setPublishers(Set<Publisher> publishers) {
         this.publishers = publishers;
+    }
+
+    public Set<Order> getBookOrders() {
+        return bookOrders;
+    }
+
+    public void setBookOrders(Set<Order> bookOrders) {
+        this.bookOrders = bookOrders;
     }
 
     @Override

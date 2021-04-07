@@ -94,7 +94,7 @@ public class AuthorController {
      * @return ResponseEntity<Author>
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id, @RequestBody Author author) {
+    public ResponseEntity<Object> updateAuthor(@PathVariable("id") long id, @RequestBody Author author) {
         Optional<Author> fetchedAuthor = authorRepository.findById(id);
 
         if (fetchedAuthor.isPresent()) {
@@ -124,8 +124,8 @@ public class AuthorController {
                     return ResponseEntity.status(409).build();
                 }
             }
-
-            return new ResponseEntity<>(authorRepository.save(_author), HttpStatus.OK);
+            authorRepository.save(_author);
+            return new ResponseEntity<>(authorRepository.findById(id).get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
