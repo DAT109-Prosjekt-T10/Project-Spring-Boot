@@ -12,6 +12,8 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
+import ch.qos.logback.core.joran.conditional.ThenAction;
+
 public class JWTUtil {
 
     public static String createToken(String id, boolean admin) {
@@ -40,14 +42,13 @@ public class JWTUtil {
 
         try {
             JWTVerifier verifier = JWT.require(Config.algorithm).withIssuer(Config.Issuer).build(); // Reusable verifier
-            DecodedJWT decodedJWT = verifier.verify(token);
-
+            DecodedJWT verifiedJWT = verifier.verify(token);
         } catch (JWTVerificationException exception) {
-            // Handle invalid signature
+            System.out.println("Token verification failed");
             return false;
         }
 
-        // Continue if valid
+        System.out.println("Token verified");
         return true;
 
     }
