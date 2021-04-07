@@ -11,17 +11,24 @@ const DetailsBookModal = ({ book, authors }) => {
 		)
 	}
 
+	//TODO Error handling
 	const displayAuthors = () => {
-		if (!book.authors || (book.authors && book.authors.length === 0)) {
+		if (!book.authors /*|| (book.authors && book.authors.length === 0)*/) {
 			return <Badge type='warning' text='Missing' />
 		} else {
 			return book.authors.map((authorId) => {
 				const author = authors.find((a) => a.id === authorId)
-				return (
-					<button className='btn btn-link row text-decoration-none'>
-						<Badge type='info' text={author.name} />
-					</button>
-				)
+				if (author) {
+					return (
+						<button className='btn btn-link row text-decoration-none'>
+							{author.name ? (
+								<Badge type='info' text={author.name} />
+							) : (
+								<Badge type='info' text={'Name missing'} />
+							)}
+						</button>
+					)
+				}
 			})
 		}
 	}
