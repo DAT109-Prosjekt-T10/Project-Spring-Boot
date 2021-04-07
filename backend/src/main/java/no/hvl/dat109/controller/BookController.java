@@ -51,6 +51,7 @@ public class BookController {
         System.out.println(book.toString());
 
         // If any author object only contains name create new author object
+        // TODO Same name on author already exists?
         Set<Author> authors = book.getAuthors();
         if (authors != null) {
             authorService.createNewAuthorsIfNotExist(authors);
