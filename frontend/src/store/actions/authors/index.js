@@ -79,7 +79,7 @@ const getAuthorByIdFailure = (error) => ({
 	},
 })
 
-export const getAuthors = () => {
+export const getAllAuthors = () => {
 	return async (dispatch) => {
 		dispatch(getAuthorsStarted())
 

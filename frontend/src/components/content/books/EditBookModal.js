@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 
-const EditBookModal = ({ book, handleSubmit }) => {
+const EditBookModal = ({ book, handleSubmit, authors }) => {
 	const [title, setTitle] = useState('')
 	const [published, setPublished] = useState('')
 	const [publisher, setPublisher] = useState('')
@@ -10,17 +10,15 @@ const EditBookModal = ({ book, handleSubmit }) => {
 	const [description, setDescription] = useState('')
 	const [selectedAuthors, setSelectedAuthors] = useState([])
 
-	const authors = []
-
 	useEffect(() => {
-		setTitle(book.title)
-		setPublished(book.published)
-		setPublisher(book.publisher)
-		setIsbn(book.isbn)
-		setCategory(book.category)
-		setDescription(book.description)
-		if (book.authors) {
-			//! maybe change format?
+		//* if book object is not empty
+		if (Object.keys(book).length !== 0) {
+			setTitle(book.title)
+			setPublished(book.published)
+			setPublisher(book.publisher)
+			setIsbn(book.isbn)
+			setCategory(book.category)
+			setDescription(book.description)
 			setSelectedAuthors(book.authors)
 		}
 	}, [book])
@@ -34,14 +32,14 @@ const EditBookModal = ({ book, handleSubmit }) => {
 			title,
 			published:
 				published.length !== 4 ? published : `${published}-01-01`,
-			// publisher: [publisher],
 			isbn,
 			category,
 			description: description ? description : '',
-			authors: [],
+			authors: selectedAuthors.map((author) =>
+				author.id ? { id: author.id } : author
+			),
+			// publisher: [publisher],
 		}
-
-		console.log(editBook)
 
 		handleSubmit(editBook)
 
@@ -178,11 +176,37 @@ const EditBookModal = ({ book, handleSubmit }) => {
 											placeholder={'Select authors..'}
 											className='react-select'
 											classNamePrefix='react-select-inner'
+											//* selectedauthors returns either
+											//* - only id if it is a selected author
+											//* - author object (id, name and books) if you select a author from the dropdown
+											//* - only name if you create a new author in the dropdown
 											value={selectedAuthors.map(
-												(author) => {
-													return {
-														label: author.name,
-														value: author.id,
+												(selected) => {
+													if (selected.id) {
+														return {
+															label:
+																selected.name,
+															value: selected.id,
+														}
+													} else {
+														const author = authors.find(
+															(a) =>
+																a.id ===
+																selected
+														)
+														return author
+															? {
+																	label:
+																		author.name,
+																	value:
+																		author.id,
+															  }
+															: {
+																	label:
+																		selected.name,
+																	value:
+																		selected.name,
+															  }
 													}
 												}
 											)}
