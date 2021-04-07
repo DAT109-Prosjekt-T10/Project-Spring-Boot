@@ -8,3 +8,5 @@ bin/
 *.iml
 .idea/
 .DS_Store
+frontend/yarn.lock
+frontend/package-lock.json
