@@ -71,16 +71,15 @@ const authorReducer = (state = initialState, action) => {
 				},
 			}
 		case UPDATE_AUTHOR_SUCCESS:
-			//* find the index of element that is being updated in state
-			const index = state.data.findIndex(
-				(author) => author.id === action.payload.data.id
-			)
-
-			//* add updated element in state
-			state.data[index] = action.payload.data
 			return {
 				...state,
-				data: [...state.data],
+				data: [
+					...state.data.map((author) =>
+						author.id === action.payload.data.id
+							? action.payload.data
+							: author
+					),
+				],
 				update: {
 					...state.update,
 					loading: false,

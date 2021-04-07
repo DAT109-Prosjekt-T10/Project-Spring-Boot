@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 import AddBookModal from '../content/books/AddBookModal'
 import { Modal } from 'bootstrap'
+import { useSelector } from 'react-redux'
 
-const Table = ({ data, columns, onAddClick, onRowClick }) => {
+const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 	const [filteredData, setFilteredData] = useState(data)
 
 	//* pagination
 	const [totalRows, setTotalRows] = useState(0)
 	const [perPage, setPerPage] = useState(10)
+
+	//* author state
+	const authors = useSelector((state) => state.authors)
 
 	//* initializes add book modal
 	const [modal, setModal] = useState()
@@ -65,10 +69,14 @@ const Table = ({ data, columns, onAddClick, onRowClick }) => {
 					/>
 				</div>
 			</div>
-
-			<button className='btn btn-primary btn-sm' onClick={openAddModal}>
-				<i className='ai-plus fs-4'></i> Add
-			</button>
+			{user && user.admin && (
+				<button
+					className='btn btn-primary btn-sm'
+					onClick={openAddModal}
+				>
+					<i className='ai-plus fs-4'></i> Add
+				</button>
+			)}
 		</>
 	)
 
@@ -88,7 +96,7 @@ const Table = ({ data, columns, onAddClick, onRowClick }) => {
 				onChangePage={handlePageChange}
 			/>
 			<AddBookModal
-				authors={authors}
+				authors={authors.data}
 				handleSubmit={(book) => {
 					modal.hide()
 					onAddClick(book)
@@ -97,13 +105,5 @@ const Table = ({ data, columns, onAddClick, onRowClick }) => {
 		</>
 	)
 }
-
-const authors = [
-	{ id: 1, name: 'Ida Jackson', books: [] },
-	{ id: 2, name: 'Knut Johansen', books: [] },
-	{ id: 3, name: 'Jan Hårstad', books: [] },
-	{ id: 4, name: 'Tonje Hauge', books: [] },
-	{ id: 5, name: 'Geir Uthaug', books: [] },
-]
 
 export default Table

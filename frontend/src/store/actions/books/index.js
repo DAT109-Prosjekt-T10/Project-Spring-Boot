@@ -1,4 +1,4 @@
-import axios from '../../../config/axios'
+import API from '../../../config/axios'
 import {
 	POST_BOOK_STARTED,
 	POST_BOOK_SUCCESS,
@@ -21,7 +21,7 @@ export const addBook = (obj) => {
 	return (dispatch) => {
 		dispatch(addBookStarted())
 
-		axios
+		API
 			.post('/api/books', obj)
 			.then((res) => dispatch(addBookSuccess(res.data)))
 			.catch((err) => {
@@ -52,7 +52,7 @@ export const getBookById = (id) => {
 	return async (dispatch) => {
 		dispatch(getBookByIdStarted())
 
-		axios
+		API
 			.get(`/api/books/${id}`)
 			.then((res) => dispatch(getBookByIdSuccess(res.data)))
 			.catch((err) => {
@@ -83,7 +83,7 @@ export const getAllBooks = () => {
 	return async (dispatch) => {
 		dispatch(getAllBooksStarted())
 
-		axios
+		API
 			.get('/api/books')
 			.then((res) => dispatch(getAllBooksSuccess(res.data)))
 			.catch((err) => {
@@ -114,7 +114,7 @@ export const updateBook = (id, obj) => {
 	return async (dispatch) => {
 		dispatch(updateBookStarted())
 
-		axios
+		API
 			.put(`/api/books/${id}`, obj)
 			.then((res) => dispatch(updateBookSuccess(res.data)))
 			.catch((err) => {
@@ -145,7 +145,7 @@ export const deleteBook = (id) => {
 	return async (dispatch) => {
 		dispatch(deleteBookStarted())
 
-		axios
+		API
 			.delete(`/api/books/${id}`)
 			.then((res) => dispatch(deleteBookSuccess(res.data)))
 			.catch((err) => {

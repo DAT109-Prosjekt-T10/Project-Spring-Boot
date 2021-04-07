@@ -4,12 +4,17 @@ import {
 	checkRegisterFormValidity,
 } from '../../../helpers/validate'
 
+const HARDCODED_ADMIN_CODE = '0150'
+
 const RegisterForm = ({ handleRegister }) => {
 	//* form utils
 	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [confirmPassword, setConfirmPassword] = useState('')
+
+	//* hardcoded admin code to set user as an admin
+	const [adminCode, setAdminCode] = useState('')
 
 	const [checkFormValidity, setCheckFormValidity] = useState(false)
 
@@ -19,12 +24,11 @@ const RegisterForm = ({ handleRegister }) => {
 
 		//* checks if form is valid
 		if (isRegisterFormValid(name, email, password, confirmPassword)) {
-			//? register user
 			let user = {
 				name,
 				email,
 				password,
-				//? admin: if admin input field is equal, set as true
+				admin: adminCode === HARDCODED_ADMIN_CODE,
 			}
 
 			//* clear form
@@ -128,6 +132,17 @@ const RegisterForm = ({ handleRegister }) => {
 				/>
 				<label htmlFor='confirm-password'>Confirm Password</label>
 				<div className='invalid-feedback'>Passwords must match.</div>
+			</div>
+			<div className='form-floating mb-3'>
+				<input
+					type='password'
+					className='form-control'
+					id='admin-code'
+					placeholder='Admin'
+					value={adminCode}
+					onChange={(e) => setAdminCode(e.target.value)}
+				/>
+				<label htmlFor='admin-code'>Admin Code (code is 0150)</label>
 			</div>
 			<br />
 			<button
