@@ -1,10 +1,14 @@
 package no.hvl.dat109.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
+import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.service.BookService;
+import no.hvl.dat109.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +34,9 @@ public class PublisherController {
     @Autowired
     private BookService bookService;
 
+    @Autowired
+    private PublisherService publisherService;
+
     @GetMapping("")
     public ResponseEntity<List<Publisher>> getAllPublishers(@RequestParam(required = false) String author) {
         List<Publisher> publishers = publisherRepository.findAll();
@@ -47,10 +54,14 @@ public class PublisherController {
     @PostMapping("")
     public ResponseEntity<Publisher> createPublisher(@RequestBody Publisher publisher) {
         try {
-            Publisher savedPublisher = publisherRepository.save(new Publisher(publisher.getName()));
-            return new ResponseEntity<>(savedPublisher, HttpStatus.CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.CONFLICT);
+            if (publisherService.publisherWithNameExists(publisher.getName()) == -1) {
+                Publisher savedPublisher = publisherRepository.save(publisher);
+                return ResponseEntity.ok(savedPublisher);
+            } else {
+                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            }
+        } catch (IncorrectResultSizeDataAccessException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
     }
 
@@ -61,9 +72,36 @@ public class PublisherController {
 
         if (publisherData.isPresent()) {
             Publisher _publisher = publisherData.get();
+//            if (publisher.getName() != null) {
+//                long idWithName = publisherService.publisherWithNameExists(publisher.getName());
+//                if (idWithName == id || idWithName == -1) {
+//                    _publisher.setName(publisher.getName());
+//                } else {
+//                    return ResponseEntity.status(409).build();
+//                }
+//            }
 
-            _publisher.setName(publisher.getName());
-            _publisher.setBooks(publisher.getBooks());
+            // Add publisher to books
+            if (publisher.getBooks() != null && !publisher.getBooks().isEmpty()) {
+                if (publisher.getBooks().stream().allMatch(b -> bookService.bookExists(b.getId()))) {
+                    bookService.removePublisherFromBooks(_publisher);
+                    bookService.addPublisherToBooks(_publisher, publisher.getBooks());
+//                    _publisher.setBooks(publisher.getBooks());
+                } else {
+                    return ResponseEntity.status(400).build();
+                }
+            }
+
+//            _publisher = publisherRepository.findById(id).get();
+
+            if (publisher.getName() != null) {
+                long idWithName = publisherService.publisherWithNameExists(publisher.getName());
+                if (idWithName == id || idWithName == -1) {
+                    _publisher.setName(publisher.getName());
+                } else {
+                    return ResponseEntity.status(409).build();
+                }
+            }
 
             return new ResponseEntity<>(publisherRepository.save(_publisher), HttpStatus.OK);
         } else {

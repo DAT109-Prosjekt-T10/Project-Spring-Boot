@@ -44,7 +44,7 @@ public class UserController {
         // Skjuler passord i JSON-response
         savedUser.setPassword(null);
 
-        String token = JWTUtil.createToken(savedUser.getName());
+        String token = JWTUtil.createToken(savedUser.getName(), user.isAdmin());
 
         return ResponseEntity.ok(token);
     }
@@ -73,7 +73,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String token = JWTUtil.createToken(registeredUser.getName());
+        String token = JWTUtil.createToken(registeredUser.getName(), user.isAdmin());
 
         return ResponseEntity.ok(token);
 
