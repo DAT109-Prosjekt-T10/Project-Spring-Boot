@@ -1,17 +1,29 @@
-import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import logo from '../assets/images/logo-libsys.png'
-import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { Link, NavLink, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { logoutUser } from '../../store/actions/auth'
+import { getUserByToken } from '../../helpers/auth'
+import logo from '../assets/images/logo-libsys.png'
 
-const Header = ({ history }) => {
+const Header = () => {
 	const user = useSelector((state) => state.user)
+
+	const [loggedInUser, setLoggedInUser] = useState(null)
+
+	useEffect(() => {
+		setLoggedInUser(
+			getUserByToken(user.data) ||
+				getUserByToken(localStorage.getItem('user'))
+		)
+	}, [user])
+
 	const dispatch = useDispatch()
+
+	const history = useHistory()
 
 	const handleLogout = () => {
 		dispatch(logoutUser())
-		if (user.data === null) history.push('/logout')
+		history.push('/login')
 	}
 
 	return (
@@ -42,7 +54,7 @@ const Header = ({ history }) => {
 						width='153'
 					/>
 				</Link>
-				{user.data ? (
+				{loggedInUser ? (
 					<div className='d-flex align-items-center order-lg-3 ms-lg-auto'>
 						<div className='navbar-tool dropdown'>
 							<div className='navbar-tool-icon-box'>
@@ -53,7 +65,7 @@ const Header = ({ history }) => {
 								to='/'
 							>
 								<small>Hello,</small>
-								{user.data.name}
+								{loggedInUser.id}
 							</Link>
 							<ul
 								className='dropdown-menu dropdown-menu-end'
