@@ -4,6 +4,7 @@ import no.hvl.dat109.entity.Order;
 import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.BookService;
 import no.hvl.dat109.service.UserService;
+import no.hvl.dat109.util.ApiError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,14 +48,13 @@ public class OrderController {
                 Order savedOrder = orderRepository.save(order);
                 return ResponseEntity.ok(savedOrder);
             } else {
-                // TODO Create APIError class for error message! https://www.baeldung.com/global-error-handler-in-a-spring-rest-api
-                return ResponseEntity.status(400).build();
+                return ResponseEntity.status(400).body(new ApiError("Book is not available at given dates."));
             }
 
         }
 
         // TODO Create APIError class for error message!
-        return ResponseEntity.status(400).build();
+        return ResponseEntity.status(400).body(new ApiError(("Book and/or user does not exist on server.")));
 
     }
 
