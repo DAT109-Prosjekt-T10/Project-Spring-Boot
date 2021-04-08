@@ -19,6 +19,7 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "publishers", cascade = {CascadeType.MERGE})
