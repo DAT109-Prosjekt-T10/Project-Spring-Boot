@@ -24,13 +24,10 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
-
     @Autowired
     private OrderRepository orderRepository;
-    
     @Autowired
     private AuthorService authorService;
-
     @Autowired
     private PublisherService publisherService;
 
@@ -48,14 +45,10 @@ public class BookController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBookById(@PathVariable("id") long id) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
 
-        Book book;
-        try {
-            book = bookRepository.findById(id).get();
-        } catch (Exception e) {
-        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
-        }
-        return ResponseEntity.ok(book);
+        return bookOptional.<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(404).body(new ApiError("Book does not exist on server.")));
     }
 
     /**
@@ -76,6 +69,7 @@ public class BookController {
         }
 
         // If any publisher object only contains name create new publisher object
+        // TODO Same name on publisher already exists?
         Set<Publisher> publishers = book.getPublishers();
         if (publishers != null) {
             publisherService.createNewPublisherIfNotExist(publishers);
@@ -104,7 +98,6 @@ public class BookController {
         if (books.isPresent()) {
             Book getBook = books.get();
 
-            // TODO Finnes det en enklere løsning for å implementere denne funksjonaliteten?
             if (book.getTitle() != null) getBook.setTitle(book.getTitle());
             if (book.getIsbn() != null) getBook.setIsbn(book.getIsbn());
             if (book.getPublished() != null) getBook.setPublished(book.getPublished());
