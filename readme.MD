@@ -63,7 +63,7 @@ The following tools were used in this project:
 
 Before starting , you need to have [Java] and [Node](https://nodejs.org/en/) installed.
 
-## :checkered_flag-starting: Starting
+## :checkered_flag: Starting
 
 ```bash
 # Clone this project
