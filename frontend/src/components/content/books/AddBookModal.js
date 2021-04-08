@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import isbnChecker from 'node-isbn'
 
-const AddBookModal = ({ authors, handleSubmit }) => {
+const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 	const [title, setTitle] = useState('')
 	const [published, setPublished] = useState('')
-	const [publisher, setPublisher] = useState('')
+	const [selectedPublishers, setSelectedPublishers] = useState([])
 	const [isbn, setIsbn] = useState('')
 	const [category, setCategory] = useState('')
 	const [description, setDescription] = useState('')
@@ -28,7 +28,9 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 			authors: selectedAuthors.map((author) =>
 				author.id ? { id: author.id } : author
 			),
-			publisher: [],
+			publishers: selectedPublishers.map((publisher) =>
+				publisher.id ? { id: publisher.id } : publisher
+			),
 		}
 
 		handleSubmit(newBook)
@@ -41,7 +43,13 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 		isbnChecker.resolve(checkIsbn).then((book) => {
 			setTitle(book.title)
 			setPublished(book.publishedDate)
-			setPublisher(book.publisher ? book.published : '')
+			setSelectedPublishers(
+				book.authors.map((publisher) => {
+					return {
+						name: publisher,
+					}
+				})
+			)
 			setIsbn(checkIsbn)
 			setCategory(book.categories[0])
 			setDescription(book.description)
@@ -59,7 +67,7 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 		setCheckIsbn('')
 		setTitle('')
 		setPublished('')
-		setPublisher('')
+		setSelectedAuthors([])
 		setIsbn('')
 		setCategory('')
 		setDescription('')
@@ -150,19 +158,50 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 								</div>
 								<div className='col'>
 									<div className='form-floating'>
-										<input
-											className='form-control'
-											type='text'
-											id='publisher'
-											placeholder='Publisher'
-											value={publisher}
-											onChange={(e) =>
-												setPublisher(e.target.value)
+										<CreatableSelect
+											isClearable
+											isMulti
+											placeholder={'Select publishers..'}
+											className='react-select'
+											classNamePrefix='react-select-inner'
+											value={selectedPublishers.map(
+												(publisher) => {
+													return {
+														label: publisher.name,
+														value: publisher.id,
+													}
+												}
+											)}
+											//* map publishers into correct format
+											options={publishers?.map(
+												(publisher) => {
+													return {
+														label: publisher.name,
+														value: publisher.id,
+													}
+												}
+											)}
+											//* items returns all selected publishers
+											//* map items to publisher from publishers array
+											//* if created new publisher, only return name, then create new later
+											onChange={(items) =>
+												setSelectedPublishers(
+													items.map((item) => {
+														const existingPublisher = selectedPublishers.find(
+															(publisher) =>
+																publisher.id ===
+																item.value
+														)
+														return existingPublisher
+															? existingPublisher
+															: {
+																	name:
+																		item.label,
+															  }
+													})
+												)
 											}
 										/>
-										<label htmlFor='publisher'>
-											Publisher
-										</label>
 									</div>
 								</div>
 							</div>

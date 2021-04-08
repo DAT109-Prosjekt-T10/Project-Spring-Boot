@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 import AddBookModal from '../content/books/AddBookModal'
+import AddAuthorModal from '../content/authors/AddAuthorModal'
 import { Modal } from 'bootstrap'
 import { useSelector } from 'react-redux'
 
@@ -17,7 +18,11 @@ const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 	//* initializes add book modal
 	const [modal, setModal] = useState()
 	useEffect(() => {
-		setModal(new Modal(document.getElementById('add-book-modal')))
+		if (columns.some((c) => c.name === 'Title')) {
+			setModal(new Modal(document.getElementById('add-book-modal')))
+		} else {
+			setModal(new Modal(document.getElementById('add-author-modal')))
+		}
 	}, [])
 
 	//* sets total rows
@@ -52,7 +57,9 @@ const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 
 	//* opens add modal
 	const openAddModal = () => {
-		if (modal) modal.show()
+		if (modal) {
+			modal.show()
+		}
 	}
 
 	const actions = (
@@ -100,6 +107,12 @@ const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 				handleSubmit={(book) => {
 					modal.hide()
 					onAddClick(book)
+				}}
+			/>
+			<AddAuthorModal
+				handleSubmit={(author) => {
+					modal.hide()
+					onAddClick(author)
 				}}
 			/>
 		</>

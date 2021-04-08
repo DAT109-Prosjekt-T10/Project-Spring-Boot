@@ -27,6 +27,11 @@ const Content = ({ match, history }) => {
 			>
 				<div className='row'>
 					<Sidebar user={loggedInUser} history={history} />
+					{currentUrl === '/' && <Dashboard history={history} />}
+					{currentUrl === '/books' && <Books user={loggedInUser} />}
+					{currentUrl === '/authors' && (
+						<Authors user={loggedInUser} history={history} />
+					)}
 					{currentUrl === '/' && <Dashboard />}
 					{currentUrl === '/books' && <Books user={loggedInUser} />}
 					{currentUrl === '/authors' && <Authors />}

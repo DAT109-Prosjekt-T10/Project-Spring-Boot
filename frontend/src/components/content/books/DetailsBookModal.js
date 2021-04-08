@@ -2,7 +2,7 @@ import React from 'react'
 import dayjs from 'dayjs'
 import Badge from '../../ui/Badge'
 
-const DetailsBookModal = ({ book, authors }) => {
+const DetailsBookModal = ({ book, authors, publishers }) => {
 	const displayDetailsText = (property) => {
 		return book[property] ? (
 			book[property]
@@ -11,24 +11,44 @@ const DetailsBookModal = ({ book, authors }) => {
 		)
 	}
 
-	//TODO Error handling
+
 	const displayAuthors = () => {
-		if (!book.authors /*|| (book.authors && book.authors.length === 0)*/) {
+		if (!book.authors || (book.authors && book.authors.length === 0)) {
 			return <Badge type='warning' text='Missing' />
 		} else {
 			return book.authors.map((authorId) => {
 				const author = authors.find((a) => a.id === authorId)
-				if (author) {
-					return (
-						<button className='btn btn-link row text-decoration-none'>
-							{author.name ? (
-								<Badge type='info' text={author.name} />
-							) : (
-								<Badge type='info' text={'Name missing'} />
-							)}
-						</button>
-					)
-				}
+				return (
+					<button className='btn btn-link row text-decoration-none'>
+						{author && author.name ? (
+							<Badge type='info' text={author.name} />
+						) : (
+							<Badge type='info' text={'Name missing'} />
+						)}
+					</button>
+				)
+			})
+		}
+	}
+
+	const displayPublishers = () => {
+		if (
+			!book.publishers ||
+			(book.publishers && book.publishers.length === 0)
+		) {
+			return <Badge type='warning' text='Missing' />
+		} else {
+			return book.publishers.map((publisherId) => {
+				const publisher = publishers.find((a) => a.id === publisherId)
+				return (
+					<button className='btn btn-link row text-decoration-none'>
+						{publisher && publisher.name ? (
+							<Badge type='info' text={publisher.name} />
+						) : (
+							<Badge type='info' text={'Name missing'} />
+						)}
+					</button>
+				)
 			})
 		}
 	}
@@ -85,7 +105,7 @@ const DetailsBookModal = ({ book, authors }) => {
 										)}
 									</dd>
 									<dd className='col'>
-										{displayDetailsText('publisher')}
+										{displayPublishers()}
 									</dd>
 								</div>
 

@@ -38,7 +38,7 @@ const EditBookModal = ({ book, handleSubmit, authors }) => {
 			authors: selectedAuthors.map((author) =>
 				author.id ? { id: author.id } : author
 			),
-			// publisher: [publisher],
+			publishers: [],
 		}
 
 		handleSubmit(editBook)

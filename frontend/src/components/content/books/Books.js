@@ -8,6 +8,7 @@ import {
 	updateBook,
 	deleteBook,
 } from '../../../store/actions/books'
+import { getAllPublishers } from '../../../store/actions/publishers'
 import { getAllAuthors } from '../../../store/actions/authors'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
@@ -31,6 +32,7 @@ const Books = ({ user }) => {
 	//* book & authors state
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
+	const publishers = useSelector((state) => state.publishers)
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
@@ -39,6 +41,7 @@ const Books = ({ user }) => {
 	const getData = useCallback(() => {
 		dispatch(getAllBooks())
 		dispatch(getAllAuthors())
+		dispatch(getAllPublishers())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
@@ -46,6 +49,12 @@ const Books = ({ user }) => {
 	//* handlers
 
 	const handleRowClick = (book) => {
+		//* needs to retrieve authors after edit in case user added new authors
+		//? not the best practise since it's dispatching every time
+		//? user clicks on book details, but ok for now
+		dispatch(getAllAuthors())
+		dispatch(getAllPublishers())
+
 		const modal = new Modal(document.getElementById('detailed-book-modal'))
 		if (modal) {
 			setDetailedBook(book)
@@ -55,7 +64,6 @@ const Books = ({ user }) => {
 
 	const handleAddClick = (book) => {
 		dispatch(addBook(book))
-		dispatch(getAllAuthors())
 	}
 
 	const handleEditClick = (book) => {
@@ -123,32 +131,30 @@ const Books = ({ user }) => {
 					>
 						<i className='ai-menu'></i>
 					</button>
-					{user && !user.admin ? (
-						<div className='dropdown-menu'>
-							<button
-								className='dropdown-item'
-								onClick={() => handleEditClick(row)} //* opens edit modal
-							>
-								<i className='ai-edit me-1'></i> Edit
-							</button>
-							<button
-								className='dropdown-item text-danger'
-								onClick={() => handleDeleteClick(row.id)}
-							>
-								<i className='ai-trash-2 me-1'></i> Delete
-							</button>
-						</div>
-					) : (
-						<div className='dropdown-menu'>
-							<button
-								className='dropdown-item'
-								onClick={() => handleRentBookClick(row)}
-							>
-								<i className='ai-shopping-bag me-1'></i> Rent
-								book
-							</button>
-						</div>
-					)}
+					<div className='dropdown-menu'>
+						<button
+							className='dropdown-item'
+							onClick={() => handleRentBookClick(row)}
+						>
+							<i className='ai-shopping-bag me-1'></i> Rent book
+						</button>
+						{user && user.admin && (
+							<>
+								<button
+									className='dropdown-item text-warning'
+									onClick={() => handleEditClick(row)} //* opens edit modal
+								>
+									<i className='ai-edit me-1'></i> Edit
+								</button>
+								<button
+									className='dropdown-item text-danger'
+									onClick={() => handleDeleteClick(row.id)}
+								>
+									<i className='ai-trash-2 me-1'></i> Delete
+								</button>
+							</>
+						)}
+					</div>
 				</div>
 			),
 		},
@@ -195,7 +201,7 @@ const Books = ({ user }) => {
 						</div>
 					)}
 				</div>
-				<DetailsBookModal book={detailedBook} authors={authors.data} />
+				<DetailsBookModal book={detailedBook} authors={authors.data} publishers={publishers.data} />
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {

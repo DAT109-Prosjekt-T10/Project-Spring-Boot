@@ -21,8 +21,7 @@ export const addAuthor = (obj) => {
 	return (dispatch) => {
 		dispatch(addAuthorStarted())
 
-		API
-			.post('/api/authors', obj)
+		API.post('/api/author', obj)
 			.then((res) => dispatch(addAuthorSuccess(res.data)))
 			.catch((err) => {
 				dispatch(addAuthorFailure(err.message))
@@ -52,8 +51,7 @@ export const getAuthorById = (id) => {
 	return async (dispatch) => {
 		dispatch(getAuthorByIdStarted())
 
-		API
-			.get(`/api/authors/${id}`)
+		API.get(`/api/author/${id}`)
 			.then((res) => dispatch(getAuthorByIdSuccess(res.data)))
 			.catch((err) => {
 				dispatch(getAuthorByIdFailure(err.message))
@@ -83,8 +81,7 @@ export const getAllAuthors = () => {
 	return async (dispatch) => {
 		dispatch(getAuthorsStarted())
 
-		API
-			.get('/api/authors')
+		API.get('/api/author')
 			.then((res) => dispatch(getAuthorsSuccess(res.data)))
 			.catch((err) => {
 				dispatch(getAuthorsFailure(err.message))
@@ -114,8 +111,7 @@ export const updateAuthor = (id, obj) => {
 	return async (dispatch) => {
 		dispatch(updateAuthorStarted())
 
-		API
-			.put(`/api/authors/${id}`, obj)
+		API.put(`/api/author/${id}`, obj)
 			.then((res) => dispatch(updateAuthorSuccess(res.data)))
 			.catch((err) => {
 				dispatch(updateAuthorFailure(err.message))
@@ -145,8 +141,7 @@ export const deleteAuthor = (id) => {
 	return async (dispatch) => {
 		dispatch(deleteAuthorStarted())
 
-		API
-			.delete(`/api/authors/${id}`)
+		API.delete(`/api/author/${id}`)
 			.then((res) => dispatch(deleteAuthorSuccess(res.data)))
 			.catch((err) => {
 				dispatch(deleteAuthorFailure(err.message))

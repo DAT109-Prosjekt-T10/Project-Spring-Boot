@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import RentedBooks from './RentedBooks'
 
-const Dashboard = () => {
+const Dashboard = ({ history }) => {
 	const [rentedBooks, setRentedBooks] = useState(dummyBookList)
 
 	return (
@@ -19,6 +19,7 @@ const Dashboard = () => {
 								<button
 									type='button'
 									className='btn btn-primary'
+									onClick={() => history.push('/books')}
 								>
 									Rent a book
 								</button>
