@@ -4,6 +4,7 @@ import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+    
     @Autowired
     private AuthorService authorService;
 
@@ -104,6 +108,11 @@ public class BookController {
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
             // TODO If there are orders on book in the future, do not delete
+        	
+        	if (orderRepository.findAll() != null) {
+        		return new ResponseEntity<>(HttpStatus.CONFLICT);
+        	}
+        	
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
