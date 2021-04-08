@@ -4,8 +4,11 @@ import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
+import no.hvl.dat109.util.ApiError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,9 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private OrderRepository orderRepository;
+    
     @Autowired
     private AuthorService authorService;
 
@@ -41,7 +47,7 @@ public class BookController {
         try {
             book = bookRepository.findById(id).get();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
         return ResponseEntity.ok(book);
     }
@@ -68,7 +74,7 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(409).body(new ApiError("Book already exists on server."));
         }
     }
 
@@ -96,7 +102,7 @@ public class BookController {
 
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 
@@ -104,11 +110,16 @@ public class BookController {
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
             // TODO If there are orders on book in the future, do not delete
+        	
+        	if (orderRepository.findAll() != null) {
+        		return ResponseEntity.status(409).body(new ApiError("Book has existing orders."));
+        	}
+        	
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 
