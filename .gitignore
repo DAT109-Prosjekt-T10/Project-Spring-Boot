@@ -11,3 +11,5 @@ bin/
 .DS_Store
 frontend/yarn.lock
 frontend/package-lock.json
+backend/.classpath
+backend/.settings/org.eclipse.core.resources.prefs
