@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import dayjs from 'dayjs'
 import Badge from '../../ui/Badge'
 
-const RentBookModal = ({ book, handleSubmit }) => {
+const RentBookModal = ({ user, book, handleSubmit }) => {
 	const [startDate, setStartDate] = useState(new Date())
 	const [returnDate, setReturnDate] = useState(new Date())
 
@@ -22,10 +21,12 @@ const RentBookModal = ({ book, handleSubmit }) => {
 
 		const order = {
 			book: { id: book.id },
-			user: { id: 0 },
-			dateFrom: startDate.toISOString(),
-			dateTo: returnDate.toISOString(),
+			user: { id: user.id },
+			dateFrom: startDate.toISOString().substring(0, 10),
+			dateTo: returnDate.toISOString().substring(0, 10),
 		}
+
+		console.log(order)
 
 		handleSubmit(order)
 

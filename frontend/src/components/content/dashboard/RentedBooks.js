@@ -8,7 +8,7 @@ const RentedBooks = ({ rentedBooks }) => {
 			<Alert
 				text='You currently have no rented books'
 				type='warning'
-				icon='triangle'
+				icon='alert-triangle'
 			/>
 		</div>
 	) : (

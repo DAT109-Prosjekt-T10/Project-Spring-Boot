@@ -117,14 +117,16 @@ const Authors = ({ user, history }) => {
 						<Alert
 							text={`An error occured while trying to add a new book`}
 							type='danger'
-							icon='triangle'
+							icon='alert-triangle'
+							dismissable={true}
 						/>
 					)}
 					{authors.delete.error && (
 						<Alert
 							text={`An error occured while trying to delete ${deletedAuthor.title} (${authors.delete.error})`}
 							type='danger'
-							icon='triangle'
+							icon='alert-triangle'
+							dismissable={true}
 						/>
 					)}
 					{!authors.loading ? (

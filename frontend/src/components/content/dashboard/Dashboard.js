@@ -1,8 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import RentedBooks from './RentedBooks'
+import { useSelector, useDispatch } from 'react-redux'
+import { getAllBooks } from '../../../store/actions/books'
+import { getOrderByUserId } from '../../../store/actions/orders'
 
-const Dashboard = ({ history }) => {
+const Dashboard = ({ user, history }) => {
 	const [rentedBooks, setRentedBooks] = useState(dummyBookList)
+
+	//* book & orders state
+	const books = useSelector((state) => state.books)
+	const orders = useSelector((state) => state.orders)
+
+	//* initialize dispatcher
+	const dispatch = useDispatch()
+
+	//* dispatch action
+	const getData = useCallback(() => {
+		dispatch(getAllBooks())
+		dispatch(getOrderByUserId(user.id))
+	}, [dispatch, user.id])
+
+	useEffect(getData, [getData])
 
 	return (
 		<div className='col-lg-8'>
@@ -13,7 +31,10 @@ const Dashboard = ({ history }) => {
 					</h1>
 					<div className='row mt-3'>
 						<h4 className='mb-4'>Rented books</h4>
-						<RentedBooks rentedBooks={rentedBooks} />
+						<RentedBooks
+							rentedBooks={orders.data}
+							books={books.data}
+						/>
 						<div className='row mt-6'>
 							<div className='col-lg-3'>
 								<button

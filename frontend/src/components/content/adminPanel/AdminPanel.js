@@ -19,17 +19,7 @@ import EditBookModal from './EditBookModal'
 import DetailsBookModal from './DetailsBookModal'
 import RentBookModal from './RentBookModal'
 
-const Books = ({ user }) => {
-	//* book to be edited, deleted, showed details and rented
-	const [editedBook, setEditedBook] = useState({})
-	const [deletedBook, setDeletedBook] = useState({})
-	const [detailedBook, setDetailedBook] = useState({})
-	const [rentedBook, setRentedBook] = useState({})
-
-	//* initializes edit book and rented book modal
-	const [editModal, setEditModal] = useState()
-	const [rentModal, setRentModal] = useState()
-
+const AdminPanel = ({ user }) => {
 	//* book & authors state
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
@@ -44,6 +34,7 @@ const Books = ({ user }) => {
 		dispatch(getAllBooks())
 		dispatch(getAllAuthors())
 		dispatch(getAllPublishers())
+		//disaptch(getAllOrders())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
@@ -51,13 +42,7 @@ const Books = ({ user }) => {
 	//* handlers
 
 	const handleRowClick = (book) => {
-		//* needs to retrieve authors after edit in case user added new authors
-		//? not the best practise since it's dispatching every time
-		//? user clicks on book details, but ok for now
-		dispatch(getAllAuthors())
-		dispatch(getAllPublishers())
-
-		const modal = new Modal(document.getElementById('detailed-book-modal'))
+		const modal = new Modal(document.getElementById('detailed-order-modal'))
 		if (modal) {
 			setDetailedBook(book)
 			modal.show()
@@ -69,7 +54,7 @@ const Books = ({ user }) => {
 	}
 
 	const handleEditClick = (book) => {
-		const modal = new Modal(document.getElementById('edit-book-modal'))
+		const modal = new Modal(document.getElementById('edit-order-modal'))
 		if (modal) {
 			setEditedBook(book)
 			setEditModal(modal)
@@ -251,4 +236,4 @@ const Books = ({ user }) => {
 	)
 }
 
-export default Books
+export default AdminPanel
