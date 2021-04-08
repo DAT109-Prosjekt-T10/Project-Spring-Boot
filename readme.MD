@@ -37,8 +37,7 @@
   <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/MrHencke" target="_blank">Author</a>
+  <a href="#memo">Authors</a>
 </p>
 
 <br>
@@ -64,7 +63,7 @@ The following tools were used in this project:
 
 Before starting , you need to have [Java] and [Node](https://nodejs.org/en/) installed.
 
-## Starting
+## :checkered_flag-starting: Starting
 
 ```bash
 # Clone this project
