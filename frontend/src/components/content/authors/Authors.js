@@ -53,9 +53,6 @@ const Authors = ({ user }) => {
 	const handleDeleteClick = (authorId) => {
 		//* find author by id
 		const author = authors.data.find((b) => b.id === authorId)
-		console.log(author)
-		console.log(authors.data)
-		console.log(authorId)
 		if (author) {
 			//* set author to found author
 			setDeletedAuthor(author)
@@ -148,7 +145,10 @@ const Authors = ({ user }) => {
 						</div>
 					)}
 				</div>
-				<DetailsAuthorModal book={detailedAuthor} />
+				<DetailsAuthorModal
+					author={detailedAuthor}
+					books={books.data}
+				/>
 				<ConfirmationModal
 					item={deletedAuthor}
 					handleClick={() => dispatch(deleteAuthor(deletedAuthor.id))}

@@ -1,27 +1,23 @@
 import React from 'react'
-import dayjs from 'dayjs'
 import Badge from '../../ui/Badge'
 
-const DetailsAuthorModal = ({ book, authors }) => {
+const DetailsAuthorModal = ({ author, books }) => {
 	const displayDetailsText = (property) => {
-		return book[property] ? (
-			book[property]
+		return author[property] ? (
+			author[property]
 		) : (
 			<Badge type='warning' text='Missing' />
 		)
 	}
 
-	//TODO Error handling
-	const displayAuthors = () => {
-		if (!book.authors || (book.authors && book.authors.length === 0)) {
-			return <Badge type='warning' text='Missing' />
-		} else {
-			return book.authors.map((authorId) => {
-				const author = authors.find((a) => a.id === authorId)
+	const displayBooks = () => {
+		if (author.books) {
+			return author.books.map((bookId) => {
+				const book = books.find((a) => a.id === bookId)
 				return (
 					<button className='btn btn-link row text-decoration-none'>
-						{author && author.name ? (
-							<Badge type='info' text={author.name} />
+						{book && book.title ? (
+							<Badge type='info' text={book.title} />
 						) : (
 							<Badge type='info' text={'Name missing'} />
 						)}
@@ -53,58 +49,23 @@ const DetailsAuthorModal = ({ book, authors }) => {
 						<div className='row mb-3'>
 							<dl>
 								<div className='row'>
-									<dt className='col'>Title</dt>
-									<dt className='col'>ISBN</dt>
+									<dt className='col'>Name</dt>
+									<dt className='col'>Total Books</dt>
 								</div>
 								<div className='row mb-3'>
 									<dd className='col'>
-										{displayDetailsText('title')}
+										{displayDetailsText('name')}
 									</dd>
 									<dd className='col'>
-										{displayDetailsText('isbn')}
+										{author.books ? author.books.length : 0}
 									</dd>
 								</div>
 
 								<div className='row'>
-									<dt className='col'>Published</dt>
-									<dt className='col'>Publisher</dt>
+									<dt className='col'>Books</dt>
 								</div>
 								<div className='row mb-3'>
-									<dd className='col'>
-										{book.published ? (
-											dayjs(book.published).format(
-												'DD MMMM YYYY'
-											)
-										) : (
-											<Badge
-												type='warning'
-												text='Missing'
-											/>
-										)}
-									</dd>
-									<dd className='col'>
-										{displayDetailsText('publisher')}
-									</dd>
-								</div>
-
-								<div className='row'>
-									<dt className='col'>Description</dt>
-									<dt className='col'>Category</dt>
-								</div>
-								<div className='row mb-3'>
-									<dd className='col'>
-										{displayDetailsText('description')}
-									</dd>
-									<dd className='col'>
-										{displayDetailsText('category')}
-									</dd>
-								</div>
-
-								<div className='row'>
-									<dt className='col'>Authors</dt>
-								</div>
-								<div className='row mb-3'>
-									<dd className='col'>{displayAuthors()}</dd>
+									<dd className='col'>{displayBooks()}</dd>
 								</div>
 							</dl>
 						</div>
