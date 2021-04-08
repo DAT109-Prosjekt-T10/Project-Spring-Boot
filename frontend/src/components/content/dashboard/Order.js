@@ -18,7 +18,11 @@ const Order = ({ order, book, authors, publishers }) => {
 			return book.authors.map((authorId) => {
 				const author = authors.find((a) => a.id === authorId)
 				return author && author.name ? (
-					<Badge type='info' text={author.name} />
+					<>
+						<Badge type='info' text={author.name} />
+						<br />
+						<br />
+					</>
 				) : (
 					<Badge type='info' text={'Name missing'} />
 				)
@@ -36,7 +40,11 @@ const Order = ({ order, book, authors, publishers }) => {
 			return book.publishers.map((publisherId) => {
 				const publisher = publishers.find((a) => a.id === publisherId)
 				return publisher && publisher.name ? (
-					<Badge type='info' text={publisher.name} />
+					<>
+						<Badge type='info' text={publisher.name} />
+						<br />
+						<br />
+					</>
 				) : (
 					<Badge type='info' text={'Name missing'} />
 				)
@@ -58,7 +66,13 @@ const Order = ({ order, book, authors, publishers }) => {
 					<div className='col'>
 						<div className='fs-md text-nowrap'>{book.title}</div>
 					</div>
-					<div className='col-4 d-flex justify-content-end me-4'>
+					<div className='col text-dark ms-2'>
+						<small>
+							{dayjs(order.dateFrom).format('DD MMMM YYYY')} -{' '}
+							{dayjs(order.dateTo).format('DD MMMM YYYY')}
+						</small>
+					</div>
+					<div className='col-4 d-flex justify-content-end me-3'>
 						<Badge type='info' text={book.category} />
 					</div>
 				</button>
@@ -101,19 +115,12 @@ const Order = ({ order, book, authors, publishers }) => {
 
 						<div className='row'>
 							<dt className='col'>Description</dt>
-							<dt className='col'>Category</dt>
 						</div>
 						<div className='row mb-3'>
 							<dd className='col'>
 								{displayDetailsText('description')}
 							</dd>
-							<dd className='col'>
-								{displayDetailsText('category')}
-							</dd>
 						</div>
-
-						<div className='row'></div>
-						<div className='row mb-3'></div>
 					</dl>
 				</div>
 			</div>
