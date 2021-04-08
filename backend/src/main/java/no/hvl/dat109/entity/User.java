@@ -14,7 +14,7 @@ import java.util.Set;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id",
-		scope = Book.class)
+		scope = User.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class User {

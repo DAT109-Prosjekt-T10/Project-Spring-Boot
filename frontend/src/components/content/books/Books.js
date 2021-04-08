@@ -8,24 +8,29 @@ import {
 	updateBook,
 	deleteBook,
 } from '../../../store/actions/books'
+import { getAllAuthors } from '../../../store/actions/authors'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
 import EditBookModal from './EditBookModal'
 import DetailsBookModal from './DetailsBookModal'
+import RentBookModal from './RentBookModal'
 
-const Books = () => {
-	//* book to be edited, deleted and showed details
+const Books = ({ user }) => {
+	//* book to be edited, deleted, showed details and rented
 	const [editedBook, setEditedBook] = useState({})
 	const [deletedBook, setDeletedBook] = useState({})
 	const [detailedBook, setDetailedBook] = useState({})
+	const [rentedBook, setRentedBook] = useState({})
 
-	//* initializes edit book modal
+	//* initializes edit book and rented book modal
 	const [editModal, setEditModal] = useState()
+	const [rentModal, setRentModal] = useState()
 
-	//* book state
+	//* book & authors state
 	const books = useSelector((state) => state.books)
+	const authors = useSelector((state) => state.authors)
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
@@ -33,6 +38,7 @@ const Books = () => {
 	//* dispatch action
 	const getData = useCallback(() => {
 		dispatch(getAllBooks())
+		dispatch(getAllAuthors())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
@@ -48,16 +54,8 @@ const Books = () => {
 	}
 
 	const handleAddClick = (book) => {
-		// selectedAuthors.forEach((author) => {
-		// 	//* no author id means it is a new author, therefor create it
-		// 	if (!author.id) {
-		// 		//? createAuthor(author)
-		// 		//* we need to get the response, to get real author object
-		// 		//* to use when posting new book
-		// 	}
-		// })
-
 		dispatch(addBook(book))
+		dispatch(getAllAuthors())
 	}
 
 	const handleEditClick = (book) => {
@@ -78,6 +76,15 @@ const Books = () => {
 
 			//* open confirmation modal
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
+		}
+	}
+
+	const handleRentBookClick = (book) => {
+		const modal = new Modal(document.getElementById('rent-book-modal'))
+		if (modal) {
+			setRentedBook(book)
+			setRentModal(modal)
+			modal.show()
 		}
 	}
 
@@ -116,20 +123,32 @@ const Books = () => {
 					>
 						<i className='ai-menu'></i>
 					</button>
-					<div className='dropdown-menu'>
-						<button
-							className='dropdown-item'
-							onClick={() => handleEditClick(row)} //* opens edit modal
-						>
-							<i className='ai-edit me-1'></i> Edit
-						</button>
-						<button
-							className='dropdown-item text-danger'
-							onClick={() => handleDeleteClick(row.id)}
-						>
-							<i className='ai-trash-2 me-1'></i> Delete
-						</button>
-					</div>
+					{user && !user.admin ? (
+						<div className='dropdown-menu'>
+							<button
+								className='dropdown-item'
+								onClick={() => handleEditClick(row)} //* opens edit modal
+							>
+								<i className='ai-edit me-1'></i> Edit
+							</button>
+							<button
+								className='dropdown-item text-danger'
+								onClick={() => handleDeleteClick(row.id)}
+							>
+								<i className='ai-trash-2 me-1'></i> Delete
+							</button>
+						</div>
+					) : (
+						<div className='dropdown-menu'>
+							<button
+								className='dropdown-item'
+								onClick={() => handleRentBookClick(row)}
+							>
+								<i className='ai-shopping-bag me-1'></i> Rent
+								book
+							</button>
+						</div>
+					)}
 				</div>
 			),
 		},
@@ -154,12 +173,17 @@ const Books = () => {
 							icon='triangle'
 						/>
 					)}
-					{!books.loading && books.data.length !== 0 ? (
+					{!books.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
-								data={books.data.sort((a, b) =>
-									a.title.localeCompare(b.title)
-								)}
+								user={user}
+								data={
+									books.data && books.data.length === 0
+										? []
+										: books.data.sort((a, b) =>
+												a.title.localeCompare(b.title)
+										  )
+								}
 								columns={columns}
 								onAddClick={(book) => handleAddClick(book)}
 								onRowClick={(book) => handleRowClick(book)}
@@ -171,17 +195,26 @@ const Books = () => {
 						</div>
 					)}
 				</div>
-				<DetailsBookModal book={detailedBook} />
+				<DetailsBookModal book={detailedBook} authors={authors.data} />
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
 						dispatch(updateBook(book.id, book))
 						editModal.hide()
 					}}
+					authors={authors.data}
 				/>
 				<ConfirmationModal
 					item={deletedBook}
 					handleClick={() => dispatch(deleteBook(deletedBook.id))}
+				/>
+				<RentBookModal
+					book={rentedBook}
+					handleSubmit={(order) => {
+						//dispatch(updateBook(book.id, book))
+						console.log(order)
+						rentModal.hide()
+					}}
 				/>
 			</div>
 		</div>

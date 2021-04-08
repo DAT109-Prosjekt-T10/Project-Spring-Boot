@@ -1,4 +1,4 @@
-import axios from '../../../config/axios'
+import API from '../../../config/axios'
 import {
 	CURRENT_USER_STARTED,
 	CURRENT_USER_SUCCESS,
@@ -10,8 +10,7 @@ export const loginUser = (obj) => {
 	return (dispatch) => {
 		dispatch(loginUserStarted())
 
-		axios
-			.post('/api/user/login', obj)
+		API.post('/api/user/login', obj)
 			.then((res) => dispatch(loginUserSuccess(res.data)))
 			.catch((err) => {
 				dispatch(loginUserFailure(err.message))
@@ -41,8 +40,7 @@ export const registerUser = (obj) => {
 	return (dispatch) => {
 		dispatch(registerUserStarted())
 
-		axios
-			.post('/api/user/register', obj)
+		API.post('/api/user/register', obj)
 			.then((res) => dispatch(registerUserSuccess(res.data)))
 			.catch((err) => {
 				dispatch(registerUserFailure(err.message))

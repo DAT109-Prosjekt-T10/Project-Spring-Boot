@@ -2,7 +2,7 @@ import React from 'react'
 import dayjs from 'dayjs'
 import Badge from '../../ui/Badge'
 
-const DetailsBookModal = ({ book }) => {
+const DetailsBookModal = ({ book, authors }) => {
 	const displayDetailsText = (property) => {
 		return book[property] ? (
 			book[property]
@@ -11,16 +11,24 @@ const DetailsBookModal = ({ book }) => {
 		)
 	}
 
+	//TODO Error handling
 	const displayAuthors = () => {
-		if (!book.authors || (book.authors && book.authors.length === 0)) {
+		if (!book.authors /*|| (book.authors && book.authors.length === 0)*/) {
 			return <Badge type='warning' text='Missing' />
 		} else {
-			return book.authors.map((author) => {
-				return (
-					<button className='btn btn-link row text-decoration-none'>
-						<Badge type='info' text={author.name} />
-					</button>
-				)
+			return book.authors.map((authorId) => {
+				const author = authors.find((a) => a.id === authorId)
+				if (author) {
+					return (
+						<button className='btn btn-link row text-decoration-none'>
+							{author.name ? (
+								<Badge type='info' text={author.name} />
+							) : (
+								<Badge type='info' text={'Name missing'} />
+							)}
+						</button>
+					)
+				}
 			})
 		}
 	}

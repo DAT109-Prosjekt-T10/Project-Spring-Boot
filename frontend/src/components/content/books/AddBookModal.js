@@ -22,11 +22,13 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 			title,
 			published:
 				published.length !== 4 ? published : `${published}-01-01`,
-			// publisher: [publisher],
 			isbn,
 			category,
 			description: description ? description : '',
-			authors: [],
+			authors: selectedAuthors.map((author) =>
+				author.id ? { id: author.id } : author
+			),
+			publisher: [],
 		}
 
 		handleSubmit(newBook)
