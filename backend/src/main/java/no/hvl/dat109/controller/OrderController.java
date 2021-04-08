@@ -24,13 +24,13 @@ public class OrderController {
     private UserService userService;
 
     @GetMapping("")
-    public ResponseEntity<List<Order>> getAllOrders() {
+    public ResponseEntity<Object> getAllOrders() {
         return ResponseEntity.ok(orderRepository.findAll());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Order> getOrderById(@PathVariable("id") long id) {
-        Optional<Order> optionalOrder = orderRepository.findById(id);
+    public ResponseEntity<Object> getOrderById(@PathVariable("id") long id) {
+        Optional<Object> optionalOrder = Optional.of(orderRepository.findById(id));
 
         return optionalOrder.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(404).build());
@@ -38,7 +38,7 @@ public class OrderController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
+    public ResponseEntity<Object> createOrder(@RequestBody Order order) {
 
         boolean bookExists = bookService.bookExists(order.getBook().getId());
         boolean userExists = userService.userExists(order.getUser().getId());
@@ -61,7 +61,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteOrder(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deleteOrder(@PathVariable("id") long id) {
         try {
             orderRepository.deleteById(id);
             return ResponseEntity.ok(id);

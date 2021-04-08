@@ -38,21 +38,21 @@ public class PublisherController {
     private PublisherService publisherService;
 
     @GetMapping("")
-    public ResponseEntity<List<Publisher>> getAllPublishers(@RequestParam(required = false) String author) {
+    public ResponseEntity<Object> getAllPublishers(@RequestParam(required = false) String author) {
         List<Publisher> publishers = publisherRepository.findAll();
         return ResponseEntity.ok(publishers);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Publisher> getAPublisherById(@PathVariable("id") long id) {
-        Optional<Publisher> publisherData = publisherRepository.findById(id);
+    public ResponseEntity<Object> getAPublisherById(@PathVariable("id") long id) {
+        Optional<Object> publisherData = Optional.of(publisherRepository.findById(id));
         return publisherData
                 .map(publisher -> new ResponseEntity<>(publisher, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("")
-    public ResponseEntity<Publisher> createPublisher(@RequestBody Publisher publisher) {
+    public ResponseEntity<Object> createPublisher(@RequestBody Publisher publisher) {
         try {
             if (publisherService.publisherWithNameExists(publisher.getName()) == -1) {
                 Publisher savedPublisher = publisherRepository.save(publisher);
@@ -67,7 +67,7 @@ public class PublisherController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Publisher> updatePublisher(@PathVariable("id") long id, @RequestBody Publisher publisher) {
+    public ResponseEntity<Object> updatePublisher(@PathVariable("id") long id, @RequestBody Publisher publisher) {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
 
         if (publisherData.isPresent()) {
@@ -116,7 +116,7 @@ public class PublisherController {
      * @return ResponseEntity<HttpStatus>
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deletePublisher(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deletePublisher(@PathVariable("id") long id) {
         try {
             Publisher publisher = publisherRepository.findById(id).get();
             bookService.removePublisherFromBooks(publisher);
