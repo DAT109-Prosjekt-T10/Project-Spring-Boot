@@ -43,6 +43,12 @@ public class PublisherController {
         return ResponseEntity.ok(publishers);
     }
 
+    /**
+     * Method to fetch a publisher by ID
+     * 
+     * @param id
+     * @return ResponseEntity<Publisher>
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Publisher> getAPublisherById(@PathVariable("id") long id) {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
@@ -51,6 +57,12 @@ public class PublisherController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * Method to create a new publisher
+     * 
+     * @param publisher
+     * @return ResponseEntity<Publisher>
+     */
     @PostMapping("")
     public ResponseEntity<Publisher> createPublisher(@RequestBody Publisher publisher) {
         try {
@@ -65,7 +77,13 @@ public class PublisherController {
         }
     }
 
-
+    /**
+     * Method to update an existing publisher
+     * 
+     * @param id
+     * @param publisher
+     * @return ResponseEntity<Publisher>
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Publisher> updatePublisher(@PathVariable("id") long id, @RequestBody Publisher publisher) {
         Optional<Publisher> publisherData = publisherRepository.findById(id);
@@ -110,10 +128,10 @@ public class PublisherController {
     }
 
     /**
-     * Method to delete an author based on the author's id.
+     * Method to delete a publisher based on the publisher's id.
      *
      * @param id
-     * @return ResponseEntity<HttpStatus>
+     * @return ResponseEntity<Long>
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Long> deletePublisher(@PathVariable("id") long id) {

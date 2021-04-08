@@ -18,6 +18,12 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Method to register a new user.
+     * 
+     * @param user
+     * @return ResponseEntity<String>
+     */
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody User user) {
 
@@ -49,6 +55,12 @@ public class UserController {
         return ResponseEntity.ok(token);
     }
 
+    /**
+     * Method to authorize a User.
+     * 
+     * @param user
+     * @return ResponseEntity<String>
+     */
     @PostMapping("/login")
     public ResponseEntity<String> authorizeUser(@RequestBody User user) {
 
