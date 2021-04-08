@@ -1,11 +1,11 @@
 <div align="center" id="top"> 
-  <img src="./.github/app.gif" alt="Maven Test" />
+  <img src="./.github/app.gif" alt="The Library System" />
 
 &#xa0;
 
 </div>
 
-<h1 align="center">DAT109 Prosjekt</h1>
+<h1 align="center">The Library System</h1>
 
 <p align="center">
   <img alt="Github top language" src="https://img.shields.io/github/languages/top/MrHencke/maven-test?color=56BEB8">
@@ -45,13 +45,13 @@
 
 ## :dart: About
 
-Library System
+A system for libraries, to handle orders, updates and deletions of books to a library's given selection.
 
 ## :sparkles: Features
 
-:heavy_check_mark: Feature 1
-:heavy_check_mark: Feature 2
-:heavy_check_mark: Feature 3
+:heavy_check_mark: Full Database Integration
+:heavy_check_mark: Separate Frontend/Backend
+:heavy_check_mark: Pretty Visuals
 
 ## :rocket: Technologies
 
@@ -62,9 +62,9 @@ The following tools were used in this project:
 
 ## :white_check_mark: Requirements
 
-Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
+Before starting , you need to have [Java] and [Node](https://nodejs.org/en/) installed.
 
-## :checkered_flag: Starting
+## Starting
 
 ```bash
 # Clone this project
@@ -79,14 +79,19 @@ $ yarn
 # Run the project
 $ yarn start
 
-# The server will initialize in the <http://localhost:3000>
+# The frontend will initialize in the <http://localhost:3000>
+
+$ cd ../backend
+
+$ mvn start
+
+# The server will initialize in the <http://localhost:3001>
+
 ```
 
-## :memo: License
+## :memo: Authors
 
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
-
-Made with :heart: by <a href="https://github.com/MrHencke" target="_blank">Henrik</a>
+Made by <a href="https://github.com/DAT109-Prosjekt-T10" target="_blank">Gruppe 10</a>
 
 &#xa0;
 
