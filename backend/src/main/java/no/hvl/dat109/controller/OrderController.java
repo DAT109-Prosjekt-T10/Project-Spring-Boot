@@ -1,6 +1,5 @@
 package no.hvl.dat109.controller;
 
-import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.entity.Order;
 import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.BookService;
@@ -9,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController

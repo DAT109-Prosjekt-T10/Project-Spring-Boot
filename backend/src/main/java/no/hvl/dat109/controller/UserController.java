@@ -1,6 +1,5 @@
 package no.hvl.dat109.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.JWTUtil;

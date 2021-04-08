@@ -1,10 +1,8 @@
 package no.hvl.dat109.controller;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
-import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.service.BookService;
 import no.hvl.dat109.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,9 +2,7 @@ package no.hvl.dat109.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
