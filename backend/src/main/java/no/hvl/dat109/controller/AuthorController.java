@@ -8,6 +8,7 @@ import no.hvl.dat109.service.BookService;
 import no.hvl.dat109.util.ApiError;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -81,8 +82,8 @@ public class AuthorController {
             } else {
             	return ResponseEntity.status(409).body(new ApiError("Author already exists on server."));
             }
-        } catch (IncorrectResultSizeDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(409).body("Name is not nullable.");
         }
     }
 
