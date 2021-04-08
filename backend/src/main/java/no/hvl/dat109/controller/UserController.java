@@ -25,7 +25,8 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8) && user.getName().length() > 0)) {
+        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8)
+                && user.getName().length() > 0)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -44,7 +45,7 @@ public class UserController {
         // Skjuler passord i JSON-response
         savedUser.setPassword(null);
 
-        String token = JWTUtil.createToken(savedUser.getName(), user.isAdmin());
+        String token = JWTUtil.createToken(savedUser.getName(), savedUser.getId(), savedUser.isAdmin());
 
         return ResponseEntity.ok(token);
     }
@@ -73,8 +74,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String token = JWTUtil.createToken(registeredUser.getName(), user.isAdmin());
-
+        String token = JWTUtil.createToken(registeredUser.getName(), registeredUser.getId(), registeredUser.isAdmin());
         return ResponseEntity.ok(token);
 
     }
