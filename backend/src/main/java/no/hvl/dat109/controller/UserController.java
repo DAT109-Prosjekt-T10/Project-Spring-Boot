@@ -1,6 +1,5 @@
 package no.hvl.dat109.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.JWTUtil;
@@ -25,13 +24,14 @@ public class UserController {
      * @return ResponseEntity<String>
      */
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<Object> registerUser(@RequestBody User user) {
 
         if (user.getEmail() == null || user.getPassword() == null || user.getName() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
-        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8) && user.getName().length() > 0)) {
+        if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8)
+                && user.getName().length() > 0)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
 
@@ -50,7 +50,7 @@ public class UserController {
         // Skjuler passord i JSON-response
         savedUser.setPassword(null);
 
-        String token = JWTUtil.createToken(savedUser.getName(), user.isAdmin());
+        String token = JWTUtil.createToken(savedUser.getName(), savedUser.getId(), savedUser.isAdmin());
 
         return ResponseEntity.ok(token);
     }
@@ -62,7 +62,7 @@ public class UserController {
      * @return ResponseEntity<String>
      */
     @PostMapping("/login")
-    public ResponseEntity<String> authorizeUser(@RequestBody User user) {
+    public ResponseEntity<Object> authorizeUser(@RequestBody User user) {
 
         if (user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -85,8 +85,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        String token = JWTUtil.createToken(registeredUser.getName(), user.isAdmin());
-
+        String token = JWTUtil.createToken(registeredUser.getName(), registeredUser.getId(), registeredUser.isAdmin());
         return ResponseEntity.ok(token);
 
     }

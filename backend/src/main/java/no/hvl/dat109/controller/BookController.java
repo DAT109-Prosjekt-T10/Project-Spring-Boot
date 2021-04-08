@@ -4,8 +4,11 @@ import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
+import no.hvl.dat109.util.ApiError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +26,16 @@ public class BookController {
     private BookRepository bookRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
     private AuthorService authorService;
 
     @Autowired
     private PublisherService publisherService;
 
     @GetMapping("")
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public ResponseEntity<Object> getAllBooks() {
         List<Book> allBooks = bookRepository.findAll();
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
     }
@@ -41,13 +47,13 @@ public class BookController {
      * @return ResponseEntity<Book>
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") long id) {
+    public ResponseEntity<Object> getBookById(@PathVariable("id") long id) {
 
         Book book;
         try {
             book = bookRepository.findById(id).get();
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
         return ResponseEntity.ok(book);
     }
@@ -59,7 +65,7 @@ public class BookController {
      * @return ResponseEntity<Book>
      */
     @PostMapping("")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Object> createBook(@RequestBody Book book) {
         System.out.println(book.toString());
 
         // If any author object only contains name create new author object
@@ -80,7 +86,7 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(409).body(new ApiError("Book already exists on server."));
         }
     }
 
@@ -92,7 +98,7 @@ public class BookController {
      * @return ResponseEntity<Book>
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
+    public ResponseEntity<Object> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
         Optional<Book> books = bookRepository.findById(id);
 
         if (books.isPresent()) {
@@ -114,7 +120,7 @@ public class BookController {
 
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 
@@ -125,14 +131,19 @@ public class BookController {
      * @return ResponseEntity<Long>
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
             // TODO If there are orders on book in the future, do not delete
+        	
+        	if (orderRepository.findAll() != null) {
+        		return ResponseEntity.status(409).body(new ApiError("Book has existing orders."));
+        	}
+        	
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 
