@@ -5,9 +5,13 @@ bin/
 !**/src/main/**/target/
 !**/src/test/**/target
 .classpath
-
+*.classpath
+org.eclipse.core.resources.prefs
 *.iml
+./backend/.settings
 .idea/
 .DS_Store
 frontend/yarn.lock
 frontend/package-lock.json
+backend/.classpath
+backend/.settings/org.eclipse.core.resources.prefs

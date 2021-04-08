@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 
 const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 	const [filteredData, setFilteredData] = useState(data)
+	const publishers = useSelector((state) => state.publishers)
 
 	//* pagination
 	const [totalRows, setTotalRows] = useState(0)
@@ -108,6 +109,7 @@ const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 					modal.hide()
 					onAddClick(book)
 				}}
+				publishers={publishers.data}
 			/>
 			<AddAuthorModal
 				handleSubmit={(author) => {

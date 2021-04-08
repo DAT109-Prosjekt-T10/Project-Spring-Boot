@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
+import dayjs from 'dayjs'
 
 const EditBookModal = ({ book, handleSubmit, authors }) => {
 	const [title, setTitle] = useState('')
@@ -30,8 +31,7 @@ const EditBookModal = ({ book, handleSubmit, authors }) => {
 		const editBook = {
 			...book,
 			title,
-			published:
-				published.length !== 4 ? published : `${published}-01-01`,
+			published: dayjs(published).format('YYYY-MM-DD'),
 			isbn,
 			category,
 			description: description ? description : '',

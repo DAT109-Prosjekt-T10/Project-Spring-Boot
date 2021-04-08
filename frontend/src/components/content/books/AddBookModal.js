@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import isbnChecker from 'node-isbn'
+import DatePicker from 'react-datepicker'
+import dayjs from 'dayjs'
 
 const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 	const [title, setTitle] = useState('')
-	const [published, setPublished] = useState('')
+	const [published, setPublished] = useState(null)
 	const [selectedPublishers, setSelectedPublishers] = useState([])
 	const [isbn, setIsbn] = useState('')
 	const [category, setCategory] = useState('')
@@ -20,8 +22,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 
 		const newBook = {
 			title,
-			published:
-				published.length !== 4 ? published : `${published}-01-01`,
+			published: dayjs(published).format('YYYY-MM-DD'),
 			isbn,
 			category,
 			description: description ? description : '',
@@ -66,7 +67,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 	const resetForm = () => {
 		setCheckIsbn('')
 		setTitle('')
-		setPublished('')
+		selectedPublishers([])
 		setSelectedAuthors([])
 		setIsbn('')
 		setCategory('')
@@ -140,19 +141,20 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 							<div className='row mb-3'>
 								<div className='col'>
 									<div className='form-floating'>
-										<input
+										<DatePicker
+											title='Published Date'
 											className='form-control'
-											type='text'
 											id='published'
+											selected={published}
 											placeholder='Published'
-											required
-											value={published}
-											onChange={(e) =>
-												setPublished(e.target.value)
+											onChange={(date) =>
+												setPublished(date)
 											}
 										/>
 										<label htmlFor='published'>
-											Published
+											{published === null
+												? 'Published Date'
+												: ''}
 										</label>
 									</div>
 								</div>
