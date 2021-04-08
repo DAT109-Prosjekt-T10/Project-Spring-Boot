@@ -62,32 +62,28 @@ public class BookController {
      */
     @PostMapping("")
     public ResponseEntity<Object> createBook(@RequestBody Book book) {
-        System.out.println(book.toString());
+
+        // Check if any of the author names already exist
+        Author authorThatExist = authorService.atLeastOneAuthorWithNameExist(book);
+        if (authorThatExist != null) {
+            return ResponseEntity.status(409).body(new ApiError("Author with name '" + authorThatExist.getName() + "' already exists."));
+        }
+
+        // Check if any of the publisher names already exist
+        Publisher publisherThatExist = publisherService.atLeastOneAuthorWithNameExist(book);
+        if (publisherThatExist != null) {
+            return ResponseEntity.status(409).body(new ApiError("Publisher with name '" + publisherThatExist.getName() + "' already exists."));
+        }
 
         // If any author object only contains name create new author object
         Set<Author> authors = book.getAuthors();
-
         if (authors != null) {
-            // Check if any of the author names already exist
-            Author authorThatExist = authorService.atLeastOneAuthorWithNameExist(book);
-
-            if (authorThatExist != null) {
-                return ResponseEntity.status(409).body(new ApiError("Author with name '" + authorThatExist.getName() + "' already exists."));
-            }
-
             authorService.createNewAuthorsIfNotExist(authors);
-
         }
 
         // If any publisher object only contains name create new publisher object
         Set<Publisher> publishers = book.getPublishers();
         if (publishers != null) {
-            // Check if any of the publisher names already exist
-            Publisher publisherThatExist = publisherService.atLeastOneAuthorWithNameExist(book);
-            if (publisherThatExist != null) {
-                return ResponseEntity.status(409).body(new ApiError("Publisher with name '" + publisherThatExist.getName() + "' already exists."));
-            }
-
             publisherService.createNewPublisherIfNotExist(publishers);
         }
 
