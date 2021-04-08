@@ -40,6 +40,12 @@ public class BookController {
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch book by ID from database.
+     * 
+     * @param id
+     * @return ResponseEntity<Book>
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBookById(@PathVariable("id") long id) {
 
@@ -52,6 +58,12 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
+    /**
+     * Method to create a new book and add to the database.
+     * 
+     * @param book
+     * @return ResponseEntity<Book>
+     */
     @PostMapping("")
     public ResponseEntity<Object> createBook(@RequestBody Book book) {
         System.out.println(book.toString());
@@ -78,7 +90,13 @@ public class BookController {
         }
     }
 
-
+    /**
+     * Method to update an existing book.
+     * 
+     * @param id
+     * @param book
+     * @return ResponseEntity<Book>
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
         Optional<Book> books = bookRepository.findById(id);
@@ -106,6 +124,12 @@ public class BookController {
         }
     }
 
+    /**
+     * Method to delete a book from the database
+     * 
+     * @param id
+     * @return ResponseEntity<Long>
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
