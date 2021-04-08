@@ -122,27 +122,17 @@ const AdminPanel = ({ user }) => {
 					</button>
 					<div className='dropdown-menu'>
 						<button
-							className='dropdown-item'
-							onClick={() => handleRentOrderClick(row)}
+							className='dropdown-item text-warning'
+							onClick={() => handleEditClick(row)} //* opens edit modal
 						>
-							<i className='ai-shopping-bag me-1'></i> Rent order
+							<i className='ai-edit me-1'></i> Edit
 						</button>
-						{user && user.admin && (
-							<>
-								<button
-									className='dropdown-item text-warning'
-									onClick={() => handleEditClick(row)} //* opens edit modal
-								>
-									<i className='ai-edit me-1'></i> Edit
-								</button>
-								<button
-									className='dropdown-item text-danger'
-									onClick={() => handleDeleteClick(row.id)}
-								>
-									<i className='ai-trash-2 me-1'></i> Delete
-								</button>
-							</>
-						)}
+						<button
+							className='dropdown-item text-danger'
+							onClick={() => handleDeleteClick(row.id)}
+						>
+							<i className='ai-trash-2 me-1'></i> Delete
+						</button>
 					</div>
 				</div>
 			),
@@ -151,12 +141,12 @@ const AdminPanel = ({ user }) => {
 
 	return (
 		<div className='col-lg-8'>
-			{/*
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
 					<h1 className='h3 mb-4 text-center text-sm-start'>
 						Orders
 					</h1>
+					{/*
 					{!orders.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
@@ -177,7 +167,7 @@ const AdminPanel = ({ user }) => {
 						<div className='d-flex justify-content-center text-center'>
 							<Spinner />
 						</div>
-					)}
+					)}*/}
 				</div>
 				{/*
 				<DetailsOrderModal
@@ -193,19 +183,8 @@ const AdminPanel = ({ user }) => {
 					}}
 					authors={authors.data}
 				/>
-				<ConfirmationModal
-					item={deletedOrder}
-					handleClick={() => dispatch(deleteOrder(deletedOrder.id))}
-				/>
-				<RentOrderModal
-					user={user}
-					order={rentedOrder}
-					handleSubmit={(order) => {
-						dispatch(addOrder(order))
-						rentModal.hide()
-					}}
-				/>
-			</div>*/}
+				*/}
+			</div>
 		</div>
 	)
 }
