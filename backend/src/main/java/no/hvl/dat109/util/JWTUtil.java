@@ -16,10 +16,11 @@ import ch.qos.logback.core.joran.conditional.ThenAction;
 
 public class JWTUtil {
 
-    public static String createToken(String id, boolean admin) {
+    public static String createToken(String name, Long id, boolean admin) {
 
         String token = null;
         Map<String, Object> payload = new HashMap<>();
+        payload.put("name", name);
         payload.put("id", id);
         payload.put("admin", admin);
 

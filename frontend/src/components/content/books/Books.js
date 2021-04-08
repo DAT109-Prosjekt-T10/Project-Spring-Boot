@@ -33,7 +33,6 @@ const Books = ({ user }) => {
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
 	const publishers = useSelector((state) => state.publishers)
-	
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()

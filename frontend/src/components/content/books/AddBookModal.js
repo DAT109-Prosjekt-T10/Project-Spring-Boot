@@ -133,7 +133,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 												setTitle(e.target.value)
 											}
 										/>
-										<label htmlFor='title'>Title</label>
+										<label htmlFor='published'>Title</label>
 									</div>
 								</div>
 							</div>

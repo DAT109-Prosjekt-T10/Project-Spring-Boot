@@ -32,6 +32,9 @@ const Content = ({ match, history }) => {
 					{currentUrl === '/authors' && (
 						<Authors user={loggedInUser} history={history} />
 					)}
+					{currentUrl === '/' && <Dashboard />}
+					{currentUrl === '/books' && <Books user={loggedInUser} />}
+					{currentUrl === '/authors' && <Authors />}
 				</div>
 			</div>
 		)
