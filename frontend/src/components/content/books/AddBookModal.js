@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import isbnChecker from 'node-isbn'
 
-const AddBookModal = ({ authors, handleSubmit }) => {
+const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 	const [title, setTitle] = useState('')
 	const [published, setPublished] = useState('')
 	const [selectedPublishers, setSelectedPublishers] = useState([])
@@ -173,7 +173,7 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 												}
 											)}
 											//* map publishers into correct format
-											options={selectedPublishers.map(
+											options={publishers?.map(
 												(publisher) => {
 													return {
 														label: publisher.name,
