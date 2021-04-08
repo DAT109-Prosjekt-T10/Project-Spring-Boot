@@ -1,8 +1,8 @@
 import React from 'react'
 import Alert from '../../ui/Alert'
-import Book from './Book'
+import Order from './Order'
 
-const RentedBooks = ({ rentedBooks }) => {
+const RentedBooks = ({ rentedBooks, allBooks, authors, publishers }) => {
 	return rentedBooks.length === 0 ? (
 		<div className='col-lg-7'>
 			<Alert
@@ -17,8 +17,17 @@ const RentedBooks = ({ rentedBooks }) => {
 				Showing a total of {rentedBooks.length} books
 			</small>
 			<div className='accordion' id='booksAccordion'>
-				{rentedBooks.map((book) => {
-					return <Book key={book.id} book={book} />
+				{rentedBooks.map((order) => {
+					const book = allBooks.find((b) => b.id === order.book)
+					return (
+						<Order
+							key={order.id}
+							order={order}
+							book={book}
+							authors={authors}
+							publishers={publishers}
+						/>
+					)
 				})}
 			</div>
 		</>
