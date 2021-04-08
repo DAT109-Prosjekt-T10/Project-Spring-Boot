@@ -4,6 +4,7 @@ import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,19 +24,22 @@ public class BookController {
     private BookRepository bookRepository;
 
     @Autowired
+    private OrderRepository orderRepository;
+    
+    @Autowired
     private AuthorService authorService;
 
     @Autowired
     private PublisherService publisherService;
 
     @GetMapping("")
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public ResponseEntity<Object> getAllBooks() {
         List<Book> allBooks = bookRepository.findAll();
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable("id") long id) {
+    public ResponseEntity<Object> getBookById(@PathVariable("id") long id) {
 
         Book book;
         try {
@@ -47,10 +51,11 @@ public class BookController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Book> createBook(@RequestBody Book book) {
+    public ResponseEntity<Object> createBook(@RequestBody Book book) {
         System.out.println(book.toString());
 
         // If any author object only contains name create new author object
+        // TODO Same name on author already exists?
         Set<Author> authors = book.getAuthors();
         if (authors != null) {
             authorService.createNewAuthorsIfNotExist(authors);
@@ -73,7 +78,7 @@ public class BookController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
+    public ResponseEntity<Object> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
         Optional<Book> books = bookRepository.findById(id);
 
         if (books.isPresent()) {
@@ -100,8 +105,14 @@ public class BookController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteBook(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
+            // TODO If there are orders on book in the future, do not delete
+        	
+        	if (orderRepository.findAll() != null) {
+        		return new ResponseEntity<>(HttpStatus.CONFLICT);
+        	}
+        	
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {

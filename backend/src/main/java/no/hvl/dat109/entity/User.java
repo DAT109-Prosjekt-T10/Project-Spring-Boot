@@ -1,15 +1,18 @@
 package no.hvl.dat109.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
-import no.hvl.dat109.Application;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.hibernate.annotations.NaturalId;
 
+import java.util.Set;
+
+@JsonIdentityInfo(
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id",
+		scope = User.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class User {
@@ -19,13 +22,21 @@ public class User {
 	private Long id;
 	
 	@NaturalId
+	@Column(name = "email", nullable = false)
 	private String email;
-	
+
+	@Column(name = "name", nullable = false)
 	private String name;
 
+	@Column(name = "password", nullable = false)
 	private String password;
+
+	@Column(name = "admin", nullable = false)
 	private boolean admin;
-	
+
+	@OneToMany(mappedBy = "user")
+	private Set<Order> userOrders;
+
 	public User() {
 		super();
 	}
@@ -82,6 +93,14 @@ public class User {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public Set<Order> getUserOrders() {
+		return userOrders;
+	}
+
+	public void setUserOrders(Set<Order> userOrders) {
+		this.userOrders = userOrders;
 	}
 
 	@Override

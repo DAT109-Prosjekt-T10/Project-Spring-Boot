@@ -2,9 +2,7 @@ package no.hvl.dat109.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,7 +41,7 @@ public class AuthorController {
      * @return ResponseEntity<List < Author>>
      */
     @GetMapping("")
-    public ResponseEntity<List<Author>> getAllAuthors() {
+    public ResponseEntity<Object> getAllAuthors() {
         List<Author> authors = authorRepository.findAll();
         return ResponseEntity.ok(authors);
     }
@@ -55,7 +53,7 @@ public class AuthorController {
      * @return ResponseEntity<Author>
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable("id") long id) {
+    public ResponseEntity<Object> getAuthorById(@PathVariable("id") long id) {
         Optional<Author> authorData = authorRepository.findById(id);
 
         if (authorData.isPresent()) {
@@ -73,7 +71,7 @@ public class AuthorController {
      * @return ResponseEntity<Author>
      */
     @PostMapping("")
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+    public ResponseEntity<Object> createAuthor(@RequestBody Author author) {
         try {
             if (authorService.authorWithNameExists(author.getName()) == -1) {
                 Author savedAuthor = authorRepository.save(author);
@@ -94,7 +92,7 @@ public class AuthorController {
      * @return ResponseEntity<Author>
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Author> updateAuthor(@PathVariable("id") long id, @RequestBody Author author) {
+    public ResponseEntity<Object> updateAuthor(@PathVariable("id") long id, @RequestBody Author author) {
         Optional<Author> fetchedAuthor = authorRepository.findById(id);
 
         if (fetchedAuthor.isPresent()) {
@@ -124,8 +122,8 @@ public class AuthorController {
                     return ResponseEntity.status(409).build();
                 }
             }
-
-            return new ResponseEntity<>(authorRepository.save(_author), HttpStatus.OK);
+            authorRepository.save(_author);
+            return new ResponseEntity<>(authorRepository.findById(id).get(), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -138,7 +136,7 @@ public class AuthorController {
      * @return ResponseEntity<HttpStatus>
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteAuthor(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deleteAuthor(@PathVariable("id") long id) {
         try {
             Author author = authorRepository.findById(id).get();
             bookService.removeAuthorFromBooks(author);
