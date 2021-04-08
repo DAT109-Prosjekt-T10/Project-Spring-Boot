@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.BookService;
+import no.hvl.dat109.util.ApiError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -60,7 +62,7 @@ public class AuthorController {
             Author author = authorData.get();
             return new ResponseEntity<>(author, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Author does not exist on server."));
         }
     }
 
@@ -77,7 +79,7 @@ public class AuthorController {
                 Author savedAuthor = authorRepository.save(author);
                 return ResponseEntity.ok(savedAuthor);
             } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            	return ResponseEntity.status(409).body(new ApiError("Author already exists on server."));
             }
         } catch (IncorrectResultSizeDataAccessException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
@@ -125,7 +127,7 @@ public class AuthorController {
             authorRepository.save(_author);
             return new ResponseEntity<>(authorRepository.findById(id).get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Author does not exist on server."));
         }
     }
 
@@ -143,7 +145,7 @@ public class AuthorController {
             authorRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Author does not exist on server."));
         }
     }
 
