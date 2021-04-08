@@ -39,7 +39,7 @@ public class BookController {
 
     /**
      * Method to fetch book by ID from database.
-     * 
+     *
      * @param id
      * @return ResponseEntity<Book>
      */
@@ -53,7 +53,7 @@ public class BookController {
 
     /**
      * Method to create a new book and add to the database.
-     * 
+     *
      * @param book
      * @return ResponseEntity<Book>
      */
@@ -62,16 +62,29 @@ public class BookController {
         System.out.println(book.toString());
 
         // If any author object only contains name create new author object
-        // TODO Same name on author already exists?
         Set<Author> authors = book.getAuthors();
+
         if (authors != null) {
+            // Check if any of the author names already exist
+            Author authorThatExist = authorService.atLeastOneAuthorWithNameExist(book);
+
+            if (authorThatExist != null) {
+                return ResponseEntity.status(409).body(new ApiError("Author with name '" + authorThatExist.getName() + "' already exists."));
+            }
+
             authorService.createNewAuthorsIfNotExist(authors);
+
         }
 
         // If any publisher object only contains name create new publisher object
-        // TODO Same name on publisher already exists?
         Set<Publisher> publishers = book.getPublishers();
         if (publishers != null) {
+            // Check if any of the publisher names already exist
+            Publisher publisherThatExist = publisherService.atLeastOneAuthorWithNameExist(book);
+            if (publisherThatExist != null) {
+                return ResponseEntity.status(409).body(new ApiError("Publisher with name '" + publisherThatExist.getName() + "' already exists."));
+            }
+
             publisherService.createNewPublisherIfNotExist(publishers);
         }
 
@@ -80,13 +93,13 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(409).body(new ApiError("Book already exists on server."));
+            return ResponseEntity.status(409).body(new ApiError("Book with ISBN " + book.getIsbn() + " already exists on server."));
         }
     }
 
     /**
      * Method to update an existing book.
-     * 
+     *
      * @param id
      * @param book
      * @return ResponseEntity<Book>
@@ -113,13 +126,13 @@ public class BookController {
 
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
-        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
+            return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 
     /**
      * Method to delete a book from the database
-     * 
+     *
      * @param id
      * @return ResponseEntity<Long>
      */
@@ -127,11 +140,11 @@ public class BookController {
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
             // TODO If there are orders on book in the future, do not delete
-        	
-        	if (orderRepository.findAll() != null) {
-        		return ResponseEntity.status(409).body(new ApiError("Book has existing orders."));
-        	}
-        	
+
+            if (orderRepository.findAll() != null) {
+                return ResponseEntity.status(409).body(new ApiError("Book has existing orders."));
+            }
+
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
