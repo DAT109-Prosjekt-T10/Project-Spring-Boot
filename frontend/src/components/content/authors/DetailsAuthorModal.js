@@ -12,18 +12,22 @@ const DetailsAuthorModal = ({ author, books }) => {
 
 	const displayBooks = () => {
 		if (author.books) {
-			return author.books.map((bookId) => {
-				const book = books.find((a) => a.id === bookId)
-				return (
-					<button className='btn btn-link row text-decoration-none'>
-						{book && book.title ? (
-							<Badge type='info' text={book.title} />
-						) : (
-							<Badge type='info' text={'Name missing'} />
-						)}
-					</button>
-				)
-			})
+			return author.books.length !== 0 ? (
+				author.books.map((bookId) => {
+					const book = books.find((a) => a.id === bookId)
+					return (
+						<button className='btn btn-link row text-decoration-none'>
+							{book && book.title ? (
+								<Badge type='info' text={book.title} />
+							) : (
+								<Badge type='info' text={'Name missing'} />
+							)}
+						</button>
+					)
+				})
+			) : (
+				<Badge type='warning' text='No books' />
+			)
 		}
 	}
 

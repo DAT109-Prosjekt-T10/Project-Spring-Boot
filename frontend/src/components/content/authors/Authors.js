@@ -47,7 +47,6 @@ const Authors = ({ user }) => {
 
 	const handleAddClick = (author) => {
 		dispatch(addAuthor(author))
-		dispatch(getAllAuthors())
 	}
 
 	const handleDeleteClick = (authorId) => {
