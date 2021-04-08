@@ -33,7 +33,6 @@ const Books = ({ user }) => {
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
 	const publishers = useSelector((state) => state.publishers)
-	
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
@@ -204,7 +203,11 @@ const Books = ({ user }) => {
 						</div>
 					)}
 				</div>
-				<DetailsBookModal book={detailedBook} authors={authors.data} publishers={publishers.data} />
+				<DetailsBookModal
+					book={detailedBook}
+					authors={authors.data}
+					publishers={publishers.data}
+				/>
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
