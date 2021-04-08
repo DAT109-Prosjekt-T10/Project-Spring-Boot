@@ -6,6 +6,7 @@ import no.hvl.dat109.entity.Publisher;
 import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
+import no.hvl.dat109.service.BookService;
 import no.hvl.dat109.service.PublisherService;
 import no.hvl.dat109.util.ApiError;
 
@@ -30,6 +31,8 @@ public class BookController {
     private AuthorService authorService;
     @Autowired
     private PublisherService publisherService;
+    @Autowired
+    private BookService bookService;
 
     @GetMapping("")
     public ResponseEntity<Object> getAllBooks() {
@@ -139,14 +142,13 @@ public class BookController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
-            // TODO If there are orders on book in the future, do not delete
 
-            if (orderRepository.findAll() != null) {
-                return ResponseEntity.status(409).body(new ApiError("Book has existing orders."));
+            if (bookService.futureBookReservations(id)) {
+                return ResponseEntity.status(409).body(new ApiError("Cannot delete book. Book has future existing orders."));
             }
 
             bookRepository.deleteById(id);
-            return new ResponseEntity<>(id, HttpStatus.OK);
+            return ResponseEntity.ok(id);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));

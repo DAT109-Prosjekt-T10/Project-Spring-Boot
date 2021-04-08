@@ -116,5 +116,21 @@ public class BookService {
 
     }
 
+    public boolean futureBookReservations(long bookId) {
+
+        Optional<Book> bookOptional = bookRepository.findById(bookId);
+
+        if (bookOptional.isPresent()) {
+
+            Set<Order> orders = bookOptional.get().getBookOrders();
+            return orders.stream()
+                    .anyMatch(o -> o.getDateFrom().isAfter(LocalDate.now()) || o.getDateTo().isAfter(LocalDate.now()));
+
+        }
+
+        return false;
+
+    }
+
 
 }
