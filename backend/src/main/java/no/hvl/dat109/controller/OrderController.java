@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/order")
@@ -32,8 +33,18 @@ public class OrderController {
         Optional<Object> optionalOrder = Optional.of(orderRepository.findById(id));
 
         return optionalOrder.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(404).build());
+                .orElseGet(() -> ResponseEntity.status(404).body(new ApiError("Order does not exist on server.")));
 
+    }
+
+    @GetMapping("/user/{id}")
+    public ResponseEntity<Object> getOrdersForUser(@PathVariable("id") long id) {
+        Set<Order> orders = userService.findOrdersforUser(id);
+        if (!orders.isEmpty()) {
+            return ResponseEntity.ok(orders);
+        } else {
+            return ResponseEntity.status(404).body(new ApiError("User " + id + " has no orders."));
+        }
     }
 
     @PostMapping("")
@@ -53,7 +64,6 @@ public class OrderController {
 
         }
 
-        // TODO Create APIError class for error message!
         return ResponseEntity.status(400).body(new ApiError(("Book and/or user does not exist on server.")));
 
     }
@@ -64,7 +74,7 @@ public class OrderController {
             orderRepository.deleteById(id);
             return ResponseEntity.ok(id);
         } catch (Exception e) {
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(404).body(new ApiError("Order does not exist on server."));
         }
     }
 
