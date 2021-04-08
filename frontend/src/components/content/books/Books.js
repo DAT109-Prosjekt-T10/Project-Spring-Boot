@@ -8,6 +8,7 @@ import {
 	updateBook,
 	deleteBook,
 } from '../../../store/actions/books'
+import { getAllPublishers } from '../../../store/actions/publishers'
 import { getAllAuthors } from '../../../store/actions/authors'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
@@ -31,6 +32,8 @@ const Books = ({ user }) => {
 	//* book & authors state
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
+	const publishers = useSelector((state) => state.publishers)
+	
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
@@ -39,6 +42,7 @@ const Books = ({ user }) => {
 	const getData = useCallback(() => {
 		dispatch(getAllBooks())
 		dispatch(getAllAuthors())
+		dispatch(getAllPublishers())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
@@ -50,6 +54,7 @@ const Books = ({ user }) => {
 		//? not the best practise since it's dispatching every time
 		//? user clicks on book details, but ok for now
 		dispatch(getAllAuthors())
+		dispatch(getAllPublishers())
 
 		const modal = new Modal(document.getElementById('detailed-book-modal'))
 		if (modal) {
@@ -199,7 +204,7 @@ const Books = ({ user }) => {
 						</div>
 					)}
 				</div>
-				<DetailsBookModal book={detailedBook} authors={authors.data} />
+				<DetailsBookModal book={detailedBook} authors={authors.data} publishers={publishers.data} />
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
