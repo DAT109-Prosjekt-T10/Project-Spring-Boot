@@ -51,7 +51,7 @@ export const getOrderByUserId = (id) => {
 	return async (dispatch) => {
 		dispatch(getOrderByUserIdStarted())
 
-		API.get(`/api/books/${id}`)
+		API.get(`/api/order/user/${id}`)
 			.then((res) => dispatch(getOrderByUserIdSuccess(res.data)))
 			.catch((err) => {
 				dispatch(getOrderByUserIdFailure(err.message))
