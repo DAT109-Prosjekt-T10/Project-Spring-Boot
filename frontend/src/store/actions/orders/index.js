@@ -9,6 +9,12 @@ import {
 	DELETE_ORDER_STARTED,
 	DELETE_ORDER_SUCCESS,
 	DELETE_ORDER_FAILURE,
+	GET_ALL_ORDERS_FAILURE,
+	GET_ALL_ORDERS_STARTED,
+	GET_ALL_ORDERS_SUCCESS,
+	UPDATE_ORDER_FAILURE,
+	UPDATE_ORDER_STARTED,
+	UPDATE_ORDER_SUCCESS,
 } from './types'
 
 export const addOrder = (obj) => {
@@ -96,6 +102,66 @@ const deleteOrderSuccess = (data) => ({
 
 const deleteOrderFailure = (error) => ({
 	type: DELETE_ORDER_FAILURE,
+	payload: {
+		error,
+	},
+})
+
+export const getAllOrders = (id) => {
+	return async (dispatch) => {
+		dispatch(getAllOrdersStarted())
+
+		API.get(`/api/order`)
+			.then((res) => dispatch(getAllOrdersSuccess(res.data)))
+			.catch((err) => {
+				dispatch(getAllOrdersFailure(err.message))
+			})
+	}
+}
+
+const getAllOrdersStarted = () => ({
+	type: GET_ALL_ORDERS_STARTED,
+})
+
+const getAllOrdersSuccess = (data) => ({
+	type: GET_ALL_ORDERS_SUCCESS,
+	payload: {
+		data,
+	},
+})
+
+const getAllOrdersFailure = (error) => ({
+	type: GET_ALL_ORDERS_FAILURE,
+	payload: {
+		error,
+	},
+})
+
+export const updateOrder = (id) => {
+	return async (dispatch) => {
+		dispatch(getAllOrdersStarted())
+
+		API.post(`/api/order/${id}`)
+			.then((res) => dispatch(getAllOrdersSuccess(res.data)))
+			.catch((err) => {
+				dispatch(getAllOrdersFailure(err.message))
+			})
+	}
+}
+
+const updateOrderStarted = () => ({
+	type: UPDATE_ORDER_STARTED,
+})
+
+const updateOrderSuccess = (data) => ({
+	type: UPDATE_ORDER_SUCCESS,
+	payload: {
+		data,
+	},
+})
+
+const updateOrderFailure = (error) => ({
+	type: UPDATE_ORDER_FAILURE,
 	payload: {
 		error,
 	},

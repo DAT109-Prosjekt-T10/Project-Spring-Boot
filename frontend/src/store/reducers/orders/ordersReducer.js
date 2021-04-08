@@ -8,6 +8,9 @@ import {
 	DELETE_ORDER_STARTED,
 	DELETE_ORDER_SUCCESS,
 	DELETE_ORDER_FAILURE,
+	GET_ALL_ORDERS_STARTED,
+	GET_ALL_ORDERS_SUCCESS,
+	GET_ALL_ORDERS_FAILURE,
 } from '../../actions/orders/types'
 
 const initialState = {
@@ -22,6 +25,11 @@ const initialState = {
 		error: undefined,
 	},
 	post: {
+		loading: false,
+		success: false,
+		error: undefined,
+	},
+	get: {
 		loading: false,
 		success: false,
 		error: undefined,
@@ -111,6 +119,36 @@ const ordersReducer = (state = initialState, action) => {
 				...state,
 				post: {
 					...state.post,
+					loading: false,
+					error: action.payload.error,
+				},
+			}
+
+		case GET_ALL_ORDERS_STARTED:
+			return {
+				...state,
+				get: {
+					...state.get,
+					loading: true,
+					success: false,
+					error: null,
+				},
+			}
+		case GET_ALL_ORDERS_SUCCESS:
+			return {
+				...state,
+				data: [...state.data, action.payload.data],
+				get: {
+					...state.get,
+					loading: false,
+					success: true,
+				},
+			}
+		case GET_ALL_ORDERS_FAILURE:
+			return {
+				...state,
+				post: {
+					...state.get,
 					loading: false,
 					error: action.payload.error,
 				},

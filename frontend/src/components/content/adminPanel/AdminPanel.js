@@ -3,24 +3,21 @@ import { Modal } from 'bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import dayjs from 'dayjs'
 import {
-	getAllBooks,
-	addBook,
-	updateBook,
-	deleteBook,
-} from '../../../store/actions/books'
-import { getAllPublishers } from '../../../store/actions/publishers'
-import { getAllAuthors } from '../../../store/actions/authors'
-import { addOrder } from '../../../store/actions/orders'
+	getAllOrders,
+	addOrder,
+	updateOrder,
+	deleteOrder,
+} from '../../../store/actions/orders'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
-import EditBookModal from './EditBookModal'
-import DetailsBookModal from './DetailsBookModal'
-import RentBookModal from './RentBookModal'
+import EditOrderModal from './EditOrderModal'
+import DetailsOrderModal from './DetailsOrderModal'
+import RentOrderModal from './RentOrderModal'
 
 const AdminPanel = ({ user }) => {
-	//* book & authors state
+	//* order & authors state
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
 	const publishers = useSelector((state) => state.publishers)
@@ -31,53 +28,58 @@ const AdminPanel = ({ user }) => {
 
 	//* dispatch action
 	const getData = useCallback(() => {
-		dispatch(getAllBooks())
-		dispatch(getAllAuthors())
-		dispatch(getAllPublishers())
-		//disaptch(getAllOrders())
+		dispatch(getAllOrders())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
 
+	const [detailedOrder, setDetailedOrder] = useState({})
+	const [editedOrder, setEditedOrder] = useState({})
+	const [deletedOrder, setDeletedOrder] = useState({})
+	const [rentedOrder, setRentedOrder] = useState({})
+
+	//* initializes edit order and rented order modal
+	const [editModal, setEditModal] = useState()
+	const [rentModal, setRentModal] = useState()
 	//* handlers
 
-	const handleRowClick = (book) => {
+	const handleRowClick = (order) => {
 		const modal = new Modal(document.getElementById('detailed-order-modal'))
 		if (modal) {
-			setDetailedBook(book)
+			setDetailedOrder(order)
 			modal.show()
 		}
 	}
 
-	const handleAddClick = (book) => {
-		dispatch(addBook(book))
+	const handleAddClick = (order) => {
+		//dispatch(addOrder(order))
 	}
 
-	const handleEditClick = (book) => {
+	const handleEditClick = (order) => {
 		const modal = new Modal(document.getElementById('edit-order-modal'))
 		if (modal) {
-			setEditedBook(book)
+			setEditedOrder(order)
 			setEditModal(modal)
 			modal.show()
 		}
 	}
 
-	const handleDeleteClick = (bookId) => {
-		//* find book by id
-		const book = books.data.find((b) => b.id === bookId)
-		if (book) {
-			//* set delete book to found book
-			setDeletedBook(book)
+	const handleDeleteClick = (orderId) => {
+		//* find order by id
+		const order = orders.data.find((b) => b.id === orderId)
+		if (order) {
+			//* set delete order to found order
+			setDeletedOrder(order)
 
 			//* open confirmation modal
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
 		}
 	}
 
-	const handleRentBookClick = (book) => {
-		const modal = new Modal(document.getElementById('rent-book-modal'))
+	const handleRentOrderClick = (order) => {
+		const modal = new Modal(document.getElementById('rent-order-modal'))
 		if (modal) {
-			setRentedBook(book)
+			setRentedOrder(order)
 			setRentModal(modal)
 			modal.show()
 		}
@@ -121,9 +123,9 @@ const AdminPanel = ({ user }) => {
 					<div className='dropdown-menu'>
 						<button
 							className='dropdown-item'
-							onClick={() => handleRentBookClick(row)}
+							onClick={() => handleRentOrderClick(row)}
 						>
-							<i className='ai-shopping-bag me-1'></i> Rent book
+							<i className='ai-shopping-bag me-1'></i> Rent order
 						</button>
 						{user && user.admin && (
 							<>
@@ -149,55 +151,26 @@ const AdminPanel = ({ user }) => {
 
 	return (
 		<div className='col-lg-8'>
+			{/*
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
-					<h1 className='h3 mb-4 text-center text-sm-start'>Books</h1>
-					{books.post.error && (
-						<Alert
-							text={`An error occured while trying to add a new book`}
-							type='danger'
-							icon='alert-triangle'
-							dismissable={true}
-						/>
-					)}
-					{books.delete.error && (
-						<Alert
-							text={`An error occured while trying to delete ${deletedBook.title} (${books.delete.error})`}
-							type='danger'
-							icon='alert-triangle'
-							dismissable={true}
-						/>
-					)}
-					{orders.post.success && (
-						<Alert
-							text={`Successfully rented ${rentedBook.title}`}
-							type='success'
-							icon='check-circle'
-							dismissable={true}
-						/>
-					)}
-					{orders.post.error && (
-						<Alert
-							text={`An error occured while trying to delete ${deletedBook.title} (${books.delete.error})`}
-							type='danger'
-							icon='alert-triangle'
-							dismissable={true}
-						/>
-					)}
-					{!books.loading ? (
+					<h1 className='h3 mb-4 text-center text-sm-start'>
+						Orders
+					</h1>
+					{!orders.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
 								user={user}
 								data={
-									books.data && books.data.length === 0
+									orders.data && orders.data.length === 0
 										? []
-										: books.data.sort((a, b) =>
+										: orders.data.sort((a, b) =>
 												a.title.localeCompare(b.title)
 										  )
 								}
 								columns={columns}
-								onAddClick={(book) => handleAddClick(book)}
-								onRowClick={(book) => handleRowClick(book)}
+								onAddClick={(order) => handleAddClick(order)}
+								onRowClick={(order) => handleRowClick(order)}
 							/>
 						</div>
 					) : (
@@ -206,32 +179,33 @@ const AdminPanel = ({ user }) => {
 						</div>
 					)}
 				</div>
-				<DetailsBookModal
-					book={detailedBook}
+				{/*
+				<DetailsOrderModal
+					order={detailedOrder}
 					authors={authors.data}
 					publishers={publishers.data}
 				/>
-				<EditBookModal
-					book={editedBook}
-					handleSubmit={(book) => {
-						dispatch(updateBook(book.id, book))
+				<EditOrderModal
+					order={editedOrder}
+					handleSubmit={(order) => {
+						dispatch(updateOrder(order.id, order))
 						editModal.hide()
 					}}
 					authors={authors.data}
 				/>
 				<ConfirmationModal
-					item={deletedBook}
-					handleClick={() => dispatch(deleteBook(deletedBook.id))}
+					item={deletedOrder}
+					handleClick={() => dispatch(deleteOrder(deletedOrder.id))}
 				/>
-				<RentBookModal
+				<RentOrderModal
 					user={user}
-					book={rentedBook}
+					order={rentedOrder}
 					handleSubmit={(order) => {
 						dispatch(addOrder(order))
 						rentModal.hide()
 					}}
 				/>
-			</div>
+			</div>*/}
 		</div>
 	)
 }
