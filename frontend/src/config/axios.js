@@ -15,7 +15,6 @@ API.interceptors.request.use(
 			const token = localStorage.getItem('user')
 			req.headers.Authorization = token
 		}
-		console.log(req.headers)
 
 		return req
 	},

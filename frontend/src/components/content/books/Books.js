@@ -46,6 +46,11 @@ const Books = ({ user }) => {
 	//* handlers
 
 	const handleRowClick = (book) => {
+		//* needs to retrieve authors after edit in case user added new authors
+		//? not the best practise since it's dispatching every time
+		//? user clicks on book details, but ok for now
+		dispatch(getAllAuthors())
+
 		const modal = new Modal(document.getElementById('detailed-book-modal'))
 		if (modal) {
 			setDetailedBook(book)
@@ -55,7 +60,6 @@ const Books = ({ user }) => {
 
 	const handleAddClick = (book) => {
 		dispatch(addBook(book))
-		dispatch(getAllAuthors())
 	}
 
 	const handleEditClick = (book) => {
@@ -123,7 +127,7 @@ const Books = ({ user }) => {
 					>
 						<i className='ai-menu'></i>
 					</button>
-					{user && !user.admin ? (
+					{user && user.admin ? (
 						<div className='dropdown-menu'>
 							<button
 								className='dropdown-item'

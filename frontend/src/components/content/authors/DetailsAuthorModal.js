@@ -2,7 +2,7 @@ import React from 'react'
 import dayjs from 'dayjs'
 import Badge from '../../ui/Badge'
 
-const DetailsBookModal = ({ book, authors }) => {
+const DetailsAuthorModal = ({ book, authors }) => {
 	const displayDetailsText = (property) => {
 		return book[property] ? (
 			book[property]
@@ -11,6 +11,7 @@ const DetailsBookModal = ({ book, authors }) => {
 		)
 	}
 
+	//TODO Error handling
 	const displayAuthors = () => {
 		if (!book.authors || (book.authors && book.authors.length === 0)) {
 			return <Badge type='warning' text='Missing' />
@@ -33,7 +34,7 @@ const DetailsBookModal = ({ book, authors }) => {
 	return (
 		<div
 			className='modal fade'
-			id='detailed-book-modal'
+			id='detailed-author-modal'
 			tabIndex='-1'
 			role='dialog'
 		>
@@ -123,4 +124,4 @@ const DetailsBookModal = ({ book, authors }) => {
 	)
 }
 
-export default DetailsBookModal
+export default DetailsAuthorModal

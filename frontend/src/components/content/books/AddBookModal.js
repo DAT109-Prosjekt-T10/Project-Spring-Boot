@@ -28,7 +28,7 @@ const AddBookModal = ({ authors, handleSubmit }) => {
 			authors: selectedAuthors.map((author) =>
 				author.id ? { id: author.id } : author
 			),
-			publisher: [],
+			//publishers: [],
 		}
 
 		handleSubmit(newBook)
