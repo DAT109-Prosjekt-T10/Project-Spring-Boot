@@ -4,9 +4,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import no.hvl.dat109.Application;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.Set;
