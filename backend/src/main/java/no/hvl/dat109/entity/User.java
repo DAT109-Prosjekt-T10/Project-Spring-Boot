@@ -4,9 +4,7 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
-import no.hvl.dat109.Application;
 import org.hibernate.annotations.NaturalId;
 
 import java.util.Set;
@@ -14,7 +12,7 @@ import java.util.Set;
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
 		property = "id",
-		scope = Book.class)
+		scope = User.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class User {

@@ -2,12 +2,13 @@ package no.hvl.dat109.controller;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
-import no.hvl.dat109.entity.Book;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.BookService;
+import no.hvl.dat109.util.ApiError;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class AuthorController {
      * @return ResponseEntity<List < Author>>
      */
     @GetMapping("")
-    public ResponseEntity<List<Author>> getAllAuthors() {
+    public ResponseEntity<Object> getAllAuthors() {
         List<Author> authors = authorRepository.findAll();
         return ResponseEntity.ok(authors);
     }
@@ -55,14 +56,14 @@ public class AuthorController {
      * @return ResponseEntity<Author>
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Author> getAuthorById(@PathVariable("id") long id) {
+    public ResponseEntity<Object> getAuthorById(@PathVariable("id") long id) {
         Optional<Author> authorData = authorRepository.findById(id);
 
         if (authorData.isPresent()) {
             Author author = authorData.get();
             return new ResponseEntity<>(author, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Author does not exist on server."));
         }
     }
 
@@ -73,16 +74,16 @@ public class AuthorController {
      * @return ResponseEntity<Author>
      */
     @PostMapping("")
-    public ResponseEntity<Author> createAuthor(@RequestBody Author author) {
+    public ResponseEntity<Object> createAuthor(@RequestBody Author author) {
         try {
             if (authorService.authorWithNameExists(author.getName()) == -1) {
                 Author savedAuthor = authorRepository.save(author);
                 return ResponseEntity.ok(savedAuthor);
             } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            	return ResponseEntity.status(409).body(new ApiError("Author already exists on server."));
             }
-        } catch (IncorrectResultSizeDataAccessException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        } catch (DataIntegrityViolationException e) {
+            return ResponseEntity.status(409).body("Name is not nullable.");
         }
     }
 
@@ -127,7 +128,7 @@ public class AuthorController {
             authorRepository.save(_author);
             return new ResponseEntity<>(authorRepository.findById(id).get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Author does not exist on server."));
         }
     }
 
@@ -138,14 +139,14 @@ public class AuthorController {
      * @return ResponseEntity<HttpStatus>
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Long> deleteAuthor(@PathVariable("id") long id) {
+    public ResponseEntity<Object> deleteAuthor(@PathVariable("id") long id) {
         try {
             Author author = authorRepository.findById(id).get();
             bookService.removeAuthorFromBooks(author);
             authorRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Author does not exist on server."));
         }
     }
 

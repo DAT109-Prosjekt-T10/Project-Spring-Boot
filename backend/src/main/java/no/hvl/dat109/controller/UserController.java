@@ -1,6 +1,5 @@
 package no.hvl.dat109.controller;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.JWTUtil;
@@ -19,7 +18,7 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody User user) {
+    public ResponseEntity<Object> registerUser(@RequestBody User user) {
 
         if (user.getEmail() == null || user.getPassword() == null || user.getName() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -51,7 +50,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> authorizeUser(@RequestBody User user) {
+    public ResponseEntity<Object> authorizeUser(@RequestBody User user) {
 
         if (user.getEmail() == null || user.getPassword() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();

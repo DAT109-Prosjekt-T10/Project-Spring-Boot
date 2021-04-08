@@ -1,7 +1,6 @@
 package no.hvl.dat109.service;
 
 import no.hvl.dat109.entity.Publisher;
-import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,9 +14,6 @@ public class PublisherService {
 
     @Autowired
     private PublisherRepository publisherRepository;
-
-    @Autowired
-    private BookRepository bookRepository;
 
     public boolean publisherExists(Long id) {
         return publisherRepository.findById(id).isPresent();
