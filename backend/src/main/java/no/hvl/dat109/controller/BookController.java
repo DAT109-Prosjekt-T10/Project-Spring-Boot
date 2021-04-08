@@ -7,6 +7,8 @@ import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.PublisherService;
+import no.hvl.dat109.util.ApiError;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +24,10 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
-
     @Autowired
     private OrderRepository orderRepository;
-    
     @Autowired
     private AuthorService authorService;
-
     @Autowired
     private PublisherService publisherService;
 
@@ -38,18 +37,26 @@ public class BookController {
         return new ResponseEntity<>(allBooks, HttpStatus.OK);
     }
 
+    /**
+     * Method to fetch book by ID from database.
+     * 
+     * @param id
+     * @return ResponseEntity<Book>
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getBookById(@PathVariable("id") long id) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
 
-        Book book;
-        try {
-            book = bookRepository.findById(id).get();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        return ResponseEntity.ok(book);
+        return bookOptional.<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(404).body(new ApiError("Book does not exist on server.")));
     }
 
+    /**
+     * Method to create a new book and add to the database.
+     * 
+     * @param book
+     * @return ResponseEntity<Book>
+     */
     @PostMapping("")
     public ResponseEntity<Object> createBook(@RequestBody Book book) {
         System.out.println(book.toString());
@@ -62,6 +69,7 @@ public class BookController {
         }
 
         // If any publisher object only contains name create new publisher object
+        // TODO Same name on publisher already exists?
         Set<Publisher> publishers = book.getPublishers();
         if (publishers != null) {
             publisherService.createNewPublisherIfNotExist(publishers);
@@ -72,11 +80,17 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(409).body(new ApiError("Book already exists on server."));
         }
     }
 
-
+    /**
+     * Method to update an existing book.
+     * 
+     * @param id
+     * @param book
+     * @return ResponseEntity<Book>
+     */
     @PutMapping("/{id}")
     public ResponseEntity<Object> updateBook(@PathVariable("id") long id, @RequestBody Book book) {
         Optional<Book> books = bookRepository.findById(id);
@@ -84,7 +98,6 @@ public class BookController {
         if (books.isPresent()) {
             Book getBook = books.get();
 
-            // TODO Finnes det en enklere løsning for å implementere denne funksjonaliteten?
             if (book.getTitle() != null) getBook.setTitle(book.getTitle());
             if (book.getIsbn() != null) getBook.setIsbn(book.getIsbn());
             if (book.getPublished() != null) getBook.setPublished(book.getPublished());
@@ -100,24 +113,30 @@ public class BookController {
 
             return new ResponseEntity<>(savedBook, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        	return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 
+    /**
+     * Method to delete a book from the database
+     * 
+     * @param id
+     * @return ResponseEntity<Long>
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
         try {
             // TODO If there are orders on book in the future, do not delete
         	
         	if (orderRepository.findAll() != null) {
-        		return new ResponseEntity<>(HttpStatus.CONFLICT);
+        		return ResponseEntity.status(409).body(new ApiError("Book has existing orders."));
         	}
         	
             bookRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
         }
     }
 

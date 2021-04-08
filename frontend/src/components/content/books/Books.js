@@ -131,32 +131,30 @@ const Books = ({ user }) => {
 					>
 						<i className='ai-menu'></i>
 					</button>
-					{user && user.admin ? (
-						<div className='dropdown-menu'>
-							<button
-								className='dropdown-item'
-								onClick={() => handleEditClick(row)} //* opens edit modal
-							>
-								<i className='ai-edit me-1'></i> Edit
-							</button>
-							<button
-								className='dropdown-item text-danger'
-								onClick={() => handleDeleteClick(row.id)}
-							>
-								<i className='ai-trash-2 me-1'></i> Delete
-							</button>
-						</div>
-					) : (
-						<div className='dropdown-menu'>
-							<button
-								className='dropdown-item'
-								onClick={() => handleRentBookClick(row)}
-							>
-								<i className='ai-shopping-bag me-1'></i> Rent
-								book
-							</button>
-						</div>
-					)}
+					<div className='dropdown-menu'>
+						<button
+							className='dropdown-item'
+							onClick={() => handleRentBookClick(row)}
+						>
+							<i className='ai-shopping-bag me-1'></i> Rent book
+						</button>
+						{user && user.admin && (
+							<>
+								<button
+									className='dropdown-item text-warning'
+									onClick={() => handleEditClick(row)} //* opens edit modal
+								>
+									<i className='ai-edit me-1'></i> Edit
+								</button>
+								<button
+									className='dropdown-item text-danger'
+									onClick={() => handleDeleteClick(row.id)}
+								>
+									<i className='ai-trash-2 me-1'></i> Delete
+								</button>
+							</>
+						)}
+					</div>
 				</div>
 			),
 		},

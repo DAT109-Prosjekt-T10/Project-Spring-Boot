@@ -11,6 +11,7 @@ const DetailsBookModal = ({ book, authors, publishers }) => {
 		)
 	}
 
+
 	const displayAuthors = () => {
 		if (!book.authors || (book.authors && book.authors.length === 0)) {
 			return <Badge type='warning' text='Missing' />

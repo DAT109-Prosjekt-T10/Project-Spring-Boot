@@ -13,7 +13,12 @@ import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
 import DetailsAuthorModal from './DetailsAuthorModal'
 
-const Authors = ({ user }) => {
+const Authors = ({ user, history }) => {
+	//* redirect users that are not admin
+	useEffect(() => {
+		if (!user.admin) history.push('/unauthorized')
+	}, [user, history])
+
 	//* author to be deleted, showed details and rented
 	const [deletedAuthor, setDeletedAuthor] = useState({})
 	const [detailedAuthor, setDetailedAuthor] = useState({})

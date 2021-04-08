@@ -55,15 +55,17 @@ const Sidebar = ({ user, history }) => {
 						<i className='ai-book fs-lg opacity-60 me-2'></i>
 						Books
 					</NavLink>
-					<NavLink
-						className='d-flex align-items-center nav-link-style px-4 py-3'
-						activeClassName='active'
-						exact
-						to='/authors'
-					>
-						<i className='ai-users fs-lg opacity-60 me-2'></i>
-						Authors
-					</NavLink>
+					{user.admin && (
+						<NavLink
+							className='d-flex align-items-center nav-link-style px-4 py-3'
+							activeClassName='active'
+							exact
+							to='/authors'
+						>
+							<i className='ai-users fs-lg opacity-60 me-2'></i>
+							Authors
+						</NavLink>
+					)}
 					<h3 className='d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3'>
 						Account
 					</h3>
