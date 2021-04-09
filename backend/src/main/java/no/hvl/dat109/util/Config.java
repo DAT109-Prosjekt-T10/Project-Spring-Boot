@@ -19,10 +19,10 @@ public class Config {
 
     public static String Issuer = "Gruppe-10";
 
-    private static String[] PrivateRoutes = { "/api/author/**", "/api/books/**", "/api/publisher/**" };
+    private static String[] PrivateRoutes = { "/api/author/**", "/api/books/**", "/api/publisher/**", "/api/user" };
     public static List<String> ProtectedRoutes = Arrays.asList(PrivateRoutes);
 
-    private static String[] PublicRoutes = { "/api/user/**", "/" };
+    private static String[] PublicRoutes = { "/api/user/login", "/api/user/register", "/" };
     public static List<String> UnprotectedRoutes = Arrays.asList(PublicRoutes);
 
     public static String[] AllowedOrigins = { HTTP.concat("localhost:3000") };
