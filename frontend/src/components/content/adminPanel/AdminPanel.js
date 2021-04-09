@@ -8,6 +8,7 @@ import {
 	updateOrder,
 	deleteOrder,
 } from '../../../store/actions/orders'
+/*
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
@@ -15,7 +16,7 @@ import Alert from '../../ui/Alert'
 import EditOrderModal from './EditOrderModal'
 import DetailsOrderModal from './DetailsOrderModal'
 import RentOrderModal from './RentOrderModal'
-
+*/
 const AdminPanel = ({ user }) => {
 	//* order & authors state
 	const books = useSelector((state) => state.books)
@@ -75,7 +76,7 @@ const AdminPanel = ({ user }) => {
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
 		}
 	}
-
+	/*
 	const handleRentOrderClick = (order) => {
 		const modal = new Modal(document.getElementById('rent-order-modal'))
 		if (modal) {
@@ -83,7 +84,7 @@ const AdminPanel = ({ user }) => {
 			setRentModal(modal)
 			modal.show()
 		}
-	}
+	}*/
 
 	const columns = [
 		{
