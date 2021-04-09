@@ -39,11 +39,17 @@ public class OrderController {
 
     @GetMapping("/user/{id}")
     public ResponseEntity<Object> getOrdersForUser(@PathVariable("id") long id) {
-        Set<Order> orders = userService.findOrdersforUser(id);
-        if (!orders.isEmpty()) {
-            return ResponseEntity.ok(orders);
+        if (userService.userExists(id)) {
+
+            Set<Order> orders = userService.findOrdersforUser(id);
+            if (!orders.isEmpty()) {
+                return ResponseEntity.ok(orders);
+            } else {
+                return ResponseEntity.status(404).body(new ApiError("User " + id + " has no orders."));
+            }
+
         } else {
-            return ResponseEntity.status(404).body(new ApiError("User " + id + " has no orders."));
+            return ResponseEntity.status(404).body(new ApiError("User with id " + id + " does not exist on server."));
         }
     }
 
