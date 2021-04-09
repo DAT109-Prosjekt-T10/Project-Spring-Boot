@@ -29,11 +29,11 @@ const AdminPanel = ({ user }) => {
 
 	//* dispatch action
 	const getData = useCallback(() => {
-		dispatch(getAllOrders())
+		//dispatch(getAllOrders())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
-
+	/*
 	const [detailedOrder, setDetailedOrder] = useState({})
 	const [editedOrder, setEditedOrder] = useState({})
 	const [deletedOrder, setDeletedOrder] = useState({})
@@ -76,7 +76,7 @@ const AdminPanel = ({ user }) => {
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
 		}
 	}
-	/*
+	
 	const handleRentOrderClick = (order) => {
 		const modal = new Modal(document.getElementById('rent-order-modal'))
 		if (modal) {
@@ -124,13 +124,13 @@ const AdminPanel = ({ user }) => {
 					<div className='dropdown-menu'>
 						<button
 							className='dropdown-item text-warning'
-							onClick={() => handleEditClick(row)} //* opens edit modal
+							/*onClick={() => handleEditClick(row)}*/ //* opens edit modal
 						>
 							<i className='ai-edit me-1'></i> Edit
 						</button>
 						<button
 							className='dropdown-item text-danger'
-							onClick={() => handleDeleteClick(row.id)}
+							/*onClick={() => handleDeleteClick(row.id)}*/
 						>
 							<i className='ai-trash-2 me-1'></i> Delete
 						</button>
