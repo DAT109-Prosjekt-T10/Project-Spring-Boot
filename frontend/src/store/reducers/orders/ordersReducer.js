@@ -16,6 +16,7 @@ import {
 const initialState = {
 	//* set default state
 	data: [],
+	allOrders: [],
 	error: undefined,
 	loading: false,
 	success: false,
@@ -137,7 +138,7 @@ const ordersReducer = (state = initialState, action) => {
 		case GET_ALL_ORDERS_SUCCESS:
 			return {
 				...state,
-				data: [...state.data, action.payload.data],
+				allOrders: action.payload.data,
 				get: {
 					...state.get,
 					loading: false,
@@ -147,7 +148,7 @@ const ordersReducer = (state = initialState, action) => {
 		case GET_ALL_ORDERS_FAILURE:
 			return {
 				...state,
-				post: {
+				get: {
 					...state.get,
 					loading: false,
 					error: action.payload.error,

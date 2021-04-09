@@ -72,7 +72,7 @@ const Sidebar = ({ user, history }) => {
 								exact
 								to='/adminpanel'
 							>
-								<i className='ai-users fs-lg opacity-60 me-2'></i>
+								<i className='ai-user fs-lg opacity-60 me-2'></i>
 								Administrator Panel
 							</NavLink>
 						</>

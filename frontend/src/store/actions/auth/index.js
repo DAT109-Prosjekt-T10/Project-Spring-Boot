@@ -4,6 +4,9 @@ import {
 	CURRENT_USER_SUCCESS,
 	CURRENT_USER_FAILURE,
 	LOGOUT_USER,
+	GET_ALL_USERS_STARTED,
+	GET_ALL_USERS_SUCCESS,
+	GET_ALL_USERS_FAILURE,
 } from './types'
 
 export const loginUser = (obj) => {
@@ -69,4 +72,34 @@ const registerUserFailure = (error) => ({
 export const logoutUser = () => ({
 	type: LOGOUT_USER,
 	payload: {},
+})
+
+export const getAllUsers = () => {
+	return (dispatch) => {
+		dispatch(getAllUsersStarted())
+
+		API.get('/api/user')
+			.then((res) => dispatch(getAllUsersSuccess(res.data)))
+			.catch((err) => {
+				dispatch(getAllUsersFailure(err.message))
+			})
+	}
+}
+
+export const getAllUsersStarted = () => ({
+	type: GET_ALL_USERS_STARTED,
+})
+
+export const getAllUsersSuccess = (data) => ({
+	type: GET_ALL_USERS_SUCCESS,
+	payload: {
+		data,
+	},
+})
+
+export const getAllUsersFailure = (error) => ({
+	type: GET_ALL_USERS_FAILURE,
+	payload: {
+		error,
+	},
 })

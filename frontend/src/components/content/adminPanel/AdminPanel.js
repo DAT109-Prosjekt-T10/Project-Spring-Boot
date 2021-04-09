@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Modal } from 'bootstrap'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, useStore } from 'react-redux'
 import dayjs from 'dayjs'
 import {
 	getAllOrders,
@@ -8,32 +8,41 @@ import {
 	updateOrder,
 	deleteOrder,
 } from '../../../store/actions/orders'
-/*
-import ConfirmationModal from '../../ui/ConfirmationModal'
+import { getAllUsers } from '../../../store/actions/auth'
+
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
 import EditOrderModal from './EditOrderModal'
 import DetailsOrderModal from './DetailsOrderModal'
-import RentOrderModal from './RentOrderModal'
-*/
+import { getAllBooks } from '../../../store/actions/books'
+
+/**
+ *
+ * TODO: Fix search, add archiving, deletion and editing
+ *
+ */
 const AdminPanel = ({ user }) => {
 	//* order & authors state
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
 	const publishers = useSelector((state) => state.publishers)
+	const users = useSelector((state) => state.user)
 	const orders = useSelector((state) => state.orders)
+	const allOrders = orders.allOrders
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
 
 	//* dispatch action
 	const getData = useCallback(() => {
-		//dispatch(getAllOrders())
+		dispatch(getAllOrders())
+		dispatch(getAllUsers())
+		dispatch(getAllBooks())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
-	/*
+
 	const [detailedOrder, setDetailedOrder] = useState({})
 	const [editedOrder, setEditedOrder] = useState({})
 	const [deletedOrder, setDeletedOrder] = useState({})
@@ -57,17 +66,17 @@ const AdminPanel = ({ user }) => {
 	}
 
 	const handleEditClick = (order) => {
-		const modal = new Modal(document.getElementById('edit-order-modal'))
+		/*const modal = new Modal(document.getElementById('edit-order-modal'))
 		if (modal) {
 			setEditedOrder(order)
 			setEditModal(modal)
 			modal.show()
-		}
+		}*/
 	}
 
 	const handleDeleteClick = (orderId) => {
 		//* find order by id
-		const order = orders.data.find((b) => b.id === orderId)
+		const order = allOrders.find((b) => b.id === orderId)
 		if (order) {
 			//* set delete order to found order
 			setDeletedOrder(order)
@@ -76,35 +85,51 @@ const AdminPanel = ({ user }) => {
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
 		}
 	}
-	
-	const handleRentOrderClick = (order) => {
-		const modal = new Modal(document.getElementById('rent-order-modal'))
-		if (modal) {
-			setRentedOrder(order)
-			setRentModal(modal)
-			modal.show()
-		}
-	}*/
+
+	const handleArchiveClick = (orderId) => {
+		//* Archive an order
+	}
 
 	const columns = [
 		{
-			name: 'Title',
-			selector: 'title',
+			name: 'Book',
+			selector: 'book',
 			sortable: true,
+			cell: (row) => (
+				<span>
+					{!books.loading
+						? books.data.find((a) => a.id === row.book).title
+						: ''}
+				</span>
+			),
 		},
 		{
-			name: 'Category',
-			selector: 'category',
-			sortable: true,
-			right: true,
-		},
-		{
-			name: 'Published',
-			selector: 'published',
+			name: 'User',
+			selector: 'user',
 			sortable: true,
 			right: true,
 			cell: (row) => (
-				<span>{dayjs(row.published).format('DD MMMM YYYY')}</span>
+				<span>
+					{!users.loading
+						? users.allusers.find((a) => a.id === row.user).name
+						: ''}
+				</span>
+			),
+		},
+		{
+			name: 'User ID',
+			selector: 'userID',
+			sortable: true,
+			right: true,
+			cell: (row) => <span>{row.user}</span>,
+		},
+		{
+			name: 'Remaining Rental',
+			selector: 'remainingTime',
+			sortable: true,
+			right: true,
+			cell: (row) => (
+				<span>{dayjs(row.dateTo).diff(row.dateFrom, 'days')}</span>
 			),
 		},
 		{
@@ -124,13 +149,13 @@ const AdminPanel = ({ user }) => {
 					<div className='dropdown-menu'>
 						<button
 							className='dropdown-item text-warning'
-							/*onClick={() => handleEditClick(row)}*/ //* opens edit modal
+							onClick={() => handleEditClick(row)} //* opens edit modal
 						>
 							<i className='ai-edit me-1'></i> Edit
 						</button>
 						<button
 							className='dropdown-item text-danger'
-							/*onClick={() => handleDeleteClick(row.id)}*/
+							onClick={() => handleDeleteClick(row.id)}
 						>
 							<i className='ai-trash-2 me-1'></i> Delete
 						</button>
@@ -145,18 +170,17 @@ const AdminPanel = ({ user }) => {
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
 					<h1 className='h3 mb-4 text-center text-sm-start'>
-						Orders
+						All Orders
 					</h1>
-					{/*
 					{!orders.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
 								user={user}
 								data={
-									orders.data && orders.data.length === 0
+									allOrders && allOrders.length === 0
 										? []
-										: orders.data.sort((a, b) =>
-												a.title.localeCompare(b.title)
+										: allOrders.sort(
+												(a, b) => a.user - b.user
 										  )
 								}
 								columns={columns}
@@ -168,14 +192,17 @@ const AdminPanel = ({ user }) => {
 						<div className='d-flex justify-content-center text-center'>
 							<Spinner />
 						</div>
-					)}*/}
+					)}
 				</div>
-				{/*
+
 				<DetailsOrderModal
 					order={detailedOrder}
+					books={books.data}
 					authors={authors.data}
 					publishers={publishers.data}
+					users={users}
 				/>
+				{/*
 				<EditOrderModal
 					order={editedOrder}
 					handleSubmit={(order) => {
@@ -183,8 +210,7 @@ const AdminPanel = ({ user }) => {
 						editModal.hide()
 					}}
 					authors={authors.data}
-				/>
-				*/}
+				/>*/}
 			</div>
 		</div>
 	)

@@ -5,6 +5,9 @@ import no.hvl.dat109.repository.UserRepository;
 import no.hvl.dat109.util.ApiError;
 import no.hvl.dat109.util.JWTUtil;
 import no.hvl.dat109.util.PasswordUtil;
+
+import java.util.List;
+
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,4 +91,9 @@ public class UserController {
 
     }
 
+    @GetMapping("")
+    public ResponseEntity<Object> getAllBooks() {
+        List<User> allUsers = userRepository.findAll();
+        return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
 }

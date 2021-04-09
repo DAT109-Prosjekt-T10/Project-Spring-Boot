@@ -3,10 +3,14 @@ import {
 	CURRENT_USER_SUCCESS,
 	CURRENT_USER_FAILURE,
 	LOGOUT_USER,
+	GET_ALL_USERS_STARTED,
+	GET_ALL_USERS_SUCCESS,
+	GET_ALL_USERS_FAILURE,
 } from '../../actions/auth/types'
 
 const initialState = {
 	data: undefined,
+	allusers: [],
 	error: undefined,
 	loading: false,
 }
@@ -37,6 +41,27 @@ const userReducer = (state = initialState, action) => {
 			return {
 				state: initialState,
 			}
+
+		case GET_ALL_USERS_STARTED:
+			return {
+				...state,
+				error: undefined,
+				loading: true,
+			}
+
+		case GET_ALL_USERS_SUCCESS:
+			return {
+				...state,
+				allusers: action.payload.data,
+				loading: false,
+			}
+		case GET_ALL_USERS_FAILURE:
+			return {
+				...state,
+				error: action.payload.error,
+				loading: false,
+			}
+
 		default:
 			return state
 	}
