@@ -169,7 +169,7 @@ const Books = ({ user }) => {
 					<h1 className='h3 mb-4 text-center text-sm-start'>Books</h1>
 					{books.post.error && (
 						<Alert
-							text={`An error occured while trying to add a new book`}
+							text={books.post.error}
 							type='danger'
 							icon='alert-triangle'
 							dismissable={true}
@@ -177,7 +177,7 @@ const Books = ({ user }) => {
 					)}
 					{books.delete.error && (
 						<Alert
-							text={`An error occured while trying to delete ${deletedBook.title} (${books.delete.error})`}
+							text={books.delete.error}
 							type='danger'
 							icon='alert-triangle'
 							dismissable={true}
