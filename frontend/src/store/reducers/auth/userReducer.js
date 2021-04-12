@@ -1,7 +1,10 @@
 import {
-	CURRENT_USER_STARTED,
-	CURRENT_USER_SUCCESS,
-	CURRENT_USER_FAILURE,
+	LOGIN_USER_STARTED,
+	LOGIN_USER_SUCCESS,
+	LOGIN_USER_FAILURE,
+	REGISTER_USER_STARTED,
+	REGISTER_USER_SUCCESS,
+	REGISTER_USER_FAILURE,
 	LOGOUT_USER,
 	GET_ALL_USERS_STARTED,
 	GET_ALL_USERS_SUCCESS,
@@ -10,36 +13,77 @@ import {
 
 const initialState = {
 	data: undefined,
-	allusers: [],
+	allUsers: [],
 	error: undefined,
 	loading: false,
+	login: {
+		error: undefined,
+		loading: false,
+	},
+	register: {
+		error: undefined,
+		loading: false,
+	},
 }
 
 const userReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case CURRENT_USER_STARTED:
+		case LOGIN_USER_STARTED:
 			return {
 				...state,
-				error: undefined,
-				loading: true,
+				login: {
+					error: undefined,
+					loading: true,
+				},
 			}
-		case CURRENT_USER_SUCCESS:
+		case LOGIN_USER_SUCCESS:
 			localStorage.setItem('user', action.payload.data)
 			return {
 				...state,
 				data: action.payload.data,
-				loading: false,
+				login: {
+					error: undefined,
+					loading: false,
+				},
 			}
-		case CURRENT_USER_FAILURE:
+		case LOGIN_USER_FAILURE:
 			return {
 				...state,
-				error: action.payload.error,
-				loading: false,
+				login: {
+					error: action.payload.error,
+					loading: false,
+				},
+			}
+		case REGISTER_USER_STARTED:
+			return {
+				...state,
+				register: {
+					error: undefined,
+					loading: true,
+				},
+			}
+		case REGISTER_USER_SUCCESS:
+			localStorage.setItem('user', action.payload.data)
+			return {
+				...state,
+				data: action.payload.data,
+				register: {
+					error: undefined,
+					loading: false,
+				},
+			}
+		case REGISTER_USER_FAILURE:
+			return {
+				...state,
+				register: {
+					error: action.payload.error,
+					loading: false,
+				},
 			}
 		case LOGOUT_USER:
 			localStorage.removeItem('user')
 			return {
-				state: initialState,
+				...initialState,
 			}
 
 		case GET_ALL_USERS_STARTED:
@@ -52,7 +96,7 @@ const userReducer = (state = initialState, action) => {
 		case GET_ALL_USERS_SUCCESS:
 			return {
 				...state,
-				allusers: action.payload.data,
+				allUsers: action.payload.data,
 				loading: false,
 			}
 		case GET_ALL_USERS_FAILURE:

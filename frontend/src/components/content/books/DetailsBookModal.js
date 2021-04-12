@@ -11,21 +11,16 @@ const DetailsBookModal = ({ book, authors, publishers }) => {
 		)
 	}
 
-
 	const displayAuthors = () => {
 		if (!book.authors || (book.authors && book.authors.length === 0)) {
 			return <Badge type='warning' text='Missing' />
 		} else {
 			return book.authors.map((authorId) => {
 				const author = authors.find((a) => a.id === authorId)
-				return (
-					<button className='btn btn-link row text-decoration-none'>
-						{author && author.name ? (
-							<Badge type='info' text={author.name} />
-						) : (
-							<Badge type='info' text={'Name missing'} />
-						)}
-					</button>
+				return author && author.name ? (
+					<Badge type='info' text={author.name} />
+				) : (
+					<Badge type='info' text={'Name missing'} />
 				)
 			})
 		}
@@ -40,14 +35,10 @@ const DetailsBookModal = ({ book, authors, publishers }) => {
 		} else {
 			return book.publishers.map((publisherId) => {
 				const publisher = publishers.find((a) => a.id === publisherId)
-				return (
-					<button className='btn btn-link row text-decoration-none'>
-						{publisher && publisher.name ? (
-							<Badge type='info' text={publisher.name} />
-						) : (
-							<Badge type='info' text={'Name missing'} />
-						)}
-					</button>
+				return publisher && publisher.name ? (
+					<Badge type='info' text={publisher.name} />
+				) : (
+					<Badge type='info' text={'Name missing'} />
 				)
 			})
 		}

@@ -4,7 +4,7 @@ import Order from './Order'
 
 const RentedBooks = ({ rentedBooks, allBooks, authors, publishers }) => {
 	return rentedBooks.length === 0 ? (
-		<div className='col-lg-7'>
+		<div className='col-lg-12'>
 			<Alert
 				text='You currently have no rented books'
 				type='warning'

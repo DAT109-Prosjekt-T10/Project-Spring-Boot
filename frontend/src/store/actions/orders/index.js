@@ -24,7 +24,10 @@ export const addOrder = (obj) => {
 		API.post('/api/order', obj)
 			.then((res) => dispatch(addOrderSuccess(res.data)))
 			.catch((err) => {
-				dispatch(addOrderFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(addOrderFailure(error.errorMessage))
+					: dispatch(addOrderFailure(err))
 			})
 	}
 }
@@ -54,7 +57,10 @@ export const getOrderByUserId = (id) => {
 		API.get(`/api/order/user/${id}`)
 			.then((res) => dispatch(getOrderByUserIdSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getOrderByUserIdFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getOrderByUserIdFailure(error.errorMessage))
+					: dispatch(getOrderByUserIdFailure(err))
 			})
 	}
 }
@@ -84,7 +90,10 @@ export const deleteOrder = (id) => {
 		API.delete(`/api/order/${id}`)
 			.then((res) => dispatch(deleteOrderSuccess(res.data)))
 			.catch((err) => {
-				dispatch(deleteOrderFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(deleteOrderFailure(error.errorMessage))
+					: dispatch(deleteOrderFailure(err))
 			})
 	}
 }
@@ -114,7 +123,10 @@ export const getAllOrders = (id) => {
 		API.get(`/api/order`)
 			.then((res) => dispatch(getAllOrdersSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getAllOrdersFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getAllOrdersFailure(error.errorMessage))
+					: dispatch(getAllOrdersFailure(err))
 			})
 	}
 }
@@ -139,12 +151,15 @@ const getAllOrdersFailure = (error) => ({
 
 export const updateOrder = (id) => {
 	return async (dispatch) => {
-		dispatch(getAllOrdersStarted())
+		dispatch(updateOrderStarted())
 
-		API.post(`/api/order/${id}`)
-			.then((res) => dispatch(getAllOrdersSuccess(res.data)))
+		API.put(`/api/order/${id}`)
+			.then((res) => dispatch(updateOrderSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getAllOrdersFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(updateOrderFailure(error.errorMessage))
+					: dispatch(updateOrderFailure(err))
 			})
 	}
 }

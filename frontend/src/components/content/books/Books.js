@@ -193,7 +193,7 @@ const Books = ({ user }) => {
 					)}
 					{orders.post.error && (
 						<Alert
-							text={`An error occured while trying to delete ${deletedBook.title} (${books.delete.error})`}
+							text={`${orders.post.error}`}
 							type='danger'
 							icon='alert-triangle'
 							dismissable={true}
@@ -243,6 +243,7 @@ const Books = ({ user }) => {
 					book={rentedBook}
 					handleSubmit={(order) => {
 						dispatch(addOrder(order))
+						console.log(order)
 						rentModal.hide()
 					}}
 				/>
