@@ -92,8 +92,9 @@ public class UserController {
     }
 
     @GetMapping("")
-    public ResponseEntity<Object> getAllBooks() {
+    public ResponseEntity<Object> getAllUsers() {
         List<User> allUsers = userRepository.findAll();
+        allUsers.forEach(u -> u.setPassword(null));
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 }
