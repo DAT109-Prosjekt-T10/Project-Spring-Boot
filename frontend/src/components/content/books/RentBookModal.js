@@ -35,11 +35,9 @@ const RentBookModal = ({ user, book, handleSubmit, allOrders }) => {
 				console.log(ordersOnBook)
 				return ordersOnBook.map((order) => {
 					return order && order.dateFrom === order.dateTo ? (
-							<Badge
+						<Badge
 							type='info'
-							text={
-								dayjs(order.dateFrom).format('DD/MM/YYYY')
-							}
+							text={dayjs(order.dateFrom).format('DD/MM/YYYY')}
 						/>
 					) : (
 						<Badge
@@ -123,12 +121,14 @@ const RentBookModal = ({ user, book, handleSubmit, allOrders }) => {
 												onChange={(date) =>
 													setStartDate(date)
 												}
+												format={'DD/MM/YYYY'}
 												filterDate={excludeDates}
 											/>
 										</dd>
 										<dd className='col'>
 											<DatePicker
 												selected={returnDate}
+												format={'DD/MM/YYYY'}
 												onChange={(date) =>
 													setReturnDate(date)
 												}
