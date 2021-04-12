@@ -108,7 +108,7 @@ const AdminPanel = ({ user }) => {
 			right: true,
 			cell: (row) => (
 				<span>
-					{!users.loading
+					{!users.loading && users.allUsers.length !== 0
 						? users.allUsers.find((a) => a.id === row.user).name
 						: ''}
 				</span>
