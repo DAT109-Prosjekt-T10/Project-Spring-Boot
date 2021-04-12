@@ -15,6 +15,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 
 	//* isbn checker util
 	const [checkIsbn, setCheckIsbn] = useState('')
+	const [checkIsbnBookExists, setCheckIsbnBookExists] = useState(true)
 
 	//* submit form
 	const onSubmit = (e) => {
@@ -41,23 +42,27 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 
 	//* finds book details by isbn
 	const findBookByIsbn = () => {
-		isbnChecker.resolve(checkIsbn).then((book) => {
-			console.log(book)
-			setTitle(book.title)
-			setPublished(new Date(book.publishedDate))
-			setSelectedPublishers([{ name: book.publisher }])
-			console.log(selectedPublishers)
-			setIsbn(checkIsbn)
-			setCategory(book.categories[0])
-			setDescription(book.description)
-			setSelectedAuthors(
-				book.authors.map((author) => {
-					return {
-						name: author,
-					}
-				})
-			)
-		})
+		isbnChecker
+			.resolve(checkIsbn)
+			.then((book) => {
+				setCheckIsbnBookExists(true)
+				setTitle(book.title)
+				setPublished(new Date(book.publishedDate))
+				setIsbn(checkIsbn)
+				book.categories && setCategory(book.categories[0])
+				setDescription(book.description)
+				setSelectedAuthors(
+					book.authors.map((author) => {
+						return {
+							name: author,
+						}
+					})
+				)
+			})
+			.catch((err) => {
+				setCheckIsbnBookExists(false)
+				setCheckIsbn('Could not find any books.')
+			})
 	}
 
 	const resetForm = () => {
@@ -96,7 +101,10 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 									<div className='form-floating'>
 										<div className='input-group'>
 											<input
-												className='form-control'
+												className={`form-control ${
+													!checkIsbnBookExists &&
+													'border border-danger text-danger'
+												}`}
 												type='text'
 												id='isbn'
 												placeholder='ISBN'
@@ -183,7 +191,6 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 											//* map items to publisher from publishers array
 											//* if created new publisher, only return name, then create new later
 											onChange={(items) => {
-												console.log(selectedPublishers)
 												setSelectedPublishers(
 													items.map((item) => {
 														const existingPublisher = selectedPublishers.find(

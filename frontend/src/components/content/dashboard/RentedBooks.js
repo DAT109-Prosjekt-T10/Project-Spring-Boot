@@ -17,18 +17,21 @@ const RentedBooks = ({ rentedBooks, allBooks, authors, publishers }) => {
 				Showing a total of {rentedBooks.length} books
 			</small>
 			<div className='accordion' id='booksAccordion'>
-				{rentedBooks.map((order) => {
-					const book = allBooks.find((b) => b.id === order.book)
-					return (
-						<Order
-							key={order.id}
-							order={order}
-							book={book}
-							authors={authors}
-							publishers={publishers}
-						/>
-					)
-				})}
+				{rentedBooks
+					.sort((a, b) => new Date(a.dateTo) - new Date(b.dateTo))
+					.map((order, index) => {
+						const book = allBooks.find((b) => b.id === order.book)
+						return (
+							<Order
+								key={order.id}
+								index={index}
+								order={order}
+								book={book}
+								authors={authors}
+								publishers={publishers}
+							/>
+						)
+					})}
 			</div>
 		</>
 	)

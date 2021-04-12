@@ -130,3 +130,13 @@
 }
 
 /* End Spinner */
+
+/* Media Queries */
+
+@media only screen and (max-width: 600px) {
+	#rentalDateBadge {
+		display: none;
+	}
+}
+
+/* End Media Queries */
