@@ -175,11 +175,27 @@ const Books = ({ user }) => {
 							dismissable={true}
 						/>
 					)}
+					{books.post.success && (
+						<Alert
+							text={`Successfully added new book.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
 					{books.delete.error && (
 						<Alert
 							text={books.delete.error}
 							type='danger'
 							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{books.delete.success && (
+						<Alert
+							text={`Successfully deleted ${deletedBook.name}.`}
+							type='success'
+							icon='check-circle'
 							dismissable={true}
 						/>
 					)}

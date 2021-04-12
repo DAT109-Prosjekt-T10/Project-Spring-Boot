@@ -42,13 +42,10 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 	//* finds book details by isbn
 	const findBookByIsbn = () => {
 		isbnChecker.resolve(checkIsbn).then((book) => {
-			console.log(book)
 			setTitle(book.title)
 			setPublished(new Date(book.publishedDate))
-			setSelectedPublishers([{ name: book.publisher }])
-			console.log(selectedPublishers)
 			setIsbn(checkIsbn)
-			setCategory(book.categories[0])
+			book.categories && setCategory(book.categories[0])
 			setDescription(book.description)
 			setSelectedAuthors(
 				book.authors.map((author) => {
@@ -183,7 +180,6 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 											//* map items to publisher from publishers array
 											//* if created new publisher, only return name, then create new later
 											onChange={(items) => {
-												console.log(selectedPublishers)
 												setSelectedPublishers(
 													items.map((item) => {
 														const existingPublisher = selectedPublishers.find(
