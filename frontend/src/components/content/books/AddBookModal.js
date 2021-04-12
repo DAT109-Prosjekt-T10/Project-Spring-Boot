@@ -53,9 +53,17 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 				setDescription(book.description)
 				setSelectedAuthors(
 					book.authors.map((author) => {
-						return {
-							name: author,
-						}
+						const existingAuthor = authors.find(
+							(a) => a.name === author
+						)
+						return existingAuthor
+							? {
+									id: existingAuthor.id,
+									name: existingAuthor.name,
+							  }
+							: {
+									name: author,
+							  }
 					})
 				)
 			})
@@ -75,6 +83,8 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 		setDescription('')
 		setSelectedAuthors([])
 	}
+
+	console.log(selectedAuthors)
 
 	return (
 		<div

@@ -196,7 +196,7 @@ const Books = ({ user }) => {
 					)}
 					{books.delete.success && (
 						<Alert
-							text={`Successfully deleted ${deletedBook.name}.`}
+							text={`Successfully deleted ${deletedBook.title}.`}
 							type='success'
 							icon='check-circle'
 							dismissable={true}
