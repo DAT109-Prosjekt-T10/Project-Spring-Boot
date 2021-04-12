@@ -18,6 +18,7 @@ import Alert from '../../ui/Alert'
 import EditBookModal from './EditBookModal'
 import DetailsBookModal from './DetailsBookModal'
 import RentBookModal from './RentBookModal'
+import { getAllOrders } from '../../../store/actions/orders'
 
 const Books = ({ user }) => {
 	//* book to be edited, deleted, showed details and rented
@@ -35,6 +36,7 @@ const Books = ({ user }) => {
 	const authors = useSelector((state) => state.authors)
 	const publishers = useSelector((state) => state.publishers)
 	const orders = useSelector((state) => state.orders)
+	const allOrders = useSelector((state) => state.orders.allOrders)
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
@@ -44,6 +46,7 @@ const Books = ({ user }) => {
 		dispatch(getAllBooks())
 		dispatch(getAllAuthors())
 		dispatch(getAllPublishers())
+		dispatch(getAllOrders())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
@@ -225,6 +228,7 @@ const Books = ({ user }) => {
 					book={detailedBook}
 					authors={authors.data}
 					publishers={publishers.data}
+					allOrders={allOrders}
 				/>
 				<EditBookModal
 					book={editedBook}
@@ -246,6 +250,7 @@ const Books = ({ user }) => {
 						console.log(order)
 						rentModal.hide()
 					}}
+					allOrders={allOrders}
 				/>
 			</div>
 		</div>

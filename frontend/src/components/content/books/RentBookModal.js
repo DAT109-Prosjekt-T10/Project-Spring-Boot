@@ -1,9 +1,13 @@
+import { arrow } from '@popperjs/core'
 import React, { useState } from 'react'
-import DatePicker from 'react-datepicker'
+import DatePicker, { addDays } from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Badge from '../../ui/Badge'
+import dayjs from 'dayjs'
+const isBetween = require('dayjs/plugin/isBetween')
+dayjs.extend(isBetween)
 
-const RentBookModal = ({ user, book, handleSubmit }) => {
+const RentBookModal = ({ user, book, handleSubmit, allOrders }) => {
 	const [startDate, setStartDate] = useState(new Date())
 	const [returnDate, setReturnDate] = useState(new Date())
 
@@ -13,6 +17,43 @@ const RentBookModal = ({ user, book, handleSubmit }) => {
 		) : (
 			<Badge type='warning' text='Missing' />
 		)
+	}
+
+	const excludeDates = (date) => {
+		console.log(date)
+		return date > new Date()
+	}
+
+	const displayOrderedDays = () => {
+		if (!allOrders || (allOrders && allOrders.length === 0)) {
+			return <Badge type='warning' text='No Orders on this book' />
+		} else {
+			const ordersOnBook = allOrders.filter((a) => a.book === book.id)
+			if (!ordersOnBook || (ordersOnBook && ordersOnBook.length === 0)) {
+				return <Badge type='warning' text='No Orders on this book' />
+			} else {
+				console.log(ordersOnBook)
+				return ordersOnBook.map((order) => {
+					return order && order.dateFrom === order.dateTo ? (
+							<Badge
+							type='info'
+							text={
+								dayjs(order.dateFrom).format('DD/MM/YYYY')
+							}
+						/>
+					) : (
+						<Badge
+							type='info'
+							text={
+								dayjs(order.dateFrom).format('DD/MM/YYYY') +
+								' To ' +
+								dayjs(order.dateTo).format('DD/MM/YYYY')
+							}
+						/>
+					)
+				})
+			}
+		}
 	}
 
 	//* submit form
@@ -82,6 +123,7 @@ const RentBookModal = ({ user, book, handleSubmit }) => {
 												onChange={(date) =>
 													setStartDate(date)
 												}
+												filterDate={excludeDates}
 											/>
 										</dd>
 										<dd className='col'>
@@ -90,7 +132,16 @@ const RentBookModal = ({ user, book, handleSubmit }) => {
 												onChange={(date) =>
 													setReturnDate(date)
 												}
+												filterDate={excludeDates}
 											/>
+										</dd>
+									</div>
+									<div className='row'>
+										<dt className='col'>Reserved Dates</dt>
+									</div>
+									<div className='row mb-3'>
+										<dd className='col'>
+											{displayOrderedDays()}
 										</dd>
 									</div>
 								</dl>
