@@ -8,8 +8,8 @@ import {
 	updateOrder,
 	deleteOrder,
 } from '../../../store/actions/orders'
+import ConfirmationModal from '../../ui/ConfirmationModal'
 import { getAllUsers } from '../../../store/actions/auth'
-
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
 import Alert from '../../ui/Alert'
@@ -94,7 +94,6 @@ const AdminPanel = ({ user }) => {
 		{
 			name: 'Book',
 			selector: 'book',
-			sortable: true,
 			cell: (row) => (
 				<span>
 					{!books.loading
@@ -106,7 +105,6 @@ const AdminPanel = ({ user }) => {
 		{
 			name: 'User',
 			selector: 'user',
-			sortable: true,
 			right: true,
 			cell: (row) => (
 				<span>
@@ -128,6 +126,9 @@ const AdminPanel = ({ user }) => {
 			selector: 'remainingTime',
 			sortable: true,
 			right: true,
+			sortFunction: (a, b) =>
+				dayjs(a.dateTo).diff(a.dateFrom, 'days') -
+				dayjs(b.dateTo).diff(b.dateFrom, 'days'),
 			cell: (row) => (
 				<span>{dayjs(row.dateTo).diff(row.dateFrom, 'days')}</span>
 			),
@@ -147,12 +148,13 @@ const AdminPanel = ({ user }) => {
 						<i className='ai-menu'></i>
 					</button>
 					<div className='dropdown-menu'>
+						{/*
 						<button
 							className='dropdown-item text-warning'
 							onClick={() => handleEditClick(row)} //* opens edit modal
 						>
 							<i className='ai-edit me-1'></i> Edit
-						</button>
+						</button>*/}
 						<button
 							className='dropdown-item text-danger'
 							onClick={() => handleDeleteClick(row.id)}
@@ -211,6 +213,11 @@ const AdminPanel = ({ user }) => {
 					}}
 					authors={authors.data}
 				/>*/}
+
+				<ConfirmationModal
+					item={deletedOrder}
+					handleClick={() => dispatch(deleteOrder(deletedOrder.id))}
+				/>
 			</div>
 		</div>
 	)
