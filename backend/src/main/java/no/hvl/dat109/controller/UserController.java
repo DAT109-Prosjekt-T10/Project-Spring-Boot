@@ -96,5 +96,4 @@ public class UserController {
         List<User> allUsers = userRepository.findAll();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
-
 }

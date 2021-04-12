@@ -24,7 +24,10 @@ export const addAuthor = (obj) => {
 		API.post('/api/author', obj)
 			.then((res) => dispatch(addAuthorSuccess(res.data)))
 			.catch((err) => {
-				dispatch(addAuthorFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(addAuthorFailure(error.errorMessage))
+					: dispatch(addAuthorFailure(err))
 			})
 	}
 }
@@ -54,7 +57,10 @@ export const getAuthorById = (id) => {
 		API.get(`/api/author/${id}`)
 			.then((res) => dispatch(getAuthorByIdSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getAuthorByIdFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getAuthorByIdFailure(error.errorMessage))
+					: dispatch(getAuthorByIdFailure(err))
 			})
 	}
 }
@@ -84,7 +90,10 @@ export const getAllAuthors = () => {
 		API.get('/api/author')
 			.then((res) => dispatch(getAuthorsSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getAuthorsFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getAuthorsFailure(error.errorMessage))
+					: dispatch(getAuthorsFailure(err))
 			})
 	}
 }
@@ -114,7 +123,10 @@ export const updateAuthor = (id, obj) => {
 		API.put(`/api/author/${id}`, obj)
 			.then((res) => dispatch(updateAuthorSuccess(res.data)))
 			.catch((err) => {
-				dispatch(updateAuthorFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(updateAuthorFailure(error.errorMessage))
+					: dispatch(updateAuthorFailure(err))
 			})
 	}
 }
@@ -144,7 +156,10 @@ export const deleteAuthor = (id) => {
 		API.delete(`/api/author/${id}`)
 			.then((res) => dispatch(deleteAuthorSuccess(res.data)))
 			.catch((err) => {
-				dispatch(deleteAuthorFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(deleteAuthorFailure(error.errorMessage))
+					: dispatch(deleteAuthorFailure(err))
 			})
 	}
 }

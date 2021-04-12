@@ -22,7 +22,7 @@ const Sidebar = ({ user, history }) => {
 						></i>
 					</div>
 
-					<h6 className='mb-0 pt-1'>{user.id}</h6>
+					<h6 className='mb-0 pt-1'>{user.name}</h6>
 				</div>
 				<div className='d-lg-none px-4 pb-4 text-center'>
 					<a
@@ -56,15 +56,26 @@ const Sidebar = ({ user, history }) => {
 						Books
 					</NavLink>
 					{user.admin && (
-						<NavLink
-							className='d-flex align-items-center nav-link-style px-4 py-3'
-							activeClassName='active'
-							exact
-							to='/authors'
-						>
-							<i className='ai-users fs-lg opacity-60 me-2'></i>
-							Authors
-						</NavLink>
+						<>
+							<NavLink
+								className='d-flex align-items-center nav-link-style px-4 py-3'
+								activeClassName='active'
+								exact
+								to='/authors'
+							>
+								<i className='ai-users fs-lg opacity-60 me-2'></i>
+								Authors
+							</NavLink>
+							<NavLink
+								className='d-flex align-items-center nav-link-style px-4 py-3'
+								activeClassName='active'
+								exact
+								to='/adminpanel'
+							>
+								<i className='ai-user fs-lg opacity-60 me-2'></i>
+								Administrator Panel
+							</NavLink>
+						</>
 					)}
 					<h3 className='d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3'>
 						Account

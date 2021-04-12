@@ -21,11 +21,13 @@ export const addBook = (obj) => {
 	return (dispatch) => {
 		dispatch(addBookStarted())
 
-		API
-			.post('/api/books', obj)
+		API.post('/api/books', obj)
 			.then((res) => dispatch(addBookSuccess(res.data)))
 			.catch((err) => {
-				dispatch(addBookFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(addBookFailure(error.errorMessage))
+					: dispatch(addBookFailure(err))
 			})
 	}
 }
@@ -52,11 +54,13 @@ export const getBookById = (id) => {
 	return async (dispatch) => {
 		dispatch(getBookByIdStarted())
 
-		API
-			.get(`/api/books/${id}`)
+		API.get(`/api/books/${id}`)
 			.then((res) => dispatch(getBookByIdSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getBookByIdFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getBookByIdFailure(error.errorMessage))
+					: dispatch(getBookByIdFailure(err))
 			})
 	}
 }
@@ -83,11 +87,13 @@ export const getAllBooks = () => {
 	return async (dispatch) => {
 		dispatch(getAllBooksStarted())
 
-		API
-			.get('/api/books')
+		API.get('/api/books')
 			.then((res) => dispatch(getAllBooksSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getAllBooksFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getAllBooksFailure(error.errorMessage))
+					: dispatch(getAllBooksFailure(err))
 			})
 	}
 }
@@ -114,11 +120,13 @@ export const updateBook = (id, obj) => {
 	return async (dispatch) => {
 		dispatch(updateBookStarted())
 
-		API
-			.put(`/api/books/${id}`, obj)
+		API.put(`/api/books/${id}`, obj)
 			.then((res) => dispatch(updateBookSuccess(res.data)))
 			.catch((err) => {
-				dispatch(updateBookFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(updateBookFailure(error.errorMessage))
+					: dispatch(updateBookFailure(err))
 			})
 	}
 }
@@ -145,11 +153,13 @@ export const deleteBook = (id) => {
 	return async (dispatch) => {
 		dispatch(deleteBookStarted())
 
-		API
-			.delete(`/api/books/${id}`)
+		API.delete(`/api/books/${id}`)
 			.then((res) => dispatch(deleteBookSuccess(res.data)))
 			.catch((err) => {
-				dispatch(deleteBookFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(deleteBookFailure(error.errorMessage))
+					: dispatch(deleteBookFailure(err))
 			})
 	}
 }

@@ -65,7 +65,7 @@ const Header = () => {
 								to='/'
 							>
 								<small>Hello,</small>
-								{loggedInUser.id}
+								{loggedInUser.name}
 							</Link>
 							<ul
 								className='dropdown-menu dropdown-menu-end'

@@ -26,6 +26,11 @@ const App = () => {
 							path='/authors'
 							component={Content}
 						/>
+						<PrivateRoute
+							exact
+							path='/adminpanel'
+							component={Content}
+						/>
 						<Route exact path='/login' component={Login} />
 						<Route exact path='/register' component={Register} />
 						<Route path='*' component={NotFound} />

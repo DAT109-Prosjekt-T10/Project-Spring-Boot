@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import isbnChecker from 'node-isbn'
+import DatePicker from 'react-datepicker'
+import dayjs from 'dayjs'
 
 const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 	const [title, setTitle] = useState('')
-	const [published, setPublished] = useState('')
+	const [published, setPublished] = useState(null)
 	const [selectedPublishers, setSelectedPublishers] = useState([])
 	const [isbn, setIsbn] = useState('')
 	const [category, setCategory] = useState('')
@@ -13,6 +15,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 
 	//* isbn checker util
 	const [checkIsbn, setCheckIsbn] = useState('')
+	const [checkIsbnBookExists, setCheckIsbnBookExists] = useState(true)
 
 	//* submit form
 	const onSubmit = (e) => {
@@ -20,8 +23,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 
 		const newBook = {
 			title,
-			published:
-				published.length !== 4 ? published : `${published}-01-01`,
+			published: dayjs(published).format('YYYY-MM-DD'),
 			isbn,
 			category,
 			description: description ? description : '',
@@ -40,39 +42,49 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 
 	//* finds book details by isbn
 	const findBookByIsbn = () => {
-		isbnChecker.resolve(checkIsbn).then((book) => {
-			setTitle(book.title)
-			setPublished(book.publishedDate)
-			setSelectedPublishers(
-				book.authors.map((publisher) => {
-					return {
-						name: publisher,
-					}
-				})
-			)
-			setIsbn(checkIsbn)
-			setCategory(book.categories[0])
-			setDescription(book.description)
-			setSelectedAuthors(
-				book.authors.map((author) => {
-					return {
-						name: author,
-					}
-				})
-			)
-		})
+		isbnChecker
+			.resolve(checkIsbn)
+			.then((book) => {
+				setCheckIsbnBookExists(true)
+				setTitle(book.title)
+				setPublished(new Date(book.publishedDate))
+				setIsbn(checkIsbn)
+				book.categories && setCategory(book.categories[0])
+				setDescription(book.description)
+				setSelectedAuthors(
+					book.authors.map((author) => {
+						const existingAuthor = authors.find(
+							(a) => a.name === author
+						)
+						return existingAuthor
+							? {
+									id: existingAuthor.id,
+									name: existingAuthor.name,
+							  }
+							: {
+									name: author,
+							  }
+					})
+				)
+			})
+			.catch((err) => {
+				setCheckIsbnBookExists(false)
+				setCheckIsbn('Could not find any books.')
+			})
 	}
 
 	const resetForm = () => {
 		setCheckIsbn('')
 		setTitle('')
-		setPublished('')
+		setSelectedPublishers([])
 		setSelectedAuthors([])
 		setIsbn('')
 		setCategory('')
 		setDescription('')
 		setSelectedAuthors([])
 	}
+
+	console.log(selectedAuthors)
 
 	return (
 		<div
@@ -99,7 +111,10 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 									<div className='form-floating'>
 										<div className='input-group'>
 											<input
-												className='form-control'
+												className={`form-control ${
+													!checkIsbnBookExists &&
+													'border border-danger text-danger'
+												}`}
 												type='text'
 												id='isbn'
 												placeholder='ISBN'
@@ -140,19 +155,20 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 							<div className='row mb-3'>
 								<div className='col'>
 									<div className='form-floating'>
-										<input
+										<DatePicker
+											title='Published Date'
 											className='form-control'
-											type='text'
 											id='published'
+											selected={published}
 											placeholder='Published'
-											required
-											value={published}
-											onChange={(e) =>
-												setPublished(e.target.value)
+											onChange={(date) =>
+												setPublished(date)
 											}
 										/>
 										<label htmlFor='published'>
-											Published
+											{published === null
+												? 'Published Date'
+												: ''}
 										</label>
 									</div>
 								</div>
@@ -184,7 +200,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 											//* items returns all selected publishers
 											//* map items to publisher from publishers array
 											//* if created new publisher, only return name, then create new later
-											onChange={(items) =>
+											onChange={(items) => {
 												setSelectedPublishers(
 													items.map((item) => {
 														const existingPublisher = selectedPublishers.find(
@@ -200,7 +216,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 															  }
 													})
 												)
-											}
+											}}
 										/>
 									</div>
 								</div>

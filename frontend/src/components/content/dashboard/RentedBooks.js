@@ -1,14 +1,14 @@
 import React from 'react'
 import Alert from '../../ui/Alert'
-import Book from './Book'
+import Order from './Order'
 
-const RentedBooks = ({ rentedBooks }) => {
+const RentedBooks = ({ rentedBooks, allBooks, authors, publishers }) => {
 	return rentedBooks.length === 0 ? (
-		<div className='col-lg-7'>
+		<div className='col-lg-12'>
 			<Alert
 				text='You currently have no rented books'
 				type='warning'
-				icon='triangle'
+				icon='alert-triangle'
 			/>
 		</div>
 	) : (
@@ -17,9 +17,21 @@ const RentedBooks = ({ rentedBooks }) => {
 				Showing a total of {rentedBooks.length} books
 			</small>
 			<div className='accordion' id='booksAccordion'>
-				{rentedBooks.map((book) => {
-					return <Book key={book.id} book={book} />
-				})}
+				{rentedBooks
+					.sort((a, b) => new Date(a.dateTo) - new Date(b.dateTo))
+					.map((order, index) => {
+						const book = allBooks.find((b) => b.id === order.book)
+						return (
+							<Order
+								key={order.id}
+								index={index}
+								order={order}
+								book={book}
+								authors={authors}
+								publishers={publishers}
+							/>
+						)
+					})}
 			</div>
 		</>
 	)

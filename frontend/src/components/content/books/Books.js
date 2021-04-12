@@ -10,6 +10,7 @@ import {
 } from '../../../store/actions/books'
 import { getAllPublishers } from '../../../store/actions/publishers'
 import { getAllAuthors } from '../../../store/actions/authors'
+import { addOrder } from '../../../store/actions/orders'
 import ConfirmationModal from '../../ui/ConfirmationModal'
 import Spinner from '../../ui/Spinner'
 import Table from '../../ui/Table'
@@ -17,6 +18,7 @@ import Alert from '../../ui/Alert'
 import EditBookModal from './EditBookModal'
 import DetailsBookModal from './DetailsBookModal'
 import RentBookModal from './RentBookModal'
+import { getAllOrders } from '../../../store/actions/orders'
 
 const Books = ({ user }) => {
 	//* book to be edited, deleted, showed details and rented
@@ -33,6 +35,8 @@ const Books = ({ user }) => {
 	const books = useSelector((state) => state.books)
 	const authors = useSelector((state) => state.authors)
 	const publishers = useSelector((state) => state.publishers)
+	const orders = useSelector((state) => state.orders)
+	const allOrders = useSelector((state) => state.orders.allOrders)
 
 	//* initialize dispatcher
 	const dispatch = useDispatch()
@@ -42,6 +46,7 @@ const Books = ({ user }) => {
 		dispatch(getAllBooks())
 		dispatch(getAllAuthors())
 		dispatch(getAllPublishers())
+		dispatch(getAllOrders())
 	}, [dispatch])
 
 	useEffect(getData, [getData])
@@ -167,16 +172,50 @@ const Books = ({ user }) => {
 					<h1 className='h3 mb-4 text-center text-sm-start'>Books</h1>
 					{books.post.error && (
 						<Alert
-							text={`An error occured while trying to add a new book`}
+							text={books.post.error}
 							type='danger'
-							icon='triangle'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{books.post.success && (
+						<Alert
+							text={`Successfully added new book.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
 						/>
 					)}
 					{books.delete.error && (
 						<Alert
-							text={`An error occured while trying to delete ${deletedBook.title} (${books.delete.error})`}
+							text={books.delete.error}
 							type='danger'
-							icon='triangle'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{books.delete.success && (
+						<Alert
+							text={`Successfully deleted ${deletedBook.title}.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{orders.post.success && (
+						<Alert
+							text={`Successfully rented ${rentedBook.title}`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{orders.post.error && (
+						<Alert
+							text={`${orders.post.error}`}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
 						/>
 					)}
 					{!books.loading ? (
@@ -201,7 +240,12 @@ const Books = ({ user }) => {
 						</div>
 					)}
 				</div>
-				<DetailsBookModal book={detailedBook} authors={authors.data} publishers={publishers.data} />
+				<DetailsBookModal
+					book={detailedBook}
+					authors={authors.data}
+					publishers={publishers.data}
+					allOrders={allOrders}
+				/>
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
@@ -215,12 +259,14 @@ const Books = ({ user }) => {
 					handleClick={() => dispatch(deleteBook(deletedBook.id))}
 				/>
 				<RentBookModal
+					user={user}
 					book={rentedBook}
 					handleSubmit={(order) => {
-						//dispatch(updateBook(book.id, book))
+						dispatch(addOrder(order))
 						console.log(order)
 						rentModal.hide()
 					}}
+					allOrders={allOrders}
 				/>
 			</div>
 		</div>

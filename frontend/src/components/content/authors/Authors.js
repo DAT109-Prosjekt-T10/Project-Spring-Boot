@@ -115,16 +115,34 @@ const Authors = ({ user, history }) => {
 					</h1>
 					{authors.post.error && (
 						<Alert
-							text={`An error occured while trying to add a new book`}
+							text={authors.post.error}
 							type='danger'
-							icon='triangle'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{authors.post.success && (
+						<Alert
+							text={`Successfully added new author.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
 						/>
 					)}
 					{authors.delete.error && (
 						<Alert
-							text={`An error occured while trying to delete ${deletedAuthor.title} (${authors.delete.error})`}
+							text={authors.delete.error}
 							type='danger'
-							icon='triangle'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{authors.delete.success && (
+						<Alert
+							text={`Successfully deleted ${deletedAuthor.name}.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
 						/>
 					)}
 					{!authors.loading ? (

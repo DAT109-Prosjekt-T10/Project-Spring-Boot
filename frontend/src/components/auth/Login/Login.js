@@ -41,16 +41,16 @@ const Login = ({ history }) => {
 								Sign in to your account using email and
 								password.
 							</p>
-							{user.loading ? (
+							{user.login.loading ? (
 								<Spinner />
 							) : (
 								<>
-									{user.error && (
+									{user.login.error && (
 										<div
 											className='alert alert-danger'
 											role='alert'
 										>
-											Incorrect email or password.
+											{user.login.error}.
 										</div>
 									)}
 									<LoginForm

@@ -40,27 +40,19 @@ const Register = ({ history }) => {
 							<p className='fs-ms text-muted mb-4 text-center'>
 								Registration takes less than a minute.
 							</p>
-							{user.loading ? (
+							{user.register.loading ? (
 								<Spinner />
 							) : (
 								<>
-									{user.error &&
+									{user.register.error && (
 										//* appears when register reducer sees an error
-										(user.error.includes('409') ? (
-											<div
-												className='alert alert-danger'
-												role='alert'
-											>
-												Email already exists.
-											</div>
-										) : (
-											<div
-												className='alert alert-danger'
-												role='alert'
-											>
-												An error occured.
-											</div>
-										))}
+										<div
+											className='alert alert-danger'
+											role='alert'
+										>
+											{user.register.error}
+										</div>
+									)}
 									<RegisterForm
 										handleRegister={(userObj) =>
 											handleRegister(userObj)
