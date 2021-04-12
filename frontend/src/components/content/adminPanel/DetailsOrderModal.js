@@ -7,7 +7,7 @@ const DetailsBookModal = ({ order, books, authors, publishers, users }) => {
 
 	const username =
 		!users.loading && order !== undefined
-			? users.allusers.find((a) => a.id === order.user)?.name
+			? users.allUsers.find((a) => a.id === order.user)?.name
 			: ''
 
 	const displayDetailsText = (type, property) => {
