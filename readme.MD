@@ -23,13 +23,13 @@
   <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/MrHencke/maven-test?color=56BEB8" /> -->
 </p>
 
-<!-- Status -->
+Status
 
-<!-- <h4 align="center">
-	🚧  DAT109 Prosjekt 🚀 Under construction...  🚧
+<h4 align="center">
+	Finished 🚀
 </h4>
 
-<hr> -->
+<hr> 
 
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
@@ -74,7 +74,7 @@ $ git clone https://github.com/DAT109-Prosjekt-T10/Project-Spring-Boot.git
 $ cd frontend
 
 # Install dependencies
-$ yarn
+$ yarn install
 
 # Run the project
 $ yarn start
