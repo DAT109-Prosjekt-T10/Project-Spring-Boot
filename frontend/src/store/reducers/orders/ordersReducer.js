@@ -76,7 +76,7 @@ const ordersReducer = (state = initialState, action) => {
 			return {
 				...state,
 				data: [
-					...state.data.filter(
+					...state.allOrders.filter(
 						(book) => book.id !== action.payload.data
 					),
 				],
