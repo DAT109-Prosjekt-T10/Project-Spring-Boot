@@ -7,6 +7,7 @@ import no.hvl.dat109.util.JWTUtil;
 import no.hvl.dat109.util.PasswordUtil;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.validator.routines.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,14 +71,14 @@ public class UserController {
         }
 
         if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email format is invalid and/or password is too short.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError("Email format is invalid and/or password is too short."));
         }
 
         User registeredUser = userRepository.findByEmail(user.getEmail());
 
         // Check if user exists
         if (registeredUser == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User with email does not exist.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiError("User with email does not exist."));
         }
 
         boolean correctPassword = PasswordUtil.comparePassword(user.getPassword(), registeredUser.getPassword());
@@ -96,6 +97,13 @@ public class UserController {
         List<User> allUsers = userRepository.findAll();
         allUsers.forEach(u -> u.setPassword(null));
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> getUserById(@PathVariable("id") long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        return userOptional.<ResponseEntity<Object>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(404).body(new ApiError("User with id " + id + " does not exist on server.")));
     }
 
 }
