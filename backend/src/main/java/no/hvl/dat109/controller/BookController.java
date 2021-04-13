@@ -7,6 +7,7 @@ import no.hvl.dat109.repository.BookRepository;
 import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.AuthorService;
 import no.hvl.dat109.service.BookService;
+import no.hvl.dat109.service.OrderService;
 import no.hvl.dat109.service.PublisherService;
 import no.hvl.dat109.util.ApiError;
 
@@ -26,7 +27,7 @@ public class BookController {
     @Autowired
     private BookRepository bookRepository;
     @Autowired
-    private OrderRepository orderRepository;
+    private OrderService orderService;
     @Autowired
     private AuthorService authorService;
     @Autowired
@@ -144,17 +145,24 @@ public class BookController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteBook(@PathVariable("id") long id) {
+
+        if (!bookRepository.existsById(id)) {
+            return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
+        }
+
+        if (bookService.futureBookReservations(id)) {
+            return ResponseEntity.status(409).body(new ApiError("Cannot delete book. Book has future existing orders."));
+        }
+
+        // Remove all (old) orders for book
+        bookService.removeAllOrdersForBook(id);
+
         try {
-
-            if (bookService.futureBookReservations(id)) {
-                return ResponseEntity.status(409).body(new ApiError("Cannot delete book. Book has future existing orders."));
-            }
-
             bookRepository.deleteById(id);
             return ResponseEntity.ok(id);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(404).body(new ApiError("Book does not exist on server."));
+            return ResponseEntity.status(400).body(new ApiError(e.getMessage()));
         }
     }
 
