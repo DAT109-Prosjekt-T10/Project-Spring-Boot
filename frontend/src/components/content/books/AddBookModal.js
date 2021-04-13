@@ -84,8 +84,6 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 		setSelectedAuthors([])
 	}
 
-	console.log(selectedAuthors)
-
 	return (
 		<div
 			className='modal fade'

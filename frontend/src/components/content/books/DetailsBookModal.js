@@ -34,7 +34,6 @@ const DetailsBookModal = ({ book, authors, publishers, allOrders }) => {
 			if (!ordersOnBook || (ordersOnBook && ordersOnBook.length === 0)) {
 				return <Badge type='warning' text='No Orders on this book' />
 			} else {
-				console.log(ordersOnBook)
 				return ordersOnBook.map((order) => {
 					return order && order.dateFrom === order.dateTo ? (
 						<Badge

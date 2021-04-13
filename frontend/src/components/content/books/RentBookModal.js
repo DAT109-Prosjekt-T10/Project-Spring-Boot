@@ -20,7 +20,6 @@ const RentBookModal = ({ user, book, handleSubmit, allOrders }) => {
 	}
 
 	const excludeDates = (date) => {
-		console.log(date)
 		return date > new Date()
 	}
 
@@ -32,7 +31,6 @@ const RentBookModal = ({ user, book, handleSubmit, allOrders }) => {
 			if (!ordersOnBook || (ordersOnBook && ordersOnBook.length === 0)) {
 				return <Badge type='warning' text='No Orders on this book' />
 			} else {
-				console.log(ordersOnBook)
 				return ordersOnBook.map((order) => {
 					return order && order.dateFrom === order.dateTo ? (
 						<Badge
@@ -64,8 +62,6 @@ const RentBookModal = ({ user, book, handleSubmit, allOrders }) => {
 			dateFrom: startDate.toISOString().substring(0, 10),
 			dateTo: returnDate.toISOString().substring(0, 10),
 		}
-
-		console.log(order)
 
 		handleSubmit(order)
 

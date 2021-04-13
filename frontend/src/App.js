@@ -1,5 +1,10 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch,
+	HashRouter,
+} from 'react-router-dom'
 import { Provider } from 'react-redux'
 import store from './store'
 import Content from './components/content/Content'
@@ -14,7 +19,7 @@ import PrivateRoute from './config/PrivateRoute'
 const App = () => {
 	return (
 		<Provider store={store}>
-			<Router>
+			<HashRouter>
 				<main className='page-wrapper d-flex flex-column min-vh-100'>
 					<Header />
 					<Background />
@@ -37,7 +42,7 @@ const App = () => {
 					</Switch>
 					<Footer />
 				</main>
-			</Router>
+			</HashRouter>
 		</Provider>
 	)
 }

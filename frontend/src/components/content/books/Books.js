@@ -263,7 +263,6 @@ const Books = ({ user }) => {
 					book={rentedBook}
 					handleSubmit={(order) => {
 						dispatch(addOrder(order))
-						console.log(order)
 						rentModal.hide()
 					}}
 					allOrders={allOrders}
