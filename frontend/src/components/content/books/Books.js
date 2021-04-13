@@ -253,6 +253,7 @@ const Books = ({ user }) => {
 						editModal.hide()
 					}}
 					authors={authors.data}
+					publishers={publishers.data}
 				/>
 				<ConfirmationModal
 					item={deletedBook}
