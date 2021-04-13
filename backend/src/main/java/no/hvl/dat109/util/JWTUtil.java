@@ -12,8 +12,6 @@ import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 
-import ch.qos.logback.core.joran.conditional.ThenAction;
-
 public class JWTUtil {
 
     public static String createToken(String name, Long id, boolean admin) {
