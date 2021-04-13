@@ -202,6 +202,14 @@ const Books = ({ user }) => {
 							dismissable={true}
 						/>
 					)}
+					{books.update.success && (
+						<Alert
+							text={`Successfully edited ${editedBook.title}.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
 					{orders.post.success && (
 						<Alert
 							text={`Successfully rented ${rentedBook.title}`}
