@@ -22,7 +22,6 @@ public class AuthorService {
 
     public long authorWithNameExists(String name) {
         Author author = authorRepository.findByName(name);
-        System.out.println("jkjhk");
         if (author != null) {
             return author.getId();
         } else {

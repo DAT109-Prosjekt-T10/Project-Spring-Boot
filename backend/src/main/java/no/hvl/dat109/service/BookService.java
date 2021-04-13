@@ -35,6 +35,11 @@ public class BookService {
         }
     }
 
+    public boolean bookWithIsbnExists(String isbn) {
+        Book book = bookRepository.findByIsbn(isbn);
+        return book != null;
+    }
+
     public boolean addAuthorToBooks(Author a, Set<Book> books) {
         for (Book b : books) {
             if (b.getId() != null) {

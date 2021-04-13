@@ -63,6 +63,11 @@ public class BookController {
     @PostMapping("")
     public ResponseEntity<Object> createBook(@RequestBody Book book) {
 
+        // Check if book with ISBN already exists
+        if (bookService.bookWithIsbnExists(book.getIsbn())) {
+            return ResponseEntity.status(409).body(new ApiError("Book with ISBN " + book.getIsbn() + " already exists on server."));
+        }
+
         // Check if any of the author names already exist
         Author authorThatExist = authorService.atLeastOneAuthorWithNameExist(book);
         if (authorThatExist != null) {
@@ -87,12 +92,14 @@ public class BookController {
             publisherService.createNewPublisherIfNotExist(publishers);
         }
 
+        // TODO too long description error handling?
+
         try {
             Book newBook = bookRepository.save(book);
             return ResponseEntity.status(HttpStatus.CREATED).body(newBook);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(409).body(new ApiError("Book with ISBN " + book.getIsbn() + " already exists on server."));
+            return ResponseEntity.status(400).body(new ApiError(e.getMessage()));
         }
     }
 
