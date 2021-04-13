@@ -51,7 +51,6 @@ const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 
 	//* pagination
 	const handlePageChange = (page) => {
-		console.log(page)
 	}
 
 	const handlePerRowsChange = async (newPerPage, page) => {

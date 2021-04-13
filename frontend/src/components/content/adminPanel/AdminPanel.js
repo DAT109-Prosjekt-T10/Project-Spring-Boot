@@ -108,7 +108,9 @@ const AdminPanel = ({ user }) => {
 			right: true,
 			cell: (row) => (
 				<span>
-					{!users.loading && users.allUsers !== undefined
+					{!users.loading &&
+					users.allUsers !== undefined &&
+					!users.allUsers.loading
 						? users.allUsers.find((a) => a.id === row.user).name
 						: ''}
 				</span>
@@ -149,13 +151,6 @@ const AdminPanel = ({ user }) => {
 						<i className='ai-menu'></i>
 					</button>
 					<div className='dropdown-menu'>
-						{/*
-						<button
-							className='dropdown-item text-warning'
-							onClick={() => handleEditClick(row)} //* opens edit modal
-						>
-							<i className='ai-edit me-1'></i> Edit
-						</button>*/}
 						<button
 							className='dropdown-item text-danger'
 							onClick={() => handleDeleteClick(row.id)}
@@ -215,7 +210,9 @@ const AdminPanel = ({ user }) => {
 							dismissable={true}
 						/>
 					)}
-					{!orders.loading ? (
+					{!orders.loading &&
+					!users.allUsers.loading &&
+					!users.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
 								user={user}
