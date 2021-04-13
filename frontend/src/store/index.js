@@ -6,9 +6,7 @@ import reducers from './reducers'
 const store = createStore(
 	reducers,
 	{},
-	(process.env.NODE_ENV = 'development'
-		? composeWithDevTools(applyMiddleware(reduxThunk))
-		: applyMiddleware(reduxThunk))
+	composeWithDevTools(applyMiddleware(reduxThunk))
 )
 
 export default store
