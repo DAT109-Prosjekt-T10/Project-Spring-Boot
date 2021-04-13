@@ -1,35 +1,35 @@
 <div align="center" id="top"> 
-  <img src="./.github/app.gif" alt="Maven Test" />
+  <img src="./.github/app.gif" alt="The Library System" />
 
 &#xa0;
 
 </div>
 
-<h1 align="center">DAT109 Prosjekt</h1>
+<h1 align="center">The Library System</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/MrHencke/maven-test?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/MrHencke/maven-test?color=56BEB8">
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/MrHencke/maven-test?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
-  <img alt="License" src="https://img.shields.io/github/license/MrHencke/maven-test?color=56BEB8">
+  <img alt="License" src="https://img.shields.io/github/license/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
   <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/MrHencke/maven-test?color=56BEB8" /> -->
 
   <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/MrHencke/maven-test?color=56BEB8" /> -->
 
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/MrHencke/maven-test?color=56BEB8" /> -->
+  <img alt="Github stars" src="https://img.shields.io/github/stars/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8" />
 </p>
 
-Status
+<!-- Status -->
 
-<h4 align="center">
-	Finished 🚀
+<!-- <h4 align="center">
+	🚧  DAT109 Prosjekt 🚀 Under construction...  🚧
 </h4>
 
-<hr> 
+<hr> -->
 
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
@@ -37,32 +37,31 @@ Status
   <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
   <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
   <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
-  <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/MrHencke" target="_blank">Author</a>
+  <a href="#memo">Authors</a>
 </p>
 
 <br>
 
 ## :dart: About
 
-Library System
+A system for libraries, to handle orders, updates and deletions of books to a library's given selection.
 
 ## :sparkles: Features
 
-:heavy_check_mark: Feature 1
-:heavy_check_mark: Feature 2
-:heavy_check_mark: Feature 3
+:heavy_check_mark: Full Database Integration
+:heavy_check_mark: Separate Frontend/Backend
+:heavy_check_mark: Pretty Visuals
 
 ## :rocket: Technologies
 
 The following tools were used in this project:
 
--   [Java](http://java.com)
+-   [Java](https://www.java.com/en/)
 -   [React](https://pt-br.reactjs.org/)
 
 ## :white_check_mark: Requirements
 
-Before starting :checkered_flag:, you need to have [Git](https://git-scm.com) and [Node](https://nodejs.org/en/) installed.
+Before starting , you need to have [Java] and [Node](https://nodejs.org/en/) installed.
 
 ## :checkered_flag: Starting
 
@@ -74,19 +73,24 @@ $ git clone https://github.com/DAT109-Prosjekt-T10/Project-Spring-Boot.git
 $ cd frontend
 
 # Install dependencies
-$ yarn install
+$ yarn
 
 # Run the project
 $ yarn start
 
-# The server will initialize in the <http://localhost:3000>
+# The frontend will initialize in the <http://localhost:3000>
+
+$ cd ../backend
+
+$ mvn start
+
+# The server will initialize in the <http://localhost:3001>
+
 ```
 
-## :memo: License
+## :memo: Authors
 
-This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
-
-Made with :heart: by <a href="https://github.com/MrHencke" target="_blank">Henrik</a>
+Made by <a href="https://github.com/DAT109-Prosjekt-T10" target="_blank">Gruppe 10</a>
 
 &#xa0;
 
