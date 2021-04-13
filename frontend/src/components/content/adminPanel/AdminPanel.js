@@ -119,6 +119,7 @@ const AdminPanel = ({ user }) => {
 			selector: 'userID',
 			sortable: true,
 			right: true,
+			sortFunction: (a, b) => a.id - b.id,
 			cell: (row) => <span>{row.user}</span>,
 		},
 		{
@@ -174,6 +175,46 @@ const AdminPanel = ({ user }) => {
 					<h1 className='h3 mb-4 text-center text-sm-start'>
 						All Orders
 					</h1>
+					{orders.post.error && (
+						<Alert
+							text={orders.post.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{orders.get.error && (
+						<Alert
+							text={orders.get.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{orders.post.success && (
+						<Alert
+							text={`Successfully added new order.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{orders.delete.error && (
+						<Alert
+							text={orders.delete.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{orders.delete.success && (
+						<Alert
+							text={`Successfully deleted order.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
 					{!orders.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
