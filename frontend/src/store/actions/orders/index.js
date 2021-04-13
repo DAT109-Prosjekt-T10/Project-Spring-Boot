@@ -123,10 +123,12 @@ export const getAllOrders = (id) => {
 		API.get(`/api/order`)
 			.then((res) => dispatch(getAllOrdersSuccess(res.data)))
 			.catch((err) => {
-				const error = err.response.data
-				error && error.errorMessage
-					? dispatch(getAllOrdersFailure(error.errorMessage))
-					: dispatch(getAllOrdersFailure(err))
+				if (err.response.data) {
+					const error = err.response.data
+					error && error.errorMessage
+						? dispatch(getAllOrdersFailure(error.errorMessage))
+						: dispatch(getAllOrdersFailure(err))
+				}
 			})
 	}
 }
@@ -148,7 +150,7 @@ const getAllOrdersFailure = (error) => ({
 		error,
 	},
 })
- 
+
 export const updateOrder = (id) => {
 	return async (dispatch) => {
 		dispatch(updateOrderStarted())
