@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react'
 import CreatableSelect from 'react-select/creatable'
 import dayjs from 'dayjs'
 
-const EditBookModal = ({ book, handleSubmit, authors, publishers }) => {
+const EditBookModal = ({ book, handleSubmit, authors }) => {
 	const [title, setTitle] = useState('')
 	const [published, setPublished] = useState('')
-	const [selectedPublishers, setSelectedPublishers] = useState([])
+	const [publisher, setPublisher] = useState('')
 	const [isbn, setIsbn] = useState('')
 	const [category, setCategory] = useState('')
 	const [description, setDescription] = useState('')
@@ -16,7 +16,7 @@ const EditBookModal = ({ book, handleSubmit, authors, publishers }) => {
 		if (Object.keys(book).length !== 0) {
 			setTitle(book.title)
 			setPublished(book.published)
-			setSelectedPublishers(book.publishers)
+			setPublisher(book.publisher)
 			setIsbn(book.isbn)
 			setCategory(book.category)
 			setDescription(book.description)
@@ -28,8 +28,6 @@ const EditBookModal = ({ book, handleSubmit, authors, publishers }) => {
 	const onSubmit = (e) => {
 		e.preventDefault()
 
-		console.log(selectedAuthors)
-		console.log(selectedPublishers)
 		const editBook = {
 			...book,
 			title,
@@ -40,9 +38,13 @@ const EditBookModal = ({ book, handleSubmit, authors, publishers }) => {
 			authors: selectedAuthors.map((author) =>
 				author.id ? { id: author.id } : author
 			),
-			publishers: selectedPublishers.map((publisher) =>
-				publisher.id ? { id: publisher.id } : publisher
-			),
+			publishers: [],
+			bookOrders: book.bookOrders.map((order) => {
+				return {
+					...order,
+					user: { id: order.user },
+				}
+			}),
 		}
 
 		handleSubmit(editBook)
@@ -53,7 +55,7 @@ const EditBookModal = ({ book, handleSubmit, authors, publishers }) => {
 	const resetForm = () => {
 		setTitle('')
 		setPublished('')
-		setSelectedPublishers([])
+		setPublisher('')
 		setIsbn('')
 		setCategory('')
 		setDescription('')
@@ -119,53 +121,19 @@ const EditBookModal = ({ book, handleSubmit, authors, publishers }) => {
 								</div>
 								<div className='col'>
 									<div className='form-floating'>
-										<CreatableSelect
-											isClearable
-											isMulti
-											placeholder={'Select publishers..'}
-											className='react-select'
-											classNamePrefix='react-select-inner'
-											value={selectedPublishers.map(
-												(publisher) => {
-													return {
-														label: publisher.name,
-														value: publisher.id,
-													}
-												}
-											)}
-											//* map publishers into correct format
-											options={publishers?.map(
-												(publisher) => {
-													return {
-														label: publisher.name,
-														value: publisher.id,
-													}
-												}
-											)}
-											//* items returns all selected publishers
-											//* map items to publisher from publishers array
-											//* if created new publisher, only return name, then create new later
-											onChange={(items) => {
-												setSelectedPublishers(
-													items.map((item) => {
-														const existingPublisher = selectedPublishers.find(
-															(publisher) =>
-																publisher.id ===
-																item.value
-														)
-														console.log(
-															existingPublisher
-														)
-														return existingPublisher
-															? existingPublisher
-															: {
-																	name:
-																		item.label,
-															  }
-													})
-												)
-											}}
+										<input
+											className='form-control'
+											type='text'
+											id='publisher'
+											placeholder='Publisher'
+											value={publisher}
+											onChange={(e) =>
+												setPublisher(e.target.value)
+											}
 										/>
+										<label htmlFor='publisher'>
+											Publisher
+										</label>
 									</div>
 								</div>
 							</div>
