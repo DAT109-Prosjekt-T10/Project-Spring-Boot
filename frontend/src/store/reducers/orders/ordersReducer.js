@@ -75,7 +75,7 @@ const ordersReducer = (state = initialState, action) => {
 			//* filters out deleted element from state
 			return {
 				...state,
-				data: [
+				allOrders: [
 					...state.allOrders.filter(
 						(book) => book.id !== action.payload.data
 					),
