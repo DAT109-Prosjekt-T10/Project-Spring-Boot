@@ -98,12 +98,4 @@ public class UserController {
         allUsers.forEach(u -> u.setPassword(null));
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Object> getUserById(@PathVariable("id") long id) {
-        Optional<User> userOptional = userRepository.findById(id);
-        return userOptional.<ResponseEntity<Object>>map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(404).body(new ApiError("User with id " + id + " does not exist on server.")));
-    }
-
 }
