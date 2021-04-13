@@ -249,7 +249,7 @@ const Books = ({ user }) => {
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
-						dispatch(updateBook(book.id, book))
+						dispatch(updateBook(editedBook.id, book))
 						editModal.hide()
 					}}
 					authors={authors.data}
