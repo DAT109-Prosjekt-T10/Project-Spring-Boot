@@ -111,7 +111,10 @@ const AdminPanel = ({ user }) => {
 					{!users.loading &&
 					users.allUsers !== undefined &&
 					!users.allUsers.loading
-						? users.allUsers.find((a) => a.id === row.user).name
+						? users.allUsers.find((a) => a.id === row.user) !==
+						  undefined
+							? users.allUsers.find((a) => a.id === row.user).name
+							: 'Name missing'
 						: ''}
 				</span>
 			),
