@@ -119,7 +119,7 @@ const AdminPanel = ({ user }) => {
 			selector: 'userID',
 			sortable: true,
 			right: true,
-			sortFunction: (a, b) => a.id - b.id,
+			sortFunction: (a, b) => a.user - b.user,
 			cell: (row) => <span>{row.user}</span>,
 		},
 		{
