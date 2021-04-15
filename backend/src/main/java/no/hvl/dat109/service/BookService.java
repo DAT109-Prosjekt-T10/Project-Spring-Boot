@@ -17,6 +17,9 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private OrderService orderService;
+
     public boolean bookExists(Long id) {
         return bookRepository.findById(id).isPresent();
     }
@@ -38,6 +41,15 @@ public class BookService {
     public boolean bookWithIsbnExists(String isbn) {
         Book book = bookRepository.findByIsbn(isbn);
         return book != null;
+    }
+
+    public void removeAllOrdersForBook(long id) {
+        Optional<Book> bookOptional = bookRepository.findById(id);
+        if (bookOptional.isPresent()) {
+            for (Order o : bookOptional.get().getBookOrders()) {
+                orderService.removeOrder(o.getId());
+            }
+        }
     }
 
     public boolean addAuthorToBooks(Author a, Set<Book> books) {
