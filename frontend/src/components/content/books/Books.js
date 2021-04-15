@@ -1,39 +1,103 @@
-import React, { useState } from 'react'
-import ConfirmationModal from '../../ui/ConfirmationModal'
-import Table from '../../ui/Table'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Modal } from 'bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
+import dayjs from 'dayjs'
+import {
+	getAllBooks,
+	addBook,
+	updateBook,
+	deleteBook,
+} from '../../../store/actions/books'
+import { getAllPublishers } from '../../../store/actions/publishers'
+import { getAllAuthors } from '../../../store/actions/authors'
+import { addOrder } from '../../../store/actions/orders'
+import ConfirmationModal from '../../ui/ConfirmationModal'
+import Spinner from '../../ui/Spinner'
+import Table from '../../ui/Table'
+import Alert from '../../ui/Alert'
+import EditBookModal from './EditBookModal'
+import DetailsBookModal from './DetailsBookModal'
+import RentBookModal from './RentBookModal'
+import { getAllOrders } from '../../../store/actions/orders'
 
-const Books = () => {
-	const [deleteBook, setDeleteBook] = useState({})
+const Books = ({ user }) => {
+	//* book to be edited, deleted, showed details and rented
+	const [editedBook, setEditedBook] = useState({})
+	const [deletedBook, setDeletedBook] = useState({})
+	const [detailedBook, setDetailedBook] = useState({})
+	const [rentedBook, setRentedBook] = useState({})
+
+	//* initializes edit book and rented book modal
+	const [editModal, setEditModal] = useState()
+	const [rentModal, setRentModal] = useState()
+
+	//* book & authors state
+	const books = useSelector((state) => state.books)
+	const authors = useSelector((state) => state.authors)
+	const publishers = useSelector((state) => state.publishers)
+	const orders = useSelector((state) => state.orders)
+	const allOrders = useSelector((state) => state.orders.allOrders)
+
+	//* initialize dispatcher
+	const dispatch = useDispatch()
+
+	//* dispatch action
+	const getData = useCallback(() => {
+		dispatch(getAllBooks())
+		dispatch(getAllAuthors())
+		dispatch(getAllPublishers())
+		dispatch(getAllOrders())
+	}, [dispatch])
+
+	useEffect(getData, [getData])
+
+	//* handlers
+
+	const handleRowClick = (book) => {
+		//* needs to retrieve authors after edit in case user added new authors
+		//? not the best practise since it's dispatching every time
+		//? user clicks on book details, but ok for now
+		dispatch(getAllAuthors())
+		dispatch(getAllPublishers())
+
+		const modal = new Modal(document.getElementById('detailed-book-modal'))
+		if (modal) {
+			setDetailedBook(book)
+			modal.show()
+		}
+	}
 
 	const handleAddClick = (book) => {
-		console.log('add btn clicked')
+		dispatch(addBook(book))
+	}
 
-		console.log(book)
-
-		// selectedAuthors.forEach((author) => {
-		// 	//* no author id means it is a new author, therefor create it
-		// 	if (!author.id) {
-		// 		//? createAuthor(author)
-		// 		//* we need to get the response, to get real author object
-		// 		//* to use when posting new book
-		// 	}
-		// })
-
-		//? createBook(newBook)
-		//? if success, show success message
-		//? if error, show error message
+	const handleEditClick = (book) => {
+		const modal = new Modal(document.getElementById('edit-book-modal'))
+		if (modal) {
+			setEditedBook(book)
+			setEditModal(modal)
+			modal.show()
+		}
 	}
 
 	const handleDeleteClick = (bookId) => {
 		//* find book by id
-		const book = books.find((b) => b.id === bookId)
+		const book = books.data.find((b) => b.id === bookId)
 		if (book) {
 			//* set delete book to found book
-			setDeleteBook(book)
+			setDeletedBook(book)
 
 			//* open confirmation modal
 			new Modal(document.getElementById('deleteConfirmationModal')).show()
+		}
+	}
+
+	const handleRentBookClick = (book) => {
+		const modal = new Modal(document.getElementById('rent-book-modal'))
+		if (modal) {
+			setRentedBook(book)
+			setRentModal(modal)
+			modal.show()
 		}
 	}
 
@@ -50,10 +114,13 @@ const Books = () => {
 			right: true,
 		},
 		{
-			name: 'Year',
-			selector: 'year',
+			name: 'Published',
+			selector: 'published',
 			sortable: true,
 			right: true,
+			cell: (row) => (
+				<span>{dayjs(row.published).format('DD MMMM YYYY')}</span>
+			),
 		},
 		{
 			name: '',
@@ -70,72 +137,136 @@ const Books = () => {
 						<i className='ai-menu'></i>
 					</button>
 					<div className='dropdown-menu'>
-						<button className='dropdown-item'>
-							<i className='ai-edit me-1'></i> Edit
-						</button>
 						<button
-							className='dropdown-item text-danger'
-							onClick={() => handleDeleteClick(row.id)}
+							className='dropdown-item'
+							onClick={() => handleRentBookClick(row)}
 						>
-							<i className='ai-trash-2 me-1'></i> Delete
+							<i className='ai-shopping-bag me-1'></i> Rent book
 						</button>
+						{user && user.admin && (
+							<>
+								<button
+									className='dropdown-item text-warning'
+									onClick={() => handleEditClick(row)} //* opens edit modal
+								>
+									<i className='ai-edit me-1'></i> Edit
+								</button>
+								<button
+									className='dropdown-item text-danger'
+									onClick={() => handleDeleteClick(row.id)}
+								>
+									<i className='ai-trash-2 me-1'></i> Delete
+								</button>
+							</>
+						)}
 					</div>
 				</div>
 			),
 		},
 	]
 
-	const books = [
-		{
-			id: 1,
-			title: 'Conan the Barbarian',
-			category: 'Action',
-			year: '1982',
-		},
-		{ id: 2, title: 'Bear the Bear', category: 'Horror', year: '1952' },
-		{ id: 3, title: 'Dunkin Feathers', category: 'Comedy', year: '2005' },
-		{
-			id: 4,
-			title: 'To Kill a Mockingbord',
-			category: 'Comedy',
-			year: '2021',
-		},
-		{
-			id: 5,
-			title: 'Pride and Prejudice',
-			category: 'Fantasy',
-			year: '1972',
-		},
-		{
-			id: 6,
-			title: 'Harry Potter and the Sorcerers Stone',
-			category: 'Sci-Fi',
-			year: '1973',
-		},
-		{ id: 7, title: 'Ulysses', category: 'Westerns', year: '1985' },
-		{ id: 8, title: 'Moby Dick', category: 'Fantasy', year: '2020' },
-		{ id: 9, title: 'War and Peace', category: 'Horror', year: '2002' },
-	]
-
 	return (
 		<div className='col-lg-8'>
 			<div className='d-flex flex-column h-100 bg-light rounded-3 shadow-lg p-4'>
 				<div className='py-2 p-md-3'>
-					<h1 className='h3 mb-3 text-center text-sm-start'>Books</h1>
-					<div id='data-table' className='row mt-3'>
-						<Table
-							data={books}
-							columns={columns}
-							onAddClick={(book) => handleAddClick(book)}
+					<h1 className='h3 mb-4 text-center text-sm-start'>Books</h1>
+					{books.post.error && (
+						<Alert
+							text={books.post.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
 						/>
-						<ConfirmationModal
-							item={deleteBook}
-							// handleClick={() =>
-							// 	// removeBook(deleteBook.id)
-							// }
+					)}
+					{books.post.success && (
+						<Alert
+							text={`Successfully added new book.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
 						/>
-					</div>
+					)}
+					{books.delete.error && (
+						<Alert
+							text={books.delete.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{books.delete.success && (
+						<Alert
+							text={`Successfully deleted ${deletedBook.title}.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{orders.post.success && (
+						<Alert
+							text={`Successfully rented ${rentedBook.title}`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{orders.post.error && (
+						<Alert
+							text={`${orders.post.error}`}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{!books.loading ? (
+						<div id='data-table' className='row mt-2'>
+							<Table
+								user={user}
+								data={
+									books.data && books.data.length === 0
+										? []
+										: books.data.sort((a, b) =>
+												a.title.localeCompare(b.title)
+										  )
+								}
+								columns={columns}
+								onAddClick={(book) => handleAddClick(book)}
+								onRowClick={(book) => handleRowClick(book)}
+							/>
+						</div>
+					) : (
+						<div className='d-flex justify-content-center text-center'>
+							<Spinner />
+						</div>
+					)}
 				</div>
+				<DetailsBookModal
+					book={detailedBook}
+					authors={authors.data}
+					publishers={publishers.data}
+					allOrders={allOrders}
+				/>
+				<EditBookModal
+					book={editedBook}
+					handleSubmit={(book) => {
+						dispatch(updateBook(book.id, book))
+						editModal.hide()
+					}}
+					authors={authors.data}
+				/>
+				<ConfirmationModal
+					item={deletedBook}
+					handleClick={() => dispatch(deleteBook(deletedBook.id))}
+				/>
+				<RentBookModal
+					user={user}
+					book={rentedBook}
+					handleSubmit={(order) => {
+						dispatch(addOrder(order))
+						rentModal.hide()
+					}}
+					allOrders={allOrders}
+				/>
 			</div>
 		</div>
 	)

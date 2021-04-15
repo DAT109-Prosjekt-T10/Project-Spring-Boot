@@ -1,32 +1,25 @@
 import {
-	POST_BOOK_STARTED,
-	POST_BOOK_SUCCESS,
-	POST_BOOK_FAILURE,
-	GET_BOOK_STARTED,
-	GET_BOOK_SUCCESS,
-	GET_BOOK_FAILURE,
-	GET_BOOKS_STARTED,
-	GET_BOOKS_SUCCESS,
-	GET_BOOKS_FAILURE,
-	UPDATE_BOOK_STARTED,
-	UPDATE_BOOK_SUCCESS,
-	UPDATE_BOOK_FAILURE,
-	DELETE_BOOK_STARTED,
-	DELETE_BOOK_SUCCESS,
-	DELETE_BOOK_FAILURE,
-} from '../../actions/books/types'
+	POST_ORDER_STARTED,
+	POST_ORDER_SUCCESS,
+	POST_ORDER_FAILURE,
+	GET_ORDER_BY_USER_STARTED,
+	GET_ORDER_BY_USER_SUCCESS,
+	GET_ORDER_BY_USER_FAILURE,
+	DELETE_ORDER_STARTED,
+	DELETE_ORDER_SUCCESS,
+	DELETE_ORDER_FAILURE,
+	GET_ALL_ORDERS_STARTED,
+	GET_ALL_ORDERS_SUCCESS,
+	GET_ALL_ORDERS_FAILURE,
+} from '../../actions/orders/types'
 
 const initialState = {
 	//* set default state
 	data: [],
+	allOrders: [],
 	error: undefined,
 	loading: false,
 	success: false,
-	update: {
-		loading: false,
-		success: false,
-		error: undefined,
-	},
 	delete: {
 		loading: false,
 		success: false,
@@ -37,11 +30,16 @@ const initialState = {
 		success: false,
 		error: undefined,
 	},
+	get: {
+		loading: false,
+		success: false,
+		error: undefined,
+	},
 }
 
-const booksReducer = (state = initialState, action) => {
+const ordersReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case GET_BOOKS_STARTED:
+		case GET_ORDER_BY_USER_STARTED:
 			return {
 				...state,
 				loading: true,
@@ -50,55 +48,20 @@ const booksReducer = (state = initialState, action) => {
 				delete: initialState.delete,
 				post: initialState.post,
 			}
-		case GET_BOOKS_SUCCESS:
+		case GET_ORDER_BY_USER_SUCCESS:
 			return {
 				...state,
 				data: action.payload.data,
 				loading: false,
 				success: true,
 			}
-		case GET_BOOKS_FAILURE:
+		case GET_ORDER_BY_USER_FAILURE:
 			return {
 				...state,
 				loading: false,
 				error: action.payload.error,
 			}
-		case UPDATE_BOOK_STARTED:
-			return {
-				...state,
-				update: {
-					...state.update,
-					loading: true,
-					success: false,
-					error: null,
-				},
-			}
-		case UPDATE_BOOK_SUCCESS:
-			return {
-				...state,
-				data: [
-					...state.data.map((book) =>
-						book.id === action.payload.data.id
-							? action.payload.data
-							: book
-					),
-				],
-				update: {
-					...state.update,
-					loading: false,
-					success: true,
-				},
-			}
-		case UPDATE_BOOK_FAILURE:
-			return {
-				...state,
-				update: {
-					...state.update,
-					loading: false,
-					error: action.payload.error,
-				},
-			}
-		case DELETE_BOOK_STARTED:
+		case DELETE_ORDER_STARTED:
 			return {
 				...state,
 				delete: {
@@ -108,12 +71,12 @@ const booksReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case DELETE_BOOK_SUCCESS:
+		case DELETE_ORDER_SUCCESS:
 			//* filters out deleted element from state
 			return {
 				...state,
-				data: [
-					...state.data.filter(
+				allOrders: [
+					...state.allOrders.filter(
 						(book) => book.id !== action.payload.data
 					),
 				],
@@ -123,7 +86,7 @@ const booksReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case DELETE_BOOK_FAILURE:
+		case DELETE_ORDER_FAILURE:
 			return {
 				...state,
 				delete: {
@@ -132,7 +95,7 @@ const booksReducer = (state = initialState, action) => {
 					error: action.payload.error,
 				},
 			}
-		case POST_BOOK_STARTED:
+		case POST_ORDER_STARTED:
 			return {
 				...state,
 				post: {
@@ -142,7 +105,7 @@ const booksReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case POST_BOOK_SUCCESS:
+		case POST_ORDER_SUCCESS:
 			return {
 				...state,
 				data: [...state.data, action.payload.data],
@@ -152,11 +115,41 @@ const booksReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case POST_BOOK_FAILURE:
+		case POST_ORDER_FAILURE:
 			return {
 				...state,
 				post: {
 					...state.post,
+					loading: false,
+					error: action.payload.error,
+				},
+			}
+
+		case GET_ALL_ORDERS_STARTED:
+			return {
+				...state,
+				get: {
+					...state.get,
+					loading: true,
+					success: false,
+					error: null,
+				},
+			}
+		case GET_ALL_ORDERS_SUCCESS:
+			return {
+				...state,
+				allOrders: action.payload.data,
+				get: {
+					...state.get,
+					loading: false,
+					success: true,
+				},
+			}
+		case GET_ALL_ORDERS_FAILURE:
+			return {
+				...state,
+				get: {
+					...state.get,
 					loading: false,
 					error: action.payload.error,
 				},
@@ -167,4 +160,4 @@ const booksReducer = (state = initialState, action) => {
 	}
 }
 
-export default booksReducer
+export default ordersReducer

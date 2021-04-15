@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from 'react'
 import DataTable from 'react-data-table-component'
 import AddBookModal from '../content/books/AddBookModal'
+import AddAuthorModal from '../content/authors/AddAuthorModal'
+import AddOrderModal from '../content/adminPanel/AddOrderModal'
 import { Modal } from 'bootstrap'
+import { useSelector } from 'react-redux'
 
-const Table = ({ data, columns, onAddClick }) => {
+const Table = ({ user, data, columns, onAddClick, onRowClick }) => {
 	const [filteredData, setFilteredData] = useState(data)
+	const publishers = useSelector((state) => state.publishers)
 
 	//* pagination
 	const [totalRows, setTotalRows] = useState(0)
 	const [perPage, setPerPage] = useState(10)
 
+	//* author state
+	const authors = useSelector((state) => state.authors)
+
 	//* initializes add book modal
 	const [modal, setModal] = useState()
 	useEffect(() => {
-		setModal(new Modal(document.getElementById('add-book-modal')))
+		if (columns.some((c) => c.name === 'Title')) {
+			setModal(new Modal(document.getElementById('add-book-modal')))
+		} else if (columns.some((c) => c.name === 'Total Books')) {
+			setModal(new Modal(document.getElementById('add-author-modal')))
+		} else {
+			setModal(new Modal(document.getElementById('add-order-modal')))
+		}
 	}, [])
 
 	//* sets total rows
@@ -21,24 +34,23 @@ const Table = ({ data, columns, onAddClick }) => {
 		setTotalRows(filteredData.length)
 	}, [filteredData])
 
-	//* search query
+	//* search query, searches against all fields
 	const [search, setSearch] = useState('')
 	useEffect(() => {
 		setFilteredData(
-			data.filter(
-				(item) =>
-					item.title.toLowerCase().includes(search.toLowerCase()) ||
-					item.category
+			data.filter((item) => {
+				return Object.keys(item).some((k) =>
+					item[k]
+						.toString()
 						.toLowerCase()
-						.includes(search.toLowerCase()) ||
-					item.year.toLowerCase().includes(search.toLowerCase())
-			)
+						.includes(search.toLowerCase())
+				)
+			})
 		)
 	}, [search, data, setFilteredData])
 
 	//* pagination
 	const handlePageChange = (page) => {
-		console.log(page)
 	}
 
 	const handlePerRowsChange = async (newPerPage, page) => {
@@ -48,7 +60,9 @@ const Table = ({ data, columns, onAddClick }) => {
 
 	//* opens add modal
 	const openAddModal = () => {
-		if (modal) modal.show()
+		if (modal) {
+			modal.show()
+		}
 	}
 
 	const actions = (
@@ -65,10 +79,14 @@ const Table = ({ data, columns, onAddClick }) => {
 					/>
 				</div>
 			</div>
-
-			<button className='btn btn-primary btn-sm' onClick={openAddModal}>
-				<i className='ai-plus fs-4'></i> Add
-			</button>
+			{user && user.admin && (
+				<button
+					className='btn btn-primary btn-sm'
+					onClick={openAddModal}
+				>
+					<i className='ai-plus fs-4'></i> Add
+				</button>
+			)}
 		</>
 	)
 
@@ -78,6 +96,8 @@ const Table = ({ data, columns, onAddClick }) => {
 				columns={columns}
 				data={filteredData}
 				actions={actions}
+				onRowClicked={(row) => onRowClick(row)}
+				pointerOnHover
 				highlightOnHover
 				pagination
 				paginationServer
@@ -86,22 +106,27 @@ const Table = ({ data, columns, onAddClick }) => {
 				onChangePage={handlePageChange}
 			/>
 			<AddBookModal
-				authors={authors}
+				authors={authors.data}
 				handleSubmit={(book) => {
 					modal.hide()
 					onAddClick(book)
+				}}
+				publishers={publishers.data}
+			/>
+			<AddAuthorModal
+				handleSubmit={(author) => {
+					modal.hide()
+					onAddClick(author)
+				}}
+			/>
+			<AddOrderModal
+				handleSubmit={(order) => {
+					modal.hide()
+					onAddClick(order)
 				}}
 			/>
 		</>
 	)
 }
-
-const authors = [
-	{ id: 1, name: 'Ida Jackson', books: [] },
-	{ id: 2, name: 'Knut Johansen', books: [] },
-	{ id: 3, name: 'Jan Hårstad', books: [] },
-	{ id: 4, name: 'Tonje Hauge', books: [] },
-	{ id: 5, name: 'Geir Uthaug', books: [] },
-]
 
 export default Table

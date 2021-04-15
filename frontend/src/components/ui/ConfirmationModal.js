@@ -23,7 +23,10 @@ const ConfirmationModal = ({ item, handleClick }) => {
 							></button>
 						</div>
 						<div className='modal-body py-4'>
-							<p>Are you sure you want to delete {item.title}?</p>
+							<p>
+								Are you sure you want to delete{' '}
+								{item.title || item.name}?
+							</p>
 						</div>
 						<div className='modal-footer'>
 							<button

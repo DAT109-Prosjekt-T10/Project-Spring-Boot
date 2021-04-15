@@ -1,9 +1,31 @@
-import React, { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
+import { Link, NavLink, useHistory } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { logoutUser } from '../../store/actions/auth'
+import { getUserByToken } from '../../helpers/auth'
 import logo from '../assets/images/logo-libsys.png'
 
 const Header = () => {
-	const [currentUser, setCurrentUser] = useState()
+	const user = useSelector((state) => state.user)
+
+	const [loggedInUser, setLoggedInUser] = useState(null)
+
+	useEffect(() => {
+		setLoggedInUser(
+			getUserByToken(user.data) ||
+				getUserByToken(localStorage.getItem('user'))
+		)
+	}, [user])
+
+	const dispatch = useDispatch()
+
+	const history = useHistory()
+
+	const handleLogout = () => {
+		dispatch(logoutUser())
+		history.push('/login')
+	}
+
 	return (
 		<header className='header navbar navbar-expand-lg navbar-dark bg-gradient navbar-floating navbar-sticky'>
 			<div className='container px-0 px-xl-3'>
@@ -32,7 +54,7 @@ const Header = () => {
 						width='153'
 					/>
 				</Link>
-				{currentUser ? (
+				{loggedInUser ? (
 					<div className='d-flex align-items-center order-lg-3 ms-lg-auto'>
 						<div className='navbar-tool dropdown'>
 							<div className='navbar-tool-icon-box'>
@@ -43,7 +65,7 @@ const Header = () => {
 								to='/'
 							>
 								<small>Hello,</small>
-								Markus
+								{loggedInUser.name}
 							</Link>
 							<ul
 								className='dropdown-menu dropdown-menu-end'
@@ -63,7 +85,7 @@ const Header = () => {
 								<li>
 									<button
 										className='dropdown-item d-flex align-items-center mt-2'
-										//onClick={handleLogout}
+										onClick={handleLogout}
 									>
 										<i className='ai-log-out font-size-base opacity-60 me-2'></i>
 										Sign out

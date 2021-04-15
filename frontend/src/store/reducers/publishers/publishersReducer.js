@@ -1,20 +1,17 @@
 import {
-	POST_AUTHOR_STARTED,
-	POST_AUTHOR_SUCCESS,
-	POST_AUTHOR_FAILURE,
-	GET_AUTHOR_STARTED,
-	GET_AUTHOR_SUCCESS,
-	GET_AUTHOR_FAILURE,
-	GET_AUTHORS_STARTED,
-	GET_AUTHORS_SUCCESS,
-	GET_AUTHORS_FAILURE,
-	UPDATE_AUTHOR_STARTED,
-	UPDATE_AUTHOR_SUCCESS,
-	UPDATE_AUTHOR_FAILURE,
-	DELETE_AUTHOR_STARTED,
-	DELETE_AUTHOR_SUCCESS,
-	DELETE_AUTHOR_FAILURE,
-} from '../../actions/authors/types'
+	POST_PUBLISHER_STARTED,
+	POST_PUBLISHER_SUCCESS,
+	POST_PUBLISHER_FAILURE,
+	GET_PUBLISHERS_STARTED,
+	GET_PUBLISHERS_SUCCESS,
+	GET_PUBLISHERS_FAILURE,
+	UPDATE_PUBLISHER_STARTED,
+	UPDATE_PUBLISHER_SUCCESS,
+	UPDATE_PUBLISHER_FAILURE,
+	DELETE_PUBLISHER_STARTED,
+	DELETE_PUBLISHER_SUCCESS,
+	DELETE_PUBLISHER_FAILURE,
+} from '../../actions/publishers/types'
 
 const initialState = {
 	//* set default state
@@ -39,28 +36,28 @@ const initialState = {
 	},
 }
 
-const authorReducer = (state = initialState, action) => {
+const publishersReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case GET_AUTHORS_STARTED:
+		case GET_PUBLISHERS_STARTED:
 			return {
 				...state,
 				loading: true,
 				success: false,
 			}
-		case GET_AUTHORS_SUCCESS:
+		case GET_PUBLISHERS_SUCCESS:
 			return {
 				...state,
 				data: action.payload.data,
 				loading: false,
 				success: true,
 			}
-		case GET_AUTHORS_FAILURE:
+		case GET_PUBLISHERS_FAILURE:
 			return {
 				...state,
 				loading: false,
 				error: action.payload.error,
 			}
-		case UPDATE_AUTHOR_STARTED:
+		case UPDATE_PUBLISHER_STARTED:
 			return {
 				...state,
 				update: {
@@ -70,14 +67,14 @@ const authorReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case UPDATE_AUTHOR_SUCCESS:
+		case UPDATE_PUBLISHER_SUCCESS:
 			return {
 				...state,
 				data: [
-					...state.data.map((author) =>
-						author.id === action.payload.data.id
+					...state.data.map((publisher) =>
+						publisher.id === action.payload.data.id
 							? action.payload.data
-							: author
+							: publisher
 					),
 				],
 				update: {
@@ -86,7 +83,7 @@ const authorReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case UPDATE_AUTHOR_FAILURE:
+		case UPDATE_PUBLISHER_FAILURE:
 			return {
 				...state,
 				update: {
@@ -95,7 +92,7 @@ const authorReducer = (state = initialState, action) => {
 					error: action.payload.error,
 				},
 			}
-		case DELETE_AUTHOR_STARTED:
+		case DELETE_PUBLISHER_STARTED:
 			return {
 				...state,
 				delete: {
@@ -105,7 +102,7 @@ const authorReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case DELETE_AUTHOR_SUCCESS:
+		case DELETE_PUBLISHER_SUCCESS:
 			//* filters out deleted element from state
 			return {
 				...state,
@@ -120,7 +117,7 @@ const authorReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case DELETE_AUTHOR_FAILURE:
+		case DELETE_PUBLISHER_FAILURE:
 			return {
 				...state,
 				delete: {
@@ -129,7 +126,7 @@ const authorReducer = (state = initialState, action) => {
 					error: action.payload.error,
 				},
 			}
-		case POST_AUTHOR_STARTED:
+		case POST_PUBLISHER_STARTED:
 			return {
 				...state,
 				post: {
@@ -139,7 +136,7 @@ const authorReducer = (state = initialState, action) => {
 					error: null,
 				},
 			}
-		case POST_AUTHOR_SUCCESS:
+		case POST_PUBLISHER_SUCCESS:
 			return {
 				...state,
 				data: [...state.data, action.payload.data],
@@ -149,7 +146,7 @@ const authorReducer = (state = initialState, action) => {
 					success: true,
 				},
 			}
-		case POST_AUTHOR_FAILURE:
+		case POST_PUBLISHER_FAILURE:
 			return {
 				...state,
 				post: {
@@ -164,4 +161,4 @@ const authorReducer = (state = initialState, action) => {
 	}
 }
 
-export default authorReducer
+export default publishersReducer
