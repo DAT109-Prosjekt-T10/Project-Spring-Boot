@@ -28,9 +28,13 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import no.hvl.dat109.entity.Author;
 import no.hvl.dat109.entity.Book;
+import no.hvl.dat109.entity.Order;
 import no.hvl.dat109.entity.Publisher;
+import no.hvl.dat109.entity.User;
 import no.hvl.dat109.repository.BookRepository;
+import no.hvl.dat109.repository.OrderRepository;
 import no.hvl.dat109.service.BookService;
+import no.hvl.dat109.service.OrderService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceTest {
@@ -179,11 +183,104 @@ public class BookServiceTest {
 		bookSer.addPublisherToBooks(p, bookSet);
 		
 		assertFalse(book.getPublishers().isEmpty());
+	}
+	
+	@Test
+	public void bookContainsAllAttributesTest() {
+		Book book = new Book();
+		book.setIsbn("isbn");
+		book.setTitle("title");
+		book.setCategory("category");
 		
-		assertTrue(bookSet.stream().anyMatch(b -> book.getPublishers().equals(p.getName())));
+		Publisher p = new Publisher();
+		Set<Publisher> pSet = new HashSet<>();
+		pSet.add(p);
+		book.setPublishers(pSet);
+		
+		book.setPublished(LocalDate.of(2000, 1, 1));
+		
+		assertTrue(bookSer.bookContainsAllAttributes(book));
 		
 	}
 	
+	@Test
+	public void bookIsAvailableTest() {
+		LocalDate date = LocalDate.of(2020, 1, 1);
+		User u = new User("","","");
+		Book book = new Book("isbn", "title", date);
+		book.setId(1L);
+
+		Order order = new Order();
+		order.setId(1L);
+		order.setBook(book);
+		order.setDateFrom(LocalDate.of(2021, 1, 5));
+		order.setDateTo(LocalDate.of(2021, 1, 19));
+		order.setUser(u);
+		Set<Order> orders = new HashSet<Order>();
+		orders.add(order);
+		
+		book.setBookOrders(orders);
+		
+//		System.out.println(book.getBookOrders());
+		//Skal ikke være ledig
+		assertFalse(bookSer.bookIsAvailable(1L, LocalDate.of(2021, 1, 7), LocalDate.of(2021, 1, 18)));
+		
+		//Skal være ledig
+		assertTrue(bookSer.bookIsAvailable(1L, LocalDate.of(2022, 3, 5), LocalDate.of(2022, 5, 10)));
+	}
 	
+//	@Test
+//	public void futureBookReservationTest() {
+//		LocalDate date = LocalDate.of(2020, 1, 1);
+//		User u = new User("","","");
+//		Book book = new Book("isbn", "title", date);
+//		book.setId(1L);
+//
+//		Order order = new Order();
+//		order.setId(1L);
+//		order.setBook(book);
+//		order.setDateFrom(LocalDate.of(2021, 6, 5));
+//		order.setDateTo(LocalDate.of(2021, 6, 19));
+//		order.setUser(u);
+//		Set<Order> orders = new HashSet<Order>();
+//		orders.add(order);
+//		
+//		book.setBookOrders(orders);
+//		
+//		
+//		
+//		//Har booken book en reservasjon etter dagen i dag: 15/04/2021
+//		System.out.println(bookSer.futureBookReservations(1L));
+//		assertTrue();
+//				
+//	}
 	
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
