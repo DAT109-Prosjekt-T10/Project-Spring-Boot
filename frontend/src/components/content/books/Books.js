@@ -202,6 +202,14 @@ const Books = ({ user }) => {
 							dismissable={true}
 						/>
 					)}
+					{books.update.success && (
+						<Alert
+							text={`Successfully edited ${editedBook.title}.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
 					{orders.post.success && (
 						<Alert
 							text={`Successfully rented ${rentedBook.title}`}
@@ -249,10 +257,11 @@ const Books = ({ user }) => {
 				<EditBookModal
 					book={editedBook}
 					handleSubmit={(book) => {
-						dispatch(updateBook(book.id, book))
+						dispatch(updateBook(editedBook.id, book))
 						editModal.hide()
 					}}
 					authors={authors.data}
+					publishers={publishers.data}
 				/>
 				<ConfirmationModal
 					item={deletedBook}
