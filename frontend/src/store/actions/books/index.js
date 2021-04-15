@@ -1,4 +1,4 @@
-import axios from 'axios'
+import API from '../../../config/axios'
 import {
 	POST_BOOK_STARTED,
 	POST_BOOK_SUCCESS,
@@ -21,11 +21,13 @@ export const addBook = (obj) => {
 	return (dispatch) => {
 		dispatch(addBookStarted())
 
-		axios
-			.post('/books', obj)
+		API.post('/api/books', obj)
 			.then((res) => dispatch(addBookSuccess(res.data)))
 			.catch((err) => {
-				dispatch(addBookFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(addBookFailure(error.errorMessage))
+					: dispatch(addBookFailure(err))
 			})
 	}
 }
@@ -52,11 +54,13 @@ export const getBookById = (id) => {
 	return async (dispatch) => {
 		dispatch(getBookByIdStarted())
 
-		axios
-			.get(`/books/${id}`)
+		API.get(`/api/books/${id}`)
 			.then((res) => dispatch(getBookByIdSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getBookByIdFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getBookByIdFailure(error.errorMessage))
+					: dispatch(getBookByIdFailure(err))
 			})
 	}
 }
@@ -79,31 +83,33 @@ const getBookByIdFailure = (error) => ({
 	},
 })
 
-export const getBooks = () => {
+export const getAllBooks = () => {
 	return async (dispatch) => {
-		dispatch(getBooksStarted())
+		dispatch(getAllBooksStarted())
 
-		axios
-			.get('/books')
-			.then((res) => dispatch(getBooksSuccess(res.data)))
+		API.get('/api/books')
+			.then((res) => dispatch(getAllBooksSuccess(res.data)))
 			.catch((err) => {
-				dispatch(getBooksFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(getAllBooksFailure(error.errorMessage))
+					: dispatch(getAllBooksFailure(err))
 			})
 	}
 }
 
-const getBooksStarted = () => ({
+const getAllBooksStarted = () => ({
 	type: GET_BOOKS_STARTED,
 })
 
-const getBooksSuccess = (data) => ({
+const getAllBooksSuccess = (data) => ({
 	type: GET_BOOKS_SUCCESS,
 	payload: {
 		data,
 	},
 })
 
-const getBooksFailure = (error) => ({
+const getAllBooksFailure = (error) => ({
 	type: GET_BOOKS_FAILURE,
 	payload: {
 		error,
@@ -114,11 +120,13 @@ export const updateBook = (id, obj) => {
 	return async (dispatch) => {
 		dispatch(updateBookStarted())
 
-		axios
-			.put(`/books/${id}`, obj)
+		API.put(`/api/books/${id}`, obj)
 			.then((res) => dispatch(updateBookSuccess(res.data)))
 			.catch((err) => {
-				dispatch(updateBookFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(updateBookFailure(error.errorMessage))
+					: dispatch(updateBookFailure(err))
 			})
 	}
 }
@@ -145,11 +153,13 @@ export const deleteBook = (id) => {
 	return async (dispatch) => {
 		dispatch(deleteBookStarted())
 
-		axios
-			.delete(`/books/${id}`)
+		API.delete(`/api/books/${id}`)
 			.then((res) => dispatch(deleteBookSuccess(res.data)))
 			.catch((err) => {
-				dispatch(deleteBookFailure(err.message))
+				const error = err.response.data
+				error && error.errorMessage
+					? dispatch(deleteBookFailure(error.errorMessage))
+					: dispatch(deleteBookFailure(err))
 			})
 	}
 }

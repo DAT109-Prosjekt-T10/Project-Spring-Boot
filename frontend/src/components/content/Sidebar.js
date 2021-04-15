@@ -1,7 +1,16 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { logoutUser } from '../../store/actions/auth'
 
-const Sidebar = () => {
+const Sidebar = ({ user, history }) => {
+	const dispatch = useDispatch()
+
+	const handleLogout = () => {
+		dispatch(logoutUser())
+		history.push('/login')
+	}
+
 	return (
 		<div className='col-lg-4 mb-4 mb-lg-0'>
 			<div className='bg-light rounded-3 shadow-lg'>
@@ -13,7 +22,7 @@ const Sidebar = () => {
 						></i>
 					</div>
 
-					<h6 className='mb-0 pt-1'>Markus Bjermeland</h6>
+					<h6 className='mb-0 pt-1'>{user.name}</h6>
 				</div>
 				<div className='d-lg-none px-4 pb-4 text-center'>
 					<a
@@ -46,21 +55,34 @@ const Sidebar = () => {
 						<i className='ai-book fs-lg opacity-60 me-2'></i>
 						Books
 					</NavLink>
-					<NavLink
-						className='d-flex align-items-center nav-link-style px-4 py-3'
-						activeClassName='active'
-						exact
-						to='/authors'
-					>
-						<i className='ai-users fs-lg opacity-60 me-2'></i>
-						Authors
-					</NavLink>
+					{user.admin && (
+						<>
+							<NavLink
+								className='d-flex align-items-center nav-link-style px-4 py-3'
+								activeClassName='active'
+								exact
+								to='/authors'
+							>
+								<i className='ai-users fs-lg opacity-60 me-2'></i>
+								Authors
+							</NavLink>
+							<NavLink
+								className='d-flex align-items-center nav-link-style px-4 py-3'
+								activeClassName='active'
+								exact
+								to='/adminpanel'
+							>
+								<i className='ai-user fs-lg opacity-60 me-2'></i>
+								Administrator Panel
+							</NavLink>
+						</>
+					)}
 					<h3 className='d-block bg-secondary fs-sm fw-semibold text-muted mb-0 px-4 py-3'>
 						Account
 					</h3>
 					<button
 						className='d-flex align-items-center nav-link-style px-4 py-3 btn'
-						//onClick={handleLogout}
+						onClick={handleLogout}
 					>
 						<i className='ai-log-out fs-lg opacity-60 me-2'></i>
 						Sign out

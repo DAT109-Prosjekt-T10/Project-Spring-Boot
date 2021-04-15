@@ -6,9 +6,24 @@
 
 /* End Header */
 
+/* React Date Picker */
+
+.react-datepicker-wrapper,
+.react-datepicker__input-container,
+.react-datepicker__input-container input {
+	display: block;
+	width: 100%;
+}
+
+/* End React Date Picker */
+
 /* Data Table */
 
 #data-table {
+	.rdt_TableBody {
+		min-height: 10rem;
+	}
+
 	.dropdown-menu {
 		min-width: 0rem;
 	}
@@ -53,13 +68,9 @@
 /* Spinner */
 
 .cs-page-loading {
-	position: fixed;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
+	display: flex;
 	width: 100%;
-	height: 100%;
+	height: 12rem;
 	-webkit-transition: all 0.4s 0.2s ease-in-out;
 	transition: all 0.4s 0.2s ease-in-out;
 	background-color: #fff;
@@ -72,8 +83,8 @@
 	visibility: visible;
 }
 .cs-page-loading-inner {
-	position: absolute;
-	top: 50%;
+	position: relative;
+	top: 70%;
 	left: 0;
 	width: 100%;
 	text-align: center;
@@ -119,3 +130,13 @@
 }
 
 /* End Spinner */
+
+/* Media Queries */
+
+@media only screen and (max-width: 600px) {
+	#rentalDateBadge {
+		display: none;
+	}
+}
+
+/* End Media Queries */
