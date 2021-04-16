@@ -9,8 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>no.hvl.dat109</groupId>
-    <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>Library_System</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
     <name>dat109</name>
     <description>Spring Boot project</description>
     <properties>
@@ -165,6 +166,14 @@
         </execution>
       </executions>
     </plugin>
+    			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<warSourceDirectory>WebContent</warSourceDirectory>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
         </plugins>
     </build>
 
