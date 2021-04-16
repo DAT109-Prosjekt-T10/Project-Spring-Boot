@@ -123,10 +123,12 @@ export const updateBook = (id, obj) => {
 		API.put(`/api/books/${id}`, obj)
 			.then((res) => dispatch(updateBookSuccess(res.data)))
 			.catch((err) => {
-				const error = err.response.data
-				error && error.errorMessage
-					? dispatch(updateBookFailure(error.errorMessage))
-					: dispatch(updateBookFailure(err))
+				if (err.response.data) {
+					const error = err.response.data
+					error && error.errorMessage
+						? dispatch(updateBookFailure(error.errorMessage))
+						: dispatch(updateBookFailure(err))
+				}
 			})
 	}
 }

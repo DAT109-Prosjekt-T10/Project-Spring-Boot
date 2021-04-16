@@ -8,19 +8,19 @@
 <h1 align="center">The Library System</h1>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/MrHencke/maven-test?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/MrHencke/maven-test?color=56BEB8">
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/MrHencke/maven-test?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
-  <img alt="License" src="https://img.shields.io/github/license/MrHencke/maven-test?color=56BEB8">
+  <img alt="License" src="https://img.shields.io/github/license/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8">
 
   <!-- <img alt="Github issues" src="https://img.shields.io/github/issues/MrHencke/maven-test?color=56BEB8" /> -->
 
   <!-- <img alt="Github forks" src="https://img.shields.io/github/forks/MrHencke/maven-test?color=56BEB8" /> -->
 
-  <!-- <img alt="Github stars" src="https://img.shields.io/github/stars/MrHencke/maven-test?color=56BEB8" /> -->
+  <img alt="Github stars" src="https://img.shields.io/github/stars/DAT109-Prosjekt-T10/Project-Spring-Boot?color=56BEB8" />
 </p>
 
 <!-- Status -->
@@ -44,6 +44,9 @@
 
 ## :dart: About
 
+
+This is Group 10s DAT109 project repository, developed during the spring of 2021.
+
 A system for libraries, to handle orders, updates and deletions of books to a library's given selection.
 
 ## :sparkles: Features
@@ -56,7 +59,7 @@ A system for libraries, to handle orders, updates and deletions of books to a li
 
 The following tools were used in this project:
 
--   [Java](http://java.com)
+-   [Java](https://www.java.com/en/)
 -   [React](https://pt-br.reactjs.org/)
 
 ## :white_check_mark: Requirements

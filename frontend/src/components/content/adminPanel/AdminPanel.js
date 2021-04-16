@@ -108,8 +108,13 @@ const AdminPanel = ({ user }) => {
 			right: true,
 			cell: (row) => (
 				<span>
-					{!users.loading && users.allUsers.length !== 0
-						? users.allUsers.find((a) => a.id === row.user).name
+					{!users.loading &&
+					users.allUsers !== undefined &&
+					!users.allUsers.loading
+						? users.allUsers.find((a) => a.id === row.user) !==
+						  undefined
+							? users.allUsers.find((a) => a.id === row.user).name
+							: 'Name missing'
 						: ''}
 				</span>
 			),
@@ -119,6 +124,7 @@ const AdminPanel = ({ user }) => {
 			selector: 'userID',
 			sortable: true,
 			right: true,
+			sortFunction: (a, b) => a.user - b.user,
 			cell: (row) => <span>{row.user}</span>,
 		},
 		{
@@ -148,13 +154,6 @@ const AdminPanel = ({ user }) => {
 						<i className='ai-menu'></i>
 					</button>
 					<div className='dropdown-menu'>
-						{/*
-						<button
-							className='dropdown-item text-warning'
-							onClick={() => handleEditClick(row)} //* opens edit modal
-						>
-							<i className='ai-edit me-1'></i> Edit
-						</button>*/}
 						<button
 							className='dropdown-item text-danger'
 							onClick={() => handleDeleteClick(row.id)}
@@ -174,7 +173,49 @@ const AdminPanel = ({ user }) => {
 					<h1 className='h3 mb-4 text-center text-sm-start'>
 						All Orders
 					</h1>
-					{!orders.loading ? (
+					{orders.post.error && (
+						<Alert
+							text={orders.post.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{orders.get.error && (
+						<Alert
+							text={orders.get.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{orders.post.success && (
+						<Alert
+							text={`Successfully added new order.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{orders.delete.error && (
+						<Alert
+							text={orders.delete.error}
+							type='danger'
+							icon='alert-triangle'
+							dismissable={true}
+						/>
+					)}
+					{orders.delete.success && (
+						<Alert
+							text={`Successfully deleted order.`}
+							type='success'
+							icon='check-circle'
+							dismissable={true}
+						/>
+					)}
+					{!orders.loading &&
+					!users.allUsers.loading &&
+					!users.loading ? (
 						<div id='data-table' className='row mt-2'>
 							<Table
 								user={user}

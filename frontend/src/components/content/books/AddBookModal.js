@@ -84,8 +84,6 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 		setSelectedAuthors([])
 	}
 
-	console.log(selectedAuthors)
-
 	return (
 		<div
 			className='modal fade'
@@ -159,6 +157,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 											title='Published Date'
 											className='form-control'
 											id='published'
+											format='DD/MM/YYYY'
 											selected={published}
 											placeholder='Published'
 											onChange={(date) =>
@@ -188,8 +187,8 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 													}
 												}
 											)}
-											//* map publishers into correct format
-											options={publishers?.map(
+											//* map authors into correct format
+											options={publishers.map(
 												(publisher) => {
 													return {
 														label: publisher.name,
@@ -197,13 +196,13 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 													}
 												}
 											)}
-											//* items returns all selected publishers
-											//* map items to publisher from publishers array
-											//* if created new publisher, only return name, then create new later
-											onChange={(items) => {
+											//* items returns all selected authors
+											//* map items to author from authors array
+											//* if created new author, only return name, then create new later
+											onChange={(items) =>
 												setSelectedPublishers(
 													items.map((item) => {
-														const existingPublisher = selectedPublishers.find(
+														const existingPublisher = publishers.find(
 															(publisher) =>
 																publisher.id ===
 																item.value
@@ -216,7 +215,7 @@ const AddBookModal = ({ authors, handleSubmit, publishers }) => {
 															  }
 													})
 												)
-											}}
+											}
 										/>
 									</div>
 								</div>
