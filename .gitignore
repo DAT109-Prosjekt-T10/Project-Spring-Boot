@@ -16,4 +16,6 @@ frontend/package-lock.json
 backend/.classpath
 backend/.settings/org.eclipse.core.resources.prefs
 frontend/build
+frontend/npm
+frontend/target
 

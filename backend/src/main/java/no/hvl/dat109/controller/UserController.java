@@ -32,12 +32,14 @@ public class UserController {
     public ResponseEntity<Object> registerUser(@RequestBody User user) {
 
         if (user.getEmail() == null || user.getPassword() == null || user.getName() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError("One or more user-attribute is null"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiError("One or more user-attribute is null"));
         }
 
         if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8)
                 && user.getName().length() > 0)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError("Email/password/name format is invalid."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiError("Email/password/name format is invalid."));
         }
 
         // Check if email already exists
@@ -71,7 +73,8 @@ public class UserController {
         }
 
         if (!(EmailValidator.getInstance().isValid(user.getEmail()) && (user.getPassword().length() >= 8))) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiError("Email format is invalid and/or password is too short."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ApiError("Email format is invalid and/or password is too short."));
         }
 
         User registeredUser = userRepository.findByEmail(user.getEmail());

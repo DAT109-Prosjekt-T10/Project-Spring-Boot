@@ -6,15 +6,16 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.4.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/> 
     </parent>
     <groupId>no.hvl.dat109</groupId>
-    <artifactId>backend</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>gruppe10-backend</artifactId>
+    <version>1</version>
+    <packaging>war</packaging>
     <name>dat109</name>
     <description>Spring Boot project</description>
     <properties>
-        <java.version>14</java.version>
+        <java.version>1.8</java.version>
     </properties>
 
     <dependencies>
@@ -63,13 +64,6 @@
         </dependency>
 
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>servlet-api</artifactId>
-            <version>2.5</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
@@ -89,7 +83,7 @@
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
+            <version>2.10.5</version>
         </dependency>
 
         <!-- H2 database for testing -->
@@ -128,44 +122,16 @@
             <scope>test</scope>
         </dependency>
 
+            <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-tomcat</artifactId>
+        <scope>provided</scope>
+    </dependency>
+
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.openejb.maven</groupId>
-                <artifactId>tomee-maven-plugin</artifactId>
-                <version>1.7.1</version>
-                <configuration>
-                    <tomeeVersion>1.7.1</tomeeVersion>
-                    <tomeeClassifier>plus</tomeeClassifier>
-                </configuration>
-            </plugin>
-                <plugin>
-      <artifactId>maven-resources-plugin</artifactId>
-      <executions>
-        <execution>
-          <id>copy-resources</id>
-          <phase>validate</phase>
-          <goals>
-            <goal>copy-resources</goal>
-          </goals>
-          <configuration>
-            <outputDirectory>${basedir}/target/classes/static/</outputDirectory>
-            <resources>
-              <resource>
-                <directory>${basedir}/../frontend/build</directory>
-              </resource>
-            </resources>
-          </configuration>
-        </execution>
-      </executions>
-    </plugin>
-        </plugins>
+    <build>    
+    <finalName>${project.artifactId}</finalName>
     </build>
 
 </project>
