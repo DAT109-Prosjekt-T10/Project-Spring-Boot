@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const API = axios.create({
-	baseURL: 'http://localhost:3001',
+	baseURL: 'http://data1.hib.no:9090/gruppe10-backend',
 })
 
 API.interceptors.request.use(
@@ -22,6 +22,5 @@ API.interceptors.request.use(
 		return Promise.reject(err)
 	}
 )
-
 
 export default API

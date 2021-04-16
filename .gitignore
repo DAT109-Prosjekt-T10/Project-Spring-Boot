@@ -18,4 +18,5 @@ backend/.settings/org.eclipse.core.resources.prefs
 frontend/build
 frontend/npm
 frontend/target
-
+frontend/.settings
+frontend/.project
