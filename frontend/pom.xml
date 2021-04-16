@@ -79,7 +79,7 @@
 
                         <configuration>
                             <environmentVariables>
-                                <PUBLIC_URL>http://localhost:8080/${project.artifactId}</PUBLIC_URL>
+                                <PUBLIC_URL>http://data1.hib.no:9090/${project.artifactId}</PUBLIC_URL>
                                 <REACT_APP_ROUTER_BASE>/${project.artifactId}</REACT_APP_ROUTER_BASE>
                             </environmentVariables>
                         </configuration>
